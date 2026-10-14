@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Glosario de PC Gamer: inglés técnico para armar y entender una computadora</title>
+<style>
+/* ===== Tokens (estética BUILD YOUR DREAM PC: oscuro violeta por defecto) ===== */
+:root{--bg:#040208;--sf:rgba(26,15,45,.88);--tx:#f3eeff;--mu:#b3a6d6;--ac:#a855f7;--ln:rgba(168,85,247,.25);--sh:0 8px 22px rgba(0,0,0,.35);--r:16px;--lav:#c4b5fd;--fuchsia:#d946ef;--dim:#8477a6;--ok:#34d399;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root[data-theme="light"]{--bg:#f6f7f8;--sf:#fff;--tx:#23272c;--mu:#5b636b;--ac:#7c3aed;--ln:#dde1e5;--lav:#6d28d9;--fuchsia:#a21caf;--dim:#5b636b;--ok:#059669}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;background:var(--bg);background-image:radial-gradient(1000px 640px at 12% -10%,rgba(139,92,246,.14),transparent 60%),radial-gradient(820px 720px at 100% 120%,rgba(99,102,241,.10),transparent 60%),linear-gradient(180deg,#040208,#0a0514 42%,#040208);min-height:100vh;color:var(--tx);font:16px/1.6 'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;overflow-x:hidden}
+:root[data-theme="light"] body{background-image:none}
+::selection{background:rgba(168,85,247,.45)}
+h1,h2,h3{line-height:1.2;margin:0}h2{font-size:1.6rem;margin-bottom:.4rem}
+section{max-width:1080px;margin:0 auto;padding:4rem 1.25rem;position:relative;z-index:1}
+.mu{color:var(--mu)}svg.i{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;flex:none}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--fuchsia);outline-offset:2px}
+::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,255,255,.28);border-radius:5px}::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.5)}
+/* Auroras de fondo */
+.aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.aurora i{position:absolute;width:62vmax;height:62vmax;border-radius:50%;background:radial-gradient(circle,rgba(168,85,247,.28),transparent 65%);animation:drift 18s ease-in-out infinite alternate}
+.aurora i:nth-child(1){left:-18vmax;top:-20vmax}
+.aurora i:nth-child(2){right:-22vmax;top:18vh;background:radial-gradient(circle,rgba(217,70,239,.20),transparent 65%);animation-duration:23s;animation-delay:-6s}
+.aurora i:nth-child(3){left:20vw;bottom:-30vmax;background:radial-gradient(circle,rgba(34,211,238,.14),transparent 65%);animation-duration:27s;animation-delay:-11s}
+@keyframes drift{to{transform:translate(9vmax,6vmax) scale(1.15)}}
+:root[data-theme="light"] .aurora{display:none}
+#prog{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,#a855f7,#d946ef);box-shadow:0 0 12px rgba(217,70,239,.7);z-index:20}
+header.top{position:sticky;top:0;z-index:10;background:rgba(15,10,30,.86);backdrop-filter:blur(12px) saturate(130%);-webkit-backdrop-filter:blur(12px) saturate(130%);border-bottom:1px solid rgba(168,85,247,.35);display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.6rem 1.25rem;padding-top:calc(.6rem + env(safe-area-inset-top,0px))}
+:root[data-theme="light"] header.top{background:rgba(255,255,255,.92)}
+header.top strong{background:linear-gradient(90deg,#c4b5fd,#a855f7,#d946ef);-webkit-background-clip:text;background-clip:text;color:transparent;font-size:1.05rem;letter-spacing:.3px;white-space:nowrap}
+header.top nav{display:flex;gap:.4rem 1rem;font-size:.9rem;align-items:center;flex-wrap:wrap}header.top a{color:var(--mu);text-decoration:none}header.top a:hover{color:var(--lav)}
+header.top a.back{border:1px solid var(--ln);border-radius:99px;padding:.3rem .85rem;font-weight:700}header.top a.back:hover{border-color:var(--ac);color:var(--lav)}
+.btn{background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.03));border:1px solid rgba(192,132,252,.4);color:var(--tx);border-radius:12px;padding:.5rem .9rem;display:inline-flex;gap:.45rem;align-items:center;font-size:.9rem;font-weight:700;transition:transform .15s,border-color .15s,box-shadow .2s}
+:root[data-theme="light"] .btn{background:#fff}
+.btn:hover{border-color:var(--ac);box-shadow:0 6px 16px rgba(168,85,247,.25);transform:translateY(-1px)}.btn:active{transform:none}
+/* Hero */
+.hero{display:grid;gap:2rem;align-items:center;padding-top:3.5rem}
+@media(min-width:800px){.hero{grid-template-columns:1.2fr 1fr}}
+.hero h1{font-size:clamp(2rem,6vw,3.2rem);letter-spacing:-.02em}.grad{background:linear-gradient(90deg,#c4b5fd,#a855f7,#d946ef,#22d3ee);-webkit-background-clip:text;background-clip:text;color:transparent}.hero p{font-size:1.1rem;max-width:34em}
+.hero svg{filter:drop-shadow(0 0 18px rgba(168,85,247,.35))}
+.stats{display:flex;gap:2.5rem;margin-top:1.5rem}.stats b{font-size:2.2rem;display:block;color:var(--lav);font-weight:700}
+.draw{stroke-dasharray:1;stroke-dashoffset:1;animation:dr 2s ease forwards}@keyframes dr{to{stroke-dashoffset:0}}
+/* Controles */
+.ctl{display:flex;flex-wrap:wrap;gap:.6rem;margin:1.2rem 0}
+#q{flex:1 1 220px;padding:.6rem .9rem;border:1px solid rgba(192,132,252,.4);border-radius:12px;background:rgba(0,0,0,.35);color:var(--tx);font:inherit}
+:root[data-theme="light"] #q{background:#fff}
+.chip{border:1px solid var(--ln);background:rgba(255,255,255,.04);color:var(--mu);border-radius:99px;padding:.35rem .9rem;font-size:.9rem;display:inline-flex;gap:.4rem;align-items:center}
+.chip svg{width:18px;height:18px}.chip[aria-pressed="true"]{background:linear-gradient(100deg,#a855f7,#d946ef);border-color:transparent;color:#fff}
+/* Tarjetas */
+#grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1rem}
+.card{background:linear-gradient(180deg,rgba(26,15,45,.92),rgba(12,7,24,.92));border:1px solid var(--ln);border-radius:var(--r);box-shadow:var(--sh);transition:transform .2s,border-color .2s,box-shadow .2s;animation:fi .35s ease both}
+:root[data-theme="light"] .card{background:#fff}
+@keyframes fi{from{opacity:0;transform:translateY(8px)}}
+.card.pre{opacity:0;transform:translateY(14px)}.card.in{opacity:1;transform:none;transition:opacity .5s,transform .5s}
+.card:hover{transform:translateY(-2px);border-color:var(--ac);box-shadow:0 6px 18px rgba(168,85,247,.28)}.card.open{grid-column:1/-1}
+.card>button.h{all:unset;box-sizing:border-box;width:100%;padding:1rem;display:flex;gap:.8rem;align-items:center;cursor:pointer;color:var(--lav)}
+.card>button.h:focus-visible{outline:2px solid var(--fuchsia);outline-offset:-2px;border-radius:var(--r)}
+.card .n{color:var(--tx);font-weight:700;display:block}.card .es{color:var(--mu);font-size:.9rem;display:block}
+.card .cat{margin-left:auto;font-size:.72rem;color:var(--dim);text-align:right;text-transform:uppercase;letter-spacing:.5px}
+.bd{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease}.open .bd{grid-template-rows:1fr}
+.bd>div{overflow:hidden}.bd .in2{padding:0 1rem 1rem;display:grid;gap:.7rem}
+.bd h4{margin:0;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:var(--lav)}.bd p{margin:.1rem 0 0}
+.ph{border-left:2px solid var(--fuchsia);background:rgba(217,70,239,.07);border-radius:0 10px 10px 0;padding:.4rem .8rem}.ph em{font-weight:700}
+.row{display:flex;flex-wrap:wrap;gap:.5rem}
+.rel{border:1px solid var(--ln);background:none;border-radius:99px;padding:.15rem .7rem;font-size:.85rem;color:var(--lav)}.rel:hover{border-color:var(--ac)}
+#none{display:none;color:var(--mu)}
+/* Diagrama */
+#dg{width:100%;max-width:640px;display:block;margin:1rem auto}
+#dg .nd rect{fill:var(--sf);stroke:var(--ln);stroke-width:1;transition:stroke .2s}#dg .nd text{fill:var(--tx);font-size:13px}
+#dg .nd{cursor:pointer;color:var(--mu)}#dg .ln{stroke:var(--ln);stroke-width:1.5;fill:none;transition:stroke .2s}
+#dg .on rect{stroke:var(--ac);stroke-width:2}#dg .on{color:var(--ac)}#dg .ln.on{stroke:var(--ac)}
+#dgi{text-align:center;min-height:3.2em;color:var(--mu)}
+/* Tabla */
+.tw{overflow-x:auto;border:1px solid var(--ln);border-radius:var(--r);background:linear-gradient(180deg,rgba(26,15,45,.9),rgba(12,7,24,.9))}
+:root[data-theme="light"] .tw{background:#fff}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.92rem}th,td{padding:.65rem .9rem;text-align:left;border-bottom:1px solid var(--ln)}
+th{color:var(--lav);font-weight:700}tr:last-child td{border:0}
+/* Quiz */
+#qz{background:linear-gradient(180deg,rgba(26,15,45,.9),rgba(12,7,24,.9));border:1px solid var(--ln);border-radius:var(--r);padding:1.4rem}
+:root[data-theme="light"] #qz{background:#fff}
+.op{display:block;width:100%;text-align:left;margin:.5rem 0;padding:.7rem .9rem;border:1px solid var(--ln);border-radius:12px;background:rgba(255,255,255,.03);color:var(--tx);transition:border-color .15s,background .15s}
+:root[data-theme="light"] .op{background:none}
+.op:hover:not(:disabled){border-color:var(--ac)}.op.ok{border-color:var(--ok);background:rgba(52,211,153,.12)}.op.no{border-style:dashed;opacity:.7}
+footer{position:relative;z-index:1;border-top:1px solid var(--ln);text-align:center;color:var(--dim);padding:2rem 1rem;font-size:.9rem;display:grid;gap:.6rem;justify-items:center}
+footer a.flink{color:var(--lav);text-decoration:none;border:1px solid var(--ln);border-radius:99px;padding:.35rem 1rem;font-weight:700}footer a.flink:hover{border-color:var(--ac)}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.draw{stroke-dashoffset:0}.card.pre{opacity:1;transform:none}.aurora{display:none}}
+</style>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+<div id="prog" aria-hidden="true"></div>
+<header class="top">
+  <strong>Glosario PC Gamer</strong>
+  <nav aria-label="Secciones"><a class="back" href="index.html" onclick="if(history.length>1){history.back();return false}">← Armar PC</a><a href="#terminos">Términos</a><a href="#conexion">Conexiones</a><a href="#compat">Compatibilidad</a><a href="#quiz">Quiz</a></nav>
+  <button class="btn" id="th" aria-label="Cambiar entre modo claro y oscuro"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.500 1.500M17.500 17.500L19 19M19 5l-1.500 1.500M6.500 17.500L5 19"/></svg><span>Tema</span></button>
+</header>
+<main>
+<section class="hero" aria-labelledby="t1">
+  <div>
+    <h1 id="t1"><span class="grad">Glosario de PC Gamer</span>: inglés técnico para armar y entender una computadora</h1>
+    <p class="mu">30 términos de hardware y software con traducción, analogías, errores comunes y frases de ejemplo para practicar tu inglés técnico.</p>
+    <div class="stats"><div><b data-n="30">0</b>términos</div><div><b data-n="5">0</b>categorías</div></div>
+  </div>
+  <svg viewBox="0 0 320 260" role="img" aria-label="Ilustración abstracta de una placa madre" style="color:var(--ac);width:100%;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round">
+    <rect class="draw" pathLength="1" x="20" y="10" width="280" height="240" rx="10"/>
+    <rect class="draw" pathLength="1" x="110" y="60" width="70" height="70" rx="4"/>
+    <path class="draw" pathLength="1" d="M125 60V45M145 60V45M165 60V45M125 130v15M145 130v15M165 130v15M110 80H95M110 100H95M180 80h15M180 100h15"/>
+    <path class="draw" pathLength="1" d="M215 40v90M230 40v90M245 40v90M260 40v90"/>
+    <rect class="draw" pathLength="1" x="45" y="175" width="230" height="16" rx="3"/>
+    <path class="draw" pathLength="1" d="M60 215h80M170 215h40M45 40h30v40"/>
+  </svg>
+</section>
+
+<section id="terminos" aria-labelledby="t2">
+  <h2 id="t2">Los 30 términos</h2>
+  <p class="mu">Buscá por palabra o filtrá por categoría. Tocá una tarjeta para ver todo el detalle.</p>
+  <div class="ctl"><input id="q" type="search" placeholder="Buscar en inglés o español" aria-label="Buscar términos"><div id="fl" class="row" role="group" aria-label="Filtrar por categoría"></div></div>
+  <div id="grid" aria-live="polite"></div>
+  <p id="none">No hay términos que coincidan con tu búsqueda.</p>
+</section>
+
+<section id="conexion" aria-labelledby="t3">
+  <h2 id="t3">Cómo se conectan las piezas</h2>
+  <p class="mu">Pasá el cursor o enfocá con el teclado cada pieza para ver qué hace.</p>
+  <svg id="dg" viewBox="0 0 600 320" role="group" aria-label="Diagrama de conexión de componentes"></svg>
+  <p id="dgi" aria-live="polite">Elegí una pieza.</p>
+</section>
+
+<section id="compat" aria-labelledby="t4">
+  <h2 id="t4">Guía de compatibilidad</h2>
+  <p class="mu">Antes de comprar: check compatibility. Los datos son orientativos; confirmá siempre en la ficha de tu placa.</p>
+  <div class="tw"><table><caption class="mu" style="text-align:left;padding:.6rem .9rem">Sockets y memoria</caption><thead><tr><th>Socket</th><th>Procesadores</th><th>RAM</th><th>Nota</th></tr></thead><tbody id="tb"></tbody></table></div>
+  <div class="tw" style="margin-top:1rem"><table><caption class="mu" style="text-align:left;padding:.6rem .9rem">Chipsets Intel LGA1700</caption><thead><tr><th>Chipset</th><th>Gama</th><th>Para quién</th></tr></thead><tbody>
+  <tr><td>H610</td><td>Básica</td><td>Oficina y juegos livianos, pocas ranuras.</td></tr>
+  <tr><td>B760</td><td>Media</td><td>La opción habitual para jugar.</td></tr>
+  <tr><td>Z790</td><td>Alta</td><td>Overclock y más conectividad.</td></tr></tbody></table></div>
+</section>
+
+<section id="quiz" aria-labelledby="t5">
+  <h2 id="t5">Mini quiz</h2>
+  <p class="mu">10 preguntas con respuesta inmediata.</p>
+  <div id="qz" aria-live="polite"></div>
+</section>
+</main>
+<footer><a class="flink" href="index.html">← Volver al armador</a><span>Glosario de PC Gamer. Material educativo para estudiantes de inglés técnico.</span></footer>
+
+<script>
+/* ===== Iconos SVG propios (24x24, trazo 1.5) ===== */
+const IC={
+chip:'<rect x="6" y="6" width="12" height="12" rx="1.5"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/>',
+gpu:'<rect x="2" y="7" width="20" height="9" rx="1.5"/><circle cx="9" cy="11.5" r="2.5"/><circle cx="16" cy="11.5" r="2.5"/><path d="M5 16v3M2 19h6"/>',
+ram:'<rect x="2" y="8" width="20" height="8" rx="1"/><path d="M6 11v2M10 11v2M14 11v2M18 11v2M5 16v2M9 16v2M13 16v2M17 16v2"/>',
+psu:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M13 8l-3 4h4l-3 4"/>',
+disk:'<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="12" cy="12" r="4"/>',
+fan:'<circle cx="12" cy="12" r="1.500"/><path d="M12 10.500C12 6 14 3 17 4c2 1 1 4-2 5M13.500 12c4.500 0 7.500 2 6.500 5-1 2-4 1-5-2M12 13.500C12 18 10 21 7 20c-2-1-1-4 2-5M10.500 12C6 12 3 10 4 7c1-2 4-1 5 2"/>',
+temp:'<path d="M10 14V5a2 2 0 014 0v9a4 4 0 11-4 0z"/><path d="M12 9v7"/>',
+drop:'<path d="M12 3s6 6.500 6 11a6 6 0 01-12 0c0-4.500 6-11 6-11z"/>',
+gear:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/>',
+slot:'<rect x="2" y="10" width="20" height="4" rx="1"/><path d="M6 14v3M10 14v3M14 14v3M18 14v3"/>',
+cable:'<path d="M4 8h4a4 4 0 014 4a4 4 0 004 4h4M4 8V6M20 16v2"/>',
+monitor:'<rect x="3" y="4" width="18" height="12" rx="1.500"/><path d="M9 20h6M12 16v4"/>',
+bug:'<rect x="8" y="8" width="8" height="11" rx="4"/><path d="M12 8V5M5 10l3 1M19 10l-3 1M5 17l3-1M19 17l-3-1M9 4l3 1 3-1"/>',
+shield:'<path d="M12 3l8 3v6c0 5-4 8-8 9-4-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/>',
+down:'<path d="M12 3v12M7 11l5 5 5-5M4 20h16"/>',
+case:'<rect x="6" y="2" width="12" height="20" rx="2"/><circle cx="12" cy="14" r="3"/><path d="M9 6h6"/>',
+gauge:'<path d="M4 17a8 8 0 1116 0"/><path d="M12 17l4-5"/>',
+board:'<rect x="3" y="3" width="18" height="18" rx="2"/><rect x="7" y="7" width="5" height="5"/><path d="M15 7h2M15 11h2M7 16h10"/>',
+bios:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 10l2 2-2 2M12 14h5"/>',
+refresh:'<path d="M20 11a8 8 0 10-2 6M20 5v6h-6"/>',
+search:'<circle cx="11" cy="11" r="6"/><path d="M20 20l-4-4"/>',
+play:'<path d="M5 9v6h4l5 4V5L9 9z"/><path d="M18 9a4 4 0 010 6"/>',
+copy:'<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M4 16V6a2 2 0 012-2h10"/>'
+};
+const ic=k=>`<svg class="i" viewBox="0 0 24 24" aria-hidden="true">${IC[k]}</svg>`;
+
+/* ===== Datos: editá aquí =====
+ t(inglés, español, categoría(0-4), icono, definición, analogía, ejemplo real, error común, frase en inglés, traducción, términos relacionados (números)) */
+const CATS=[["Componentes","chip"],["Software","bios"],["Rendimiento","gauge"],["Refrigeración","fan"],["Armado y entorno","case"]];
+const t=(en,es,c,i,d,a,e,m,p,tr,r)=>({en,es,c,i,d,a,e,m,p,tr,r});
+const T=[
+t("Motherboard","Placa madre",0,"board","Es la placa principal donde se conectan CPU, RAM, GPU y almacenamiento. Define qué piezas entran (socket, tipo de RAM) y cuántas ranuras y puertos tenés. El chipset marca la gama: H610 básico, B760 media, Z790 para overclock.","Como el plano de una ciudad: decide dónde va cada edificio y por qué calles se comunican.","Una B760 con un Core i5 para jugar y dos SSD.","Elegirla solo por precio sin mirar socket ni tipo de RAM.","The motherboard connects all the components.","La placa madre conecta todos los componentes.",[2,4,24,7]),
+t("CPU / Processor","Procesador",0,"chip","Ejecuta las instrucciones de programas y juegos. Se describe con núcleos, hilos y frecuencia, pero la arquitectura pesa tanto como los GHz.","El cerebro de la PC: decide qué hacer y en qué orden.","Un Ryzen 5 5600 o un Core i5 alcanzan para jugar bien en 1080p.","Creer que más GHz siempre es más rápido entre generaciones distintas.","The CPU runs every program on your PC.","El procesador ejecuta cada programa de tu PC.",[1,12,11,22]),
+t("GPU / Graphics Card","Placa de video",0,"gpu","Procesa los gráficos y los dibuja en el monitor. Tiene su propia memoria (VRAM) y suele ser la pieza que más influye en los FPS al jugar.","Un taller con cientos de dibujantes trabajando en paralelo mientras el CPU dirige.","Una RTX 4060 mueve la mayoría de los juegos a 1080p en calidad alta.","Olvidar la VRAM, el tamaño en el gabinete o los watts que pide.","A better graphics card gives you more FPS.","Una mejor placa de video te da más FPS.",[14,12,5,24]),
+t("RAM / Memory","Memoria",0,"ram","Memoria temporal y muy rápida donde viven los programas abiertos; se vacía al apagar. Hoy 16 GB es lo habitual para jugar y 8 GB suele quedar corto. En dual channel (dos módulos) el ancho de banda se duplica.","Tu escritorio de trabajo: más grande, más cosas abiertas a la vez.","Dos módulos de 8 GB DDR4 en dual channel.","Creer que 2x8 GB siempre da un porcentaje fijo más de FPS: la mejora depende del juego, del CPU y del modelo, y a veces es casi nula.","More RAM lets you open more programs.","Más RAM te deja abrir más programas.",[1,24,6,29]),
+t("PSU / Power Supply","Fuente",0,"psu","Convierte la corriente de la pared en la que usan las piezas. Sumá el consumo de CPU y GPU y dejá margen. Como piso orientativo, 550 W 80 Plus Bronze para un equipo medio; la placa de video manda.","El corazón: bombea energía a todo el cuerpo.","CPU de 65 W + GPU de 160 W + resto: una de 550 W de marca cubre con margen.","Comprar una genérica sin certificación: puede fallar y dañar piezas.","Choose a reliable PSU.","Elegí una fuente confiable.",[3,2,23]),
+t("Storage","Almacenamiento",0,"disk","Guarda datos de forma permanente. HDD: mecánico, barato y lento. SSD SATA: sin partes móviles y mucho más veloz. SSD NVMe M.2: el más rápido, va directo en una ranura de la placa.","Un depósito: el HDD es un galpón lejano; el NVMe, un estante al lado del escritorio.","SSD para Windows y juegos, HDD para fotos y videos.","Creer que sin NVMe no se puede jugar: un SSD SATA ya mejora muchísimo los tiempos de carga.","Install the game on the SSD to load faster.","Instalá el juego en el SSD para que cargue más rápido.",[24,18,19,1]),
+t("BIOS","BIOS (firmware de la placa)",1,"bios","Programa grabado en la placa que arranca el hardware antes de Windows. Ahí elegís el orden de arranque y activás XMP o EXPO para la RAM. Hoy se usa su versión moderna, UEFI.","El encargado que abre el edificio y revisa todo antes de que lleguen los inquilinos.","Un Ryzen 5000 en una placa AM4 vieja puede no dar video hasta actualizar la BIOS.","Actualizarla sin necesidad o con riesgo de corte de luz.","Update the BIOS before installing the new CPU.","Actualizá la BIOS antes de instalar el nuevo procesador.",[1,2,26]),
+t("Driver","Controlador",1,"gear","Programa que le explica a Windows cómo usar un componente. Con un driver ausente o muy viejo, una placa de video puede rendir menos y fallar en juegos nuevos.","Un intérprete entre dos personas que hablan idiomas distintos.","Instalar el driver de NVIDIA o AMD desde la web oficial.","Bajar drivers de sitios no oficiales.","A driver is the software for your hardware.","Un controlador es el software de tu hardware.",[3,26,18]),
+t("Format","Formatear",1,"refresh","Borrar un disco y prepararlo con un sistema de archivos. Se hace al reinstalar Windows o limpiar una unidad. Se pierde todo lo que haya adentro.","Vaciar y reordenar un placard entero.","Formatear el SSD antes de instalar Windows desde cero.","Formatear sin hacer una copia de seguridad.","Back up your files before you format.","Guardá una copia de tus archivos antes de formatear.",[19,18,6]),
+t("Overheating","Sobrecalentamiento",3,"temp","Ocurre cuando una pieza pasa su temperatura segura, por polvo, poca ventilación o pasta seca. Para protegerse, el CPU o la GPU bajan su velocidad solos (thermal throttling) y caen los FPS.","Correr con campera en verano: bajás el ritmo para no desmayarte.","Un CPU cerca de 95 grados con el gabinete lleno de polvo.","Ignorar las temperaturas hasta que la PC se cuelga.","Overheating causes FPS drop.","El sobrecalentamiento causa caídas de FPS.",[11,22,30,14]),
+t("Thermal Paste","Pasta térmica",3,"drop","Crema que llena huecos microscópicos entre el CPU y el cooler para pasar mejor el calor. Va una capa fina. No hace falta cambiarla cada año: suele durar varios, y se renueva al desmontar el cooler o si las temperaturas suben sin otra causa.","Un relleno entre dos piezas que no encajan perfecto.","Una gota del tamaño de una arveja en el centro del CPU.","Poner demasiada o cambiarla sin motivo.","Thermal paste transfers heat from CPU to cooler.","La pasta térmica transfiere calor del CPU al cooler.",[2,10,22]),
+t("Bottleneck","Cuello de botella",2,"gauge","Un componente lento limita a los demás. Depende del juego y la resolución: a 1440p o 4K el CPU pesa menos que a 1080p. Un RTX 4060 con un CPU muy viejo puede quedar frenada.","Una autopista que se angosta a un solo carril.","Un Core i3 antiguo con una RTX 4060: la placa espera al CPU.","Creer que existe un porcentaje exacto de bottleneck para cada par de piezas.","Bottleneck is when one slow component limits the others.","Cuello de botella es cuando un componente lento limita a los demás.",[2,3,14,13]),
+t("Upgrade","Mejora",4,"gear","Reemplazar o ampliar una pieza para mejorar el equipo. Conviene detectar primero qué limita el rendimiento y revisar compatibilidad (socket, RAM, watts) antes de comprar.","Cambiar la rueda que falla, no el auto entero.","Pasar de 8 a 16 GB de RAM o de HDD a SSD.","Cambiar la GPU sin mirar fuente ni CPU.","An upgrade can fix a bottleneck.","Una mejora puede resolver un cuello de botella.",[12,5,24]),
+t("FPS / Frames Per Second","Cuadros por segundo",2,"monitor","Cantidad de imágenes que la PC dibuja por segundo. Referencia: 30 se siente trabado, 60 fluido y 144 o más es para juegos competitivos. El monitor también limita: uno de 60 Hz no muestra más de 60 FPS.","Las hojas de un flipbook: más hojas por segundo, movimiento más suave.","Un juego a 144 FPS en un monitor de 144 Hz.","Comprar una GPU para 144 FPS y usar un monitor de 60 Hz.","FPS means Frames Per Second. More FPS is smoother.","FPS significa cuadros por segundo. Más FPS es más fluido.",[15,17,3,29]),
+t("Lag","Retraso / Tirón",2,"refresh","Demora entre tu acción y la respuesta en pantalla. Puede ser de red (ping alto) o de la PC (pocos FPS o tirones). Son problemas distintos con soluciones distintas.","Hablar por radio con dos segundos de retraso.","El ping sube a 200 ms y el personaje se teletransporta.","Culpar al hardware cuando el problema es el Wi-Fi.","High ping causes lag in online games.","Un ping alto causa lag en juegos online.",[14,29,10]),
+t("Build","Armado de PC",4,"case","Armar una computadora eligiendo y ensamblando las piezas. Un orden habitual: CPU, cooler, RAM y M.2 sobre la placa, luego gabinete, fuente y GPU.","Armar un mueble modular siguiendo las instrucciones.","Un build para 1080p con Ryzen 5, 16 GB y RTX 4060.","No chequear compatibilidad antes de comprar.","I want to build my first PC.","Quiero armar mi primera PC.",[1,23,25,13]),
+t("Benchmark","Prueba de rendimiento",2,"gauge","Prueba estandarizada que mide cuánto rinde una pieza o la PC completa, para poder comparar. Hay benchmarks sintéticos (programas de prueba) y pruebas con juegos reales.","Una carrera cronometrada para comparar corredores.","Correr 3DMark o el benchmark integrado de un juego.","Comparar resultados hechos con configuraciones distintas.","Run a benchmark to compare your results.","Hacé un benchmark para comparar tus resultados.",[14,29,12]),
+t("Install","Instalar",1,"down","Copiar un programa o sistema al disco para usarlo. Elegí la ubicación (idealmente un SSD para juegos) y descargá siempre desde fuentes oficiales.","Mudar un electrodoméstico y dejarlo enchufado en su lugar.","Instalar Windows desde un pendrive.","Llenar el disco de sistema hasta el límite.","Install the latest driver.","Instalá el último driver.",[8,6,26]),
+t("Backup","Copia de seguridad",1,"shield","Copia de tus datos en otro lugar por si falla el disco o formateás. Una regla útil: 3 copias, en 2 tipos de medio, con 1 fuera de casa.","Una llave de repuesto con un vecino.","Fotos en un disco externo y en la nube.","Creer que un segundo disco dentro de la misma PC es un backup suficiente.","Make a backup before you update.","Hacé una copia de seguridad antes de actualizar.",[9,6,26]),
+t("Bug","Error",1,"bug","Falla en un programa o juego que provoca comportamientos inesperados. Se corrige con un parche (patch) del desarrollador, no con hardware nuevo.","Una piedrita en el zapato del software.","Un personaje atraviesa una pared por un bug.","Pensar que toda falla de un juego es culpa de la PC.","This bug makes the game crash.","Este error hace que el juego se cuelgue.",[21,26,8]),
+t("Crash","Cuelgue",1,"bug","El programa o la PC deja de responder o se cierra de golpe. Causas posibles: drivers, calor, RAM inestable, fuente justa o bugs. Revisá temperaturas y el visor de eventos antes de reinstalar todo.","Un auto que se detiene en plena ruta.","El juego se cierra al cargar el mapa.","Reinstalar Windows sin revisar antes temperaturas y drivers.","The game crashes when it overheats.","El juego se cuelga cuando se recalienta.",[20,8,10]),
+t("Cooling","Refrigeración",3,"fan","Sistema que saca el calor de las piezas: disipadores, ventiladores y el flujo de aire del gabinete. Todo CPU necesita al menos un cooler adecuado a su consumo.","La ventilación de una cocina.","Ventiladores de entrada adelante y uno de salida atrás.","Sumar ventiladores sin pensar en el recorrido del aire.","Good cooling keeps temperatures low.","Una buena refrigeración mantiene bajas las temperaturas.",[30,11,10,23]),
+t("Case","Gabinete",4,"case","Caja que contiene y protege las piezas. Define el tamaño de placa que entra (ATX, mATX, ITX), la ventilación y el espacio para GPU y cooler.","La carrocería de un auto.","Un gabinete con frente de malla para mejor flujo de aire.","Elegirlo por estética sin revisar el largo de la GPU.","Check the case size before buying.","Verificá el tamaño del gabinete antes de comprar.",[1,22,25,16]),
+t("Slot","Ranura",0,"slot","Conector de la placa donde se inserta una pieza: DIMM para RAM, PCIe para la GPU, M.2 para SSD NVMe.","Un enchufe con forma propia.","La GPU va en el slot PCIe x16 más cercano al CPU.","Forzar una pieza: si no entra, probablemente no es compatible.","Insert the RAM into the slot until it clicks.","Insertá la RAM en la ranura hasta que haga clic.",[1,3,4,6]),
+t("Cable Management","Orden de cables",4,"cable","Ordenar y sujetar los cables dentro del gabinete. Mejora el flujo de aire y facilita futuras mejoras o limpieza.","Los cables de tu escritorio agrupados con precintos.","Pasar cables por detrás de la bandeja y ajustarlos con precintos.","Creer que es solo estética: también ayuda al flujo de aire.","Cable management helps airflow.","El orden de cables mejora el flujo de aire.",[23,22,16]),
+t("Update","Actualización",1,"refresh","Nueva versión de un programa, driver o BIOS con mejoras y correcciones. Actualizá desde la fuente oficial y, en el caso de la BIOS, solo si hace falta.","El service periódico de tu auto.","Actualizar el driver de la GPU para un juego nuevo.","Actualizar la BIOS por las dudas sin necesidad.","Update your drivers regularly.","Actualizá tus drivers con regularidad.",[8,7,19]),
+t("Setup","Configuración / Escritorio gamer",4,"monitor","Tiene dos sentidos: la configuración de un programa o equipo, y el conjunto de monitor, teclado, mouse y accesorios sobre tu escritorio.","Armar tu mesa de trabajo a tu medida.","Un setup con monitor de 144 Hz, mouse y auriculares.","Gastar todo en la torre y quedarse con un monitor de 60 Hz.","My setup has two monitors.","Mi setup tiene dos monitores.",[28,14,16]),
+t("Peripheral","Periférico",0,"monitor","Dispositivo externo que se conecta a la PC: teclado, mouse, monitor, auriculares, webcam.","Las manos y los ojos de la PC.","Un mouse con sensor de alta precisión.","Confundir periférico con componente interno.","A mouse is a peripheral device.","El mouse es un dispositivo periférico.",[27,14]),
+t("Performance","Rendimiento",2,"gauge","Qué tan bien funciona la PC: FPS, tiempos de carga y estabilidad. Depende del conjunto de piezas, de la configuración gráfica y del mantenimiento.","El desempeño de un equipo de fútbol, no de un solo jugador.","Bajar sombras a nivel medio mejora el rendimiento con poca pérdida visual.","Culpar a una sola pieza sin medir.","Performance depends on the whole system.","El rendimiento depende de todo el sistema.",[12,14,17,10]),
+t("Liquid Cooling / Air Cooling / AIO","Refrigeración líquida / por aire",3,"drop","Air cooling: disipador y ventilador, económico y simple. AIO (All-In-One): kit líquido cerrado de 120, 240 o 360 mm. Custom loop: a medida y muy caro. Un buen cooler de aire puede igualar a un AIO y alcanzar para muchos i7: depende del modelo y de la carga.","El aire es un ventilador de pie; el líquido, el radiador de un auto.","Un i5 con cooler de torre; un i7 exigente con AIO de 240 mm.","Creer que el líquido siempre enfría más que el aire.","Liquid cooling is better for overclocking.","La refrigeración líquida suele ser mejor para overclocking.",[22,11,10])
+];
+
+/* ===== Utilidades ===== */
+const $=s=>document.querySelector(s),root=document.documentElement;
+let cat=-1,qs="";
+const norm=s=>s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+
+/* ===== Tema ===== */
+$("#th").onclick=()=>{const d=root.dataset.theme?root.dataset.theme==="dark":matchMedia("(prefers-color-scheme:dark)").matches;root.dataset.theme=d?"light":"dark"};
+
+/* ===== Filtros ===== */
+const fl=$("#fl");
+[["Todos","search"],...CATS].forEach(([n,i],k)=>{const b=document.createElement("button");b.className="chip";b.innerHTML=ic(i)+n;b.setAttribute("aria-pressed",k===0);b.onclick=()=>{cat=k-1;[...fl.children].forEach((c,j)=>c.setAttribute("aria-pressed",j===k));render()};fl.append(b)});
+$("#q").oninput=e=>{qs=norm(e.target.value);render()};
+
+/* ===== Tarjetas ===== */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{threshold:.1});
+function render(){
+  const g=$("#grid");g.innerHTML="";let n=0;
+  T.forEach((x,i)=>{
+    if(cat>-1&&x.c!==cat)return;
+    if(qs&&!norm(x.en+" "+x.es+" "+x.d).includes(qs))return;
+    n++;const c=document.createElement("article");c.className="card pre";c.id="c"+(i+1);
+    c.innerHTML=`<button class="h" aria-expanded="false" aria-controls="b${i}">${ic(x.i)}<span><span class="n">${x.en}</span><span class="es">${x.es}</span></span><span class="cat">${CATS[x.c][0]}</span></button>
+    <div class="bd" id="b${i}"><div><div class="in2">
+    <div><h4>Definición</h4><p>${x.d}</p></div>
+    <div><h4>Analogía</h4><p>${x.a}</p></div>
+    <div><h4>Ejemplo real</h4><p>${x.e}</p></div>
+    <div><h4>Error común</h4><p>${x.m}</p></div>
+    <div class="ph"><h4>En inglés</h4><p><em>${x.p}</em><br><span class="mu">${x.tr}</span></p></div>
+    <div class="row"><button class="btn cp">${ic("copy")}<span>Copiar frase</span></button>${"speechSynthesis"in window?`<button class="btn sp">${ic("play")}<span>Escuchar</span></button>`:""}</div>
+    <div><h4>Relacionados</h4><div class="row">${x.r.map(r=>`<button class="rel" data-go="${r}">${T[r-1].en.split(" / ")[0]}</button>`).join("")}</div></div>
+    </div></div></div>`;
+    const h=c.querySelector(".h");h.onclick=()=>{const o=c.classList.toggle("open");h.setAttribute("aria-expanded",o)};
+    c.querySelector(".cp").onclick=async e=>{const s=e.currentTarget.querySelector("span");try{await navigator.clipboard.writeText(x.p);s.textContent="Copiado"}catch(_){s.textContent="No se pudo copiar"}setTimeout(()=>s.textContent="Copiar frase",1500)};
+    const sp=c.querySelector(".sp");if(sp)sp.onclick=()=>{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(x.p);u.lang="en-US";speechSynthesis.speak(u)};
+    c.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>go(+b.dataset.go));
+    g.append(c);io.observe(c);
+  });
+  $("#none").style.display=n?"none":"block";
+}
+function go(n){cat=-1;qs="";$("#q").value="";[...fl.children].forEach((c,j)=>c.setAttribute("aria-pressed",j===0));render();const c=$("#c"+n);c.classList.add("in");c.classList.remove("pre");c.classList.add("open");c.querySelector(".h").setAttribute("aria-expanded",true);c.scrollIntoView({behavior:"smooth",block:"center"})}
+render();
+
+/* ===== Contadores y progreso ===== */
+document.querySelectorAll("[data-n]").forEach(el=>{const to=+el.dataset.n,rm=matchMedia("(prefers-reduced-motion:reduce)").matches;if(rm){el.textContent=to;return}let s=null;const f=ts=>{s=s||ts;const p=Math.min((ts-s)/1200,1);el.textContent=Math.round(p*to);if(p<1)requestAnimationFrame(f)};requestAnimationFrame(f)});
+addEventListener("scroll",()=>{$("#prog").style.width=(scrollY/(document.body.scrollHeight-innerHeight)*100)+"%"},{passive:true});
+
+/* ===== Diagrama interactivo ===== */
+const N=[["Cooling",110,45,"fan","Saca el calor del CPU y del gabinete. Sin refrigeración adecuada hay sobrecalentamiento."],["CPU",300,45,"chip","Procesa las instrucciones y coordina al resto desde su socket."],["RAM",490,45,"ram","Memoria rápida que guarda lo que usás en el momento, en ranuras DIMM."],["PSU",110,275,"psu","La fuente entrega energía a la placa, la GPU y el almacenamiento."],["GPU",300,275,"gpu","Genera las imágenes; va en el slot PCIe y suele ser la pieza que más consume."],["Storage",490,275,"disk","Guarda Windows y juegos; el SSD NVMe va en una ranura M.2."]];
+let sv='';
+N.forEach(([n,x,y],k)=>sv+=`<path class="ln draw" pathLength="1" data-k="${k}" d="M300 160L${x} ${y}"/>`);
+sv+=`<g><rect x="240" y="135" width="120" height="50" rx="8" style="fill:var(--sf);stroke:var(--ac)"/><text x="300" y="165" text-anchor="middle" style="fill:var(--tx);font-size:14px">Motherboard</text></g>`;
+N.forEach(([n,x,y,i],k)=>sv+=`<g class="nd" data-k="${k}" tabindex="0" role="button" aria-label="${n}"><rect x="${x-52}" y="${y-22}" width="104" height="44" rx="8"/><g transform="translate(${x-44} ${y-12})" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${IC[i]}</g><text x="${x-14}" y="${y+4}">${n}</text></g>`);
+$("#dg").innerHTML=sv;
+const dg=$("#dg");
+function hl(k){dg.querySelectorAll("[data-k]").forEach(e=>e.classList.toggle("on",e.dataset.k==k));$("#dgi").textContent=k===null?"Elegí una pieza.":N[k][0]+": "+N[k][4]}
+dg.querySelectorAll(".nd").forEach(g=>{const k=g.dataset.k;g.onmouseenter=g.onfocus=()=>hl(k);g.onmouseleave=g.onblur=()=>hl(null)});
+
+/* ===== Tabla de compatibilidad ===== */
+[["LGA1700","Intel Core 12.ª a 14.ª gen","DDR4 o DDR5 (según el modelo de placa)","No entra en LGA1200."],["LGA1200","Intel Core 10.ª y 11.ª gen","DDR4","No entra en LGA1700."],["AM4","Ryzen 1000 a 5000","DDR4","Un Ryzen 5000 puede requerir actualizar la BIOS."],["AM5","Ryzen 7000 en adelante","Solo DDR5","No entra en AM4."]].forEach(r=>$("#tb").insertAdjacentHTML("beforeend","<tr>"+r.map(c=>`<td>${c}</td>`).join("")+"</tr>"));
+
+/* ===== Quiz ===== */
+const Q=[
+["¿Qué es un bottleneck?",["Un cable roto","Un componente lento que frena al resto","Un tipo de RAM"],1,"Un componente lento limita el rendimiento de los demás."],
+["Con un monitor de 60 Hz, ¿cuántos FPS llegás a ver?",["Hasta 60","Hasta 144","Los que dé la GPU"],0,"El monitor muestra como máximo su frecuencia."],
+["¿Qué RAM entra en una placa AM5?",["DDR4","DDR5","Ambas"],1,"AM5 funciona solo con DDR5."],
+["¿Qué significa backup?",["Actualización","Copia de seguridad","Cuelgue"],1,"Backup es una copia de seguridad de tus datos."],
+["¿Para qué sirve la pasta térmica?",["Pegar el cooler","Transferir calor del CPU al cooler","Limpiar el CPU"],1,"Llena huecos microscópicos para conducir el calor."],
+["¿Qué es el thermal throttling?",["Bajar la velocidad por exceso de calor","Subir los FPS","Formatear el disco"],0,"El hardware se frena solo para no dañarse."],
+["¿Qué significa AIO?",["All-In-One: refrigeración líquida cerrada","Air Input Output","Advanced Intel Option"],0,"Es un kit líquido cerrado de 120, 240 o 360 mm."],
+["¿Qué hace un driver?",["Enfría la placa","Permite que Windows use el hardware","Guarda archivos"],1,"Es el software que comunica el sistema con la pieza."],
+["Un procesador para LGA1700 entra en...",["LGA1200","AM4","Una placa LGA1700"],2,"El socket debe coincidir exactamente."],
+["¿Qué ranura usa un SSD NVMe?",["M.2","DIMM","PCIe x16 solamente"],0,"M.2 es la ranura típica para NVMe."]];
+let qi=0,sc=0;
+function showQ(){
+  const z=$("#qz");
+  if(qi>=Q.length){z.innerHTML=`<h3>Puntaje final: ${sc} de ${Q.length}</h3><p class="mu">${sc>=8?"Muy bien, dominás el vocabulario.":sc>=5?"Buen camino. Repasá las tarjetas y volvé a intentar.":"Repasá los términos y probá de nuevo."}</p><button class="btn" id="rs">Reiniciar</button>`;$("#rs").onclick=()=>{qi=0;sc=0;showQ()};return}
+  const [q,o,a,e]=Q[qi];
+  z.innerHTML=`<p class="mu">Pregunta ${qi+1} de ${Q.length}</p><h3>${q}</h3>${o.map((x,i)=>`<button class="op" data-i="${i}">${x}</button>`).join("")}<p id="fb"></p>`;
+  z.querySelectorAll(".op").forEach(b=>b.onclick=()=>{
+    const i=+b.dataset.i;if(i===a)sc++;
+    z.querySelectorAll(".op").forEach(x=>{x.disabled=true;if(+x.dataset.i===a)x.classList.add("ok");else if(x===b)x.classList.add("no")});
+    $("#fb").textContent=(i===a?"Correcto. ":"No es esa. ")+e;
+    const nx=document.createElement("button");nx.className="btn";nx.textContent=qi+1<Q.length?"Siguiente":"Ver puntaje";nx.onclick=()=>{qi++;showQ()};z.append(nx);nx.focus();
+  });
+}
+showQ();
+</script>
+</body>
+</html>

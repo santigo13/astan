@@ -1,0 +1,3995 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#040208">
+<title>BUILD YOUR DREAM PC — What is your FPS?</title>
+<style>
+:root{
+  --tb:150px;
+  --bg:#040208; --bg2:#0a0514; --panel:rgba(26,15,45,.88); --panel2:rgba(38,22,64,.95);
+  --stroke:rgba(168,85,247,.22); --stroke2:rgba(192,132,252,.38);
+  --txt:#f3eeff; --muted:#b3a6d6; --dim:#8477a6;
+  --violet:#a855f7; --purple:#8b5cf6; --fuchsia:#d946ef; --indigo:#818cf8; --lav:#c4b5fd;
+  --cyan:#a855f7; --magenta:#d946ef; --lime:#c084fc;
+  --amber:#fbbf24; --red:#fb7185;
+  --ok:#34d399; --warn:#fbbf24; --bad:#fb7185;
+  --r:16px; --r2:22px; --sh:0 8px 22px rgba(0,0,0,.35);
+  --ff:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+html,body{margin:0;padding:0}
+body{
+  font-family:var(--ff); color:var(--txt); background:var(--bg); min-height:100vh;
+  background-image:
+    radial-gradient(1000px 640px at 12% -10%, rgba(139,92,246,.11), transparent 60%),
+    radial-gradient(820px 720px at 100% 120%, rgba(99,102,241,.08), transparent 60%),
+    linear-gradient(180deg,#040208,#0a0514 42%,#040208);
+  overflow-x:hidden;
+}
+#particles{position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.26}
+.wrap{position:relative; z-index:2; max-width:1500px; margin:0 auto; padding:14px; padding-top:calc(var(--tb) + 18px)}
+body.lite #particles{display:none}
+body.lite .float{animation:none!important}
+
+.glass{
+  background:linear-gradient(180deg,var(--panel),rgba(12,7,24,.9));
+  border:1px solid var(--stroke); border-radius:var(--r2);
+  box-shadow:var(--sh);
+}
+.topbar{
+  position:sticky; top:8px; z-index:40; display:flex; flex-direction:column; gap:10px;
+  padding:14px 16px; margin-bottom:16px;
+  backdrop-filter:blur(12px) saturate(130%); -webkit-backdrop-filter:blur(12px) saturate(130%);
+}
+.brand{display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+.logo{
+  width:46px;height:46px;border-radius:14px; flex:0 0 auto; position:relative;
+  background:linear-gradient(150deg,var(--violet),var(--indigo));
+  display:grid; place-items:center; box-shadow:0 0 12px rgba(168,85,247,.28);
+}
+.logo b{width:36px;height:36px;border-radius:10px;background:#0a0514;display:grid;place-items:center;font-size:18px;color:#e9d5ff}
+h1{font-size:clamp(1.05rem,3.6vw,1.55rem); margin:0; letter-spacing:.4px; line-height:1.1}
+h1 span{background:linear-gradient(90deg,var(--lav),var(--violet),var(--fuchsia)); -webkit-background-clip:text; background-clip:text; color:transparent}
+.sub{color:var(--muted); font-size:.78rem; margin-top:3px}
+.toolbar{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+.spacer{flex:1}
+.chipset{display:flex; gap:8px; flex-wrap:wrap}
+
+button,.btn{font-family:inherit}
+.btn{
+  min-height:48px; padding:10px 16px; border-radius:14px; cursor:pointer; font-weight:700; font-size:.86rem;
+  color:var(--txt); border:1px solid var(--stroke2); background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.03));
+  display:inline-flex; align-items:center; gap:8px; justify-content:center; position:relative; overflow:hidden;
+  transition:transform .16s cubic-bezier(.2,.9,.3,1.4), box-shadow .2s, border-color .2s, background .2s;
+}
+.btn:hover{transform:translateY(-1px); border-color:var(--violet); box-shadow:0 6px 16px rgba(168,85,247,.2)}
+.btn:active{transform:scale(.97)}
+.btn:focus-visible{outline:3px solid var(--cyan); outline-offset:2px}
+.btn.sm{min-height:48px; padding:8px 12px; font-size:.78rem; border-radius:12px}
+.presets{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px}
+.presets .btn{flex:1; min-width:120px}
+.btn.primary{border-color:transparent; background:linear-gradient(100deg,var(--cyan),var(--violet) 55%,var(--magenta)); color:#04060f}
+.btn.lime{background:linear-gradient(100deg,var(--lime),var(--cyan)); color:#04060f; border-color:transparent}
+.btn.ghost{background:rgba(255,255,255,.04)}
+.btn.danger{border-color:var(--red); color:#ffd7de}
+.btn[aria-pressed="true"]{border-color:var(--violet); box-shadow:0 0 0 2px rgba(168,85,247,.4) inset}
+.ripple{position:absolute; border-radius:50%; transform:scale(0); background:rgba(255,255,255,.55); pointer-events:none; animation:ripple .6s linear; mix-blend-mode:screen}
+@keyframes ripple{to{transform:scale(3.4); opacity:0}}
+
+.layout{display:grid; grid-template-columns:1fr; gap:16px}
+@media(min-width:1000px){.layout{grid-template-columns:minmax(0,1.55fr) minmax(340px,.95fr); align-items:start}}
+.col-right{position:static; display:flex; flex-direction:column; gap:16px; max-height:none; overflow:visible}
+@media(min-width:1000px){
+  .col-right{position:sticky; top:calc(var(--tb) + 12px); max-height:calc(100vh - var(--tb) - 24px); max-height:calc(100dvh - var(--tb) - 24px); overflow-y:auto; overscroll-behavior:contain; scrollbar-width:thin; scrollbar-color:rgba(255,255,255,.35) transparent; padding-bottom:4px}
+  .col-right::-webkit-scrollbar{width:5px}
+  .col-right::-webkit-scrollbar-track{background:transparent}
+  .col-right::-webkit-scrollbar-thumb{background:rgba(255,255,255,.35); border-radius:4px}
+  .col-right::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.55)}
+}
+
+.section{padding:14px 15px; margin-bottom:14px; border-radius:var(--r2); content-visibility:auto; contain-intrinsic-size:auto 300px}
+.sec-head{display:flex; align-items:center; gap:10px; margin-bottom:10px}
+.sec-head h2{font-size:1rem; margin:0; letter-spacing:.3px}
+.sec-head .ico{font-size:1.15rem}
+.sec-head .hint{color:var(--dim); font-size:.72rem; font-weight:600}
+.pillgrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(148px,1fr)); gap:9px}
+.opt{
+  position:relative; text-align:left; border-radius:15px; cursor:pointer; padding:11px 12px; color:var(--txt);
+  border:1px solid var(--stroke); background:linear-gradient(180deg,rgba(168,85,247,.06),rgba(255,255,255,.012));
+  transition:transform .18s, border-color .2s, box-shadow .2s, background .2s; min-height:48px; overflow:hidden;
+  display:flex; flex-direction:column; gap:6px;
+}
+.opt:hover{transform:translateY(-2px); border-color:var(--stroke2); box-shadow:0 6px 16px rgba(0,0,0,.35)}
+.opt:focus-visible{outline:3px solid var(--fuchsia); outline-offset:2px}
+.opt.sel{border-color:var(--violet); background:linear-gradient(180deg,rgba(168,85,247,.14),rgba(139,92,246,.08)); box-shadow:0 0 0 1px var(--violet) inset}
+
+.opt .nm{font-weight:700; font-size:.84rem; line-height:1.25; padding-right:20px; word-break:break-word}
+.opt .spec{color:var(--muted); font-size:.71rem; display:flex; gap:5px; flex-wrap:wrap}
+.opt .pr{font-size:.8rem; font-weight:800; color:var(--lav); margin-top:auto}
+.tag{display:inline-block; font-size:.64rem; padding:2px 6px; border-radius:7px; background:rgba(168,85,247,.1); border:1px solid var(--stroke); color:var(--muted)}
+.tag.d4{border-color:rgba(129,140,248,.55); color:#d6d9ff}
+.tag.d5{border-color:rgba(217,70,239,.55); color:#ffd9fb}
+.tag.warn{border-color:rgba(251,191,36,.6); color:#ffe6ab}
+.tag.bad{border-color:rgba(251,113,133,.6); color:#ffcdd5}
+
+.casebox{padding:12px}
+.case-stage{
+  position:relative; border-radius:16px; padding:12px; overflow:hidden;
+  background:linear-gradient(180deg,rgba(10,12,22,.85),rgba(6,8,15,.85)); border:1px solid var(--stroke);
+}
+.case-frame{position:relative; height:210px; border-radius:12px; border:2px solid var(--stroke2); background:
+  linear-gradient(180deg,rgba(255,255,255,.02),transparent), repeating-linear-gradient(90deg,transparent 0 18px,rgba(255,255,255,.022) 18px 19px);
+}
+.slot{position:absolute; border-radius:8px; border:1px dashed rgba(192,132,252,.28); display:grid; place-items:center;
+  font-size:.6rem; color:var(--dim); text-align:center; transition:all .35s ease; padding:2px 4px; line-height:1.1;
+  overflow:hidden; word-break:break-word}
+.slot.filled{border-style:solid; opacity:1; box-shadow:0 0 16px rgba(168,85,247,.5); color:#0a0514; font-weight:800}
+.slot.filled.cpu{background:linear-gradient(160deg,var(--violet),var(--purple))}
+.slot.filled.mobo{background:linear-gradient(160deg,#3b2a5e,#1a1030); color:#e9d5ff}
+.slot.filled.ram{background:linear-gradient(160deg,var(--lav),var(--indigo))}
+.slot.filled.gpu{background:linear-gradient(160deg,var(--fuchsia),var(--violet))}
+.slot.filled.psu{background:linear-gradient(160deg,#fcd34d,#b45309)}
+.slot.filled.cooling{background:linear-gradient(160deg,#a5b4fc,#6366f1)}
+.slot.filled.storage{background:linear-gradient(160deg,#d8b4fe,#7c3aed)}
+.slot.filled.case{background:linear-gradient(160deg,#6d28d9,#2e1065); color:#e9d5ff}
+.float{animation:floaty 3.4s ease-in-out infinite}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+.case-cap{display:flex; justify-content:space-between; color:var(--muted); font-size:.72rem; margin-top:8px; flex-wrap:wrap; gap:6px}
+
+.summary{padding:14px}
+.sumrow{display:flex; justify-content:space-between; align-items:baseline; gap:8px; padding:5px 0; border-bottom:1px dashed rgba(255,255,255,.07)}
+.sumrow:last-child{border-bottom:0}
+.sumrow .k{color:var(--muted); font-size:.8rem}
+.sumrow .v{font-weight:800; font-size:.92rem}
+.bigprice{font-size:clamp(1.5rem,6vw,2.1rem); font-weight:900; letter-spacing:.5px}
+.ars{color:var(--lime)} .usd{color:var(--cyan)}
+.rate{display:flex; gap:8px; align-items:center; margin-top:8px}
+.rate input{flex:1; min-height:44px; border-radius:12px; border:1px solid var(--stroke2); background:rgba(0,0,0,.35); color:var(--txt); padding:8px 12px; font-size:.9rem}
+input,select{font-family:inherit}
+input:focus-visible,select:focus-visible{outline:3px solid var(--cyan); outline-offset:1px}
+
+.comp-list{display:flex; flex-direction:column; gap:7px; margin-top:4px}
+.comp{display:flex; gap:9px; align-items:center; padding:8px 10px; border-radius:12px; background:rgba(255,255,255,.035); border:1px solid var(--stroke); font-size:.78rem}
+.comp .st{width:22px;height:22px;border-radius:50%; display:grid; place-items:center; flex:0 0 auto; font-size:.72rem; font-weight:900; color:#04060f}
+.comp.ok .st{background:var(--ok)} .comp.warn .st{background:var(--warn)} .comp.bad .st{background:var(--bad)}
+.comp.ok{border-color:rgba(52,211,153,.4)} .comp.warn{border-color:rgba(251,191,36,.4)} .comp.bad{border-color:rgba(251,113,133,.45)}
+.comp .tx{color:var(--muted)} .comp .tx b{color:var(--txt)}
+
+.actions{display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-top:12px}
+.actions .wide{grid-column:1/-1}
+
+.bench{padding:20px; text-align:center}
+.bench .bar{height:12px; border-radius:20px; background:rgba(255,255,255,.08); overflow:hidden; margin:16px 0}
+.bench .bar i{display:block; height:100%; width:0; border-radius:20px; background:linear-gradient(90deg,var(--cyan),var(--lime),var(--magenta)); transition:width .25s linear}
+.bench .log{font-family:ui-monospace,Consolas,monospace; font-size:.74rem; color:var(--muted); height:64px; overflow:hidden; text-align:left; margin-top:6px}
+.bench .log div{opacity:.85}
+.bench .pct{font-size:2.3rem; font-weight:900; background:linear-gradient(90deg,var(--cyan),var(--lime)); -webkit-background-clip:text; background-clip:text; color:transparent}
+
+.modal{position:fixed; inset:0; z-index:100; display:none; align-items:flex-start; justify-content:center; padding:14px; overflow:auto;
+  background:rgba(3,4,10,.72); backdrop-filter:blur(8px)}
+.modal.open{display:flex; animation:fadein .25s}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+.modal .box{width:100%; max-width:1080px; margin:auto; padding:18px; position:relative; animation:pop .3s cubic-bezier(.2,.9,.3,1.3);
+  backdrop-filter:blur(12px) saturate(130%); -webkit-backdrop-filter:blur(12px) saturate(130%)}
+@keyframes pop{from{transform:scale(.92) translateY(14px); opacity:0}to{transform:none; opacity:1}}
+.modal .box.slim{max-width:560px}
+.close{position:absolute; top:12px; right:12px}
+.result-grid{display:grid; grid-template-columns:1fr; gap:14px}
+@media(min-width:820px){.result-grid{grid-template-columns:1fr 1fr}}
+.card{padding:14px; border-radius:var(--r); border:1px solid var(--stroke); background:linear-gradient(180deg,rgba(168,85,247,.07),rgba(255,255,255,.015))}
+.card h3{margin:0 0 10px; font-size:.9rem; letter-spacing:.3px; display:flex; gap:8px; align-items:center}
+.gauge{display:flex; gap:14px; align-items:center; flex-wrap:wrap}
+.dial{--p:0; --c1:var(--violet); --c2:var(--fuchsia); width:clamp(96px,26vw,116px); height:clamp(96px,26vw,116px); border-radius:50%; flex:0 0 auto; position:relative;
+  background:conic-gradient(var(--c1) calc(var(--p)*1%), rgba(255,255,255,.08) 0); display:grid; place-items:center}
+.dial::before{content:""; position:absolute; inset:11px; border-radius:50%; background:var(--bg2); border:1px solid var(--stroke)}
+.dial .val{position:relative; z-index:1; text-align:center; padding:0 6px}
+.dial .val b{font-size:clamp(1.15rem,4.4vw,1.5rem); display:block; line-height:1}
+.dial .val span{font-size:.6rem; color:var(--muted); display:block; margin-top:2px}
+.gauge .legend{flex:1 1 160px; min-width:0}
+.legend .lr{display:flex; justify-content:space-between; align-items:baseline; gap:8px; font-size:.78rem; padding:4px 0; border-bottom:1px dashed rgba(255,255,255,.07)}
+.legend .lr:last-child{border-bottom:0}
+.legend .lr>span{flex:1 1 auto; min-width:0}
+.legend .lr b{text-align:right; flex:0 1 auto; min-width:0; overflow-wrap:anywhere}
+.legend .lr .k{color:var(--muted)}
+.badge{display:inline-flex; align-items:center; gap:6px; padding:3px 9px; border-radius:999px; font-size:.7rem; font-weight:800; border:1px solid var(--stroke2); white-space:nowrap}
+.badge.notgood{background:rgba(251,113,133,.18); border-color:var(--red); color:#ffd7de}
+.badge.playable{background:rgba(251,191,36,.16); border-color:var(--amber); color:#ffe6ab}
+.badge.decent{background:rgba(52,211,153,.16); border-color:var(--ok); color:#c8ffe8}
+.badge.great{background:rgba(168,85,247,.2); border-color:var(--violet); color:#eadcff}
+.badge.excellent{background:linear-gradient(90deg,rgba(168,85,247,.3),rgba(217,70,239,.3)); border-color:var(--fuchsia); color:#ffe3fd}
+.fps-row{display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:5px 8px; padding:7px 0; border-bottom:1px dashed rgba(255,255,255,.07)}
+.fps-row:last-child{border-bottom:0}
+.fps-row .gname{font-weight:700; font-size:.82rem; flex:1 1 100px; min-width:0; word-break:break-word}
+.fps-row .fps{font-weight:900; font-size:.98rem; color:var(--lav); text-align:right; white-space:nowrap}
+.fps-row .mini{color:var(--dim); font-size:.66rem; text-align:right; white-space:nowrap}
+.fps-row .badge{margin-left:auto}
+.fps-row .fbar{flex:1 1 100%; height:5px; border-radius:4px; background:rgba(255,255,255,.07); overflow:hidden; margin-top:2px}
+.fps-row .fbar i{display:block; height:100%; border-radius:4px; background:linear-gradient(90deg,var(--cyan),var(--violet))}
+.result-grid .card.hero{grid-column:1/-1}
+.hero h3{justify-content:center}
+.bigscore{display:flex; align-items:center; gap:18px; flex-wrap:wrap; justify-content:center}
+.verdictbox{text-align:center}
+.verdictline{display:flex; align-items:center; gap:8px; justify-content:center; flex-wrap:wrap; font-size:.86rem}
+.verdictline>span{color:var(--muted)}
+.verdictsub{color:var(--muted); font-size:.74rem; margin-top:6px}
+.statstrip{display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:9px; margin-top:16px}
+.stat{padding:9px 11px; border-radius:12px; border:1px solid var(--stroke); background:rgba(255,255,255,.03)}
+.stat b{display:block; font-size:1.02rem; color:var(--lav)}
+.stat span{display:block; color:var(--dim); font-size:.62rem; text-transform:uppercase; letter-spacing:.5px; margin-top:2px}
+.upgradeline{margin-top:14px; font-size:.78rem; color:var(--muted); border-top:1px dashed rgba(255,255,255,.08); padding-top:10px; overflow-wrap:anywhere}
+.sec-head .multi{color:var(--dim); font-size:.7rem; font-weight:600}
+.tbl-actions{display:flex; gap:8px; flex-wrap:wrap; margin-top:8px}
+
+.saved{display:flex; flex-direction:column; gap:8px}
+.saveditem{padding:10px; border-radius:12px; border:1px solid var(--stroke); background:rgba(255,255,255,.04); font-size:.76rem; display:flex; gap:8px; align-items:center; justify-content:space-between}
+.saveditem .m{color:var(--muted); font-size:.7rem}
+.cmp-grid{overflow:auto; margin-top:10px}
+.cmp-grid table{border-collapse:collapse; width:100%; font-size:.76rem; min-width:520px}
+.cmp-grid th,.cmp-grid td{border:1px solid var(--stroke); padding:7px 9px; text-align:left}
+.cmp-grid th{color:var(--muted); background:rgba(255,255,255,.04)}
+.cmp-grid .win{color:var(--lime); font-weight:900}
+
+.glossary{display:grid; grid-template-columns:1fr; gap:10px}
+@media(min-width:700px){.glossary{grid-template-columns:1fr 1fr}}
+.gcard{padding:14px 16px; border-radius:16px; border:1px solid var(--stroke2); min-height:150px;
+  background:linear-gradient(150deg,rgba(139,92,246,.2),rgba(217,70,239,.14));
+  display:flex; flex-direction:column; justify-content:center; gap:8px}
+.gcard .term{font-size:1.15rem; font-weight:900; background:linear-gradient(90deg,var(--violet),var(--fuchsia)); -webkit-background-clip:text; background-clip:text; color:transparent}
+.gcard .def{font-size:.85rem; color:#e6ddff; line-height:1.45}
+.gcard .cat{font-size:.66rem; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px}
+
+.toast{position:fixed; left:50%; bottom:22px; transform:translateX(-50%) translateY(90px); z-index:200; padding:12px 18px; border-radius:14px;
+  background:rgba(15,18,32,.95); border:1px solid var(--cyan); color:var(--txt); font-weight:700; font-size:.84rem; box-shadow:var(--sh); transition:transform .35s}
+.toast.show{transform:translateX(-50%) translateY(0)}
+#confetti{position:fixed; inset:0; z-index:150; pointer-events:none; display:none}
+#confetti.on{display:block}
+
+.kiosk-note{color:var(--dim); font-size:.7rem}
+.badge-count{display:inline-flex; align-items:center; gap:6px; padding:5px 11px; border-radius:999px; background:rgba(168,85,247,.16); border:1px solid rgba(168,85,247,.45); color:#eadcff; font-size:.72rem; font-weight:800}
+
+.printsheet{display:none}
+@media print{
+  body{background:#fff; color:#000}
+  body *{visibility:hidden!important}
+  .printsheet,.printsheet *{visibility:visible!important}
+  .printsheet{display:block!important; position:absolute; inset:0; padding:22px; color:#000; background:#fff}
+  .printsheet table{width:100%; border-collapse:collapse; font-size:12px}
+  .printsheet th,.printsheet td{border:1px solid #333; padding:6px 8px; text-align:left}
+  .printsheet h1{font-size:20px; margin:0 0 4px}
+  .printsheet .ph{display:flex; justify-content:space-between; align-items:flex-start; border-bottom:2px solid #000; padding-bottom:8px; margin-bottom:10px}
+  .printsheet .num{font-weight:900; border:2px solid #000; padding:6px 10px; border-radius:8px; font-size:16px}
+}
+
+body.kiosk{font-size:1.16rem}
+body.kiosk .wrap{max-width:1700px}
+body.kiosk .opt{min-height:60px}
+body.kiosk .btn{min-height:56px; font-size:.98rem}
+body.kiosk .pillgrid{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
+body.kiosk .hide-kiosk{display:none!important}
+body.kiosk #langBtn{display:inline-flex!important}
+a.btn{text-decoration:none}
+body.kiosk .col-right{top:calc(var(--tb) + 12px)}
+
+body.techmode .techonly{display:block!important}
+.techonly{display:none}
+.techphrase{padding:14px; border-radius:16px; border:1px solid var(--violet); background:linear-gradient(140deg,rgba(139,92,246,.16),rgba(217,70,239,.12)); font-size:1rem; line-height:1.5}
+.techphrase b{color:var(--lav)}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.001ms!important; animation-iteration-count:1!important; transition-duration:.001ms!important}
+  #particles{display:none}
+}
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.adminfield{display:flex; flex-direction:column; gap:5px; margin-bottom:9px}
+.adminfield label{font-size:.72rem; color:var(--muted); font-weight:700}
+.adminfield textarea{min-height:150px; font-family:ui-monospace,Consolas,monospace; font-size:.72rem; border-radius:12px; border:1px solid var(--stroke2); background:rgba(0,0,0,.35); color:var(--txt); padding:9px; width:100%}
+.adminfield input[type=number],.adminfield input[type=text]{min-height:44px; border-radius:12px; border:1px solid var(--stroke2); background:rgba(0,0,0,.35); color:var(--txt); padding:8px 12px}
+
+.i{width:1.15em;height:1.15em;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.2em;flex:0 0 auto}
+.lg{height:20px;width:auto;flex:0 0 auto;display:block}.ap{width:28px;height:28px;flex:0 0 auto}
+.gi{width:32px;height:20px;display:inline-grid;place-items:center;border-radius:6px;background:rgba(168,85,247,.16);color:var(--lav);flex:0 0 auto}
+.oh{display:flex;gap:8px;align-items:flex-start}.oh .lg,.oh .gi{margin-top:1px}
+.ck{position:absolute;top:8px;right:8px;color:var(--lav);display:grid}
+.catico{color:var(--lav);display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:rgba(168,85,247,.14);border:1px solid var(--stroke)}
+.catico .i{width:20px;height:20px}
+.comp .st .i{width:14px;height:14px;stroke:#04060f;stroke-width:3}
+.gname.wl{display:flex;gap:8px;align-items:center}
+.case-frame{height:auto!important;border:0!important;background:none!important}
+.case-stage{padding:6px;background:radial-gradient(ellipse at 50% 40%,rgba(139,92,246,.18),rgba(6,8,15,.9) 70%)}
+.csvg{width:100%;height:auto;display:block;filter:drop-shadow(0 10px 22px rgba(139,92,246,.28))}
+.spin{animation:spin 1.6s linear infinite;transform-box:fill-box;transform-origin:center}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hue{animation:hue 7s linear infinite}@keyframes hue{to{filter:hue-rotate(360deg)}}
+.drop{animation:dropin .55s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes dropin{from{opacity:0;transform:translateY(-26px) scale(.96)}to{opacity:1;transform:none}}
+body.lite .spin,body.lite .hue{animation:none}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:4px 9px 4px 5px;border-radius:999px;border:1px solid var(--stroke);background:rgba(255,255,255,.04);font-size:.68rem;color:var(--muted)}
+.btn .i{width:1.2em;height:1.2em}
+
+@property --ang{syntax:"<angle>";inherits:false;initial-value:0deg}
+@keyframes ang{to{--ang:360deg}}
+@keyframes flow{to{background-position:250% 0}}
+@keyframes halo{0%,100%{box-shadow:0 0 10px rgba(168,85,247,.35),0 0 0 0 rgba(217,70,239,.35)}50%{box-shadow:0 0 28px rgba(217,70,239,.75),0 0 0 8px rgba(217,70,239,0)}}
+@keyframes sweep{0%,55%{left:-60%}100%{left:130%}}
+@keyframes slide{to{transform:translateX(100%)}}
+@keyframes glowp{0%,100%{box-shadow:0 0 12px rgba(168,85,247,.35)}50%{box-shadow:0 0 30px rgba(217,70,239,.85)}}
+@keyframes dialg{0%,100%{filter:drop-shadow(0 0 5px rgba(168,85,247,.45))}50%{filter:drop-shadow(0 0 16px rgba(217,70,239,.9))}}
+@keyframes drift{to{transform:translate(9vmax,6vmax) scale(1.15)}}
+.aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.aurora i{position:absolute;width:62vmax;height:62vmax;border-radius:50%;background:radial-gradient(circle,rgba(168,85,247,.30),transparent 65%);animation:drift 18s ease-in-out infinite alternate}
+.aurora i:nth-child(1){left:-18vmax;top:-20vmax}
+.aurora i:nth-child(2){right:-22vmax;top:18vh;background:radial-gradient(circle,rgba(217,70,239,.22),transparent 65%);animation-duration:23s;animation-delay:-6s}
+.aurora i:nth-child(3){left:20vw;bottom:-30vmax;background:radial-gradient(circle,rgba(34,211,238,.16),transparent 65%);animation-duration:27s;animation-delay:-11s}
+#particles{opacity:.6}
+.rgb:not(.topbar){position:relative}
+.rgb::before,.opt.sel::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.6px;pointer-events:none;
+ background:conic-gradient(from var(--ang),#a855f7,#d946ef,#22d3ee,#6366f1,#a855f7);
+ -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:ang 4s linear infinite}
+.opt.sel{box-shadow:0 0 18px rgba(168,85,247,.35),0 0 0 1px rgba(168,85,247,.5) inset}
+.opt::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .25s;background:radial-gradient(150px circle at var(--mx,50%) var(--my,50%),rgba(217,70,239,.26),transparent 60%)}
+.opt:hover::after{opacity:1}
+h1 span{background-image:linear-gradient(90deg,#c4b5fd,#a855f7,#d946ef,#22d3ee,#c4b5fd);background-size:250% auto;animation:flow 6s linear infinite}
+.logo{animation:glowp 2.6s ease-in-out infinite}
+.btn.primary{background-image:linear-gradient(100deg,#a855f7,#d946ef,#6366f1,#a855f7);background-size:250% 100%;animation:flow 5s linear infinite,halo 2.4s ease-in-out infinite}
+.btn.primary::before{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;pointer-events:none;background:linear-gradient(100deg,transparent,rgba(255,255,255,.6),transparent);transform:skewX(-20deg);animation:sweep 3s ease-in-out infinite}
+.btn:not(.primary):hover{box-shadow:0 0 20px rgba(217,70,239,.5)}
+.fps-row .fbar i,.bench .bar i{position:relative;overflow:hidden}
+.fps-row .fbar i::after,.bench .bar i::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.6),transparent);transform:translateX(-100%);animation:slide 1.8s linear infinite}
+.dial{animation:dialg 2.8s ease-in-out infinite}
+.badge.excellent,.badge.great{background-size:200% 100%;animation:flow 3s linear infinite}
+.part{filter:drop-shadow(0 0 4px rgba(168,85,247,.55))}
+.spin{animation:spin 1.4s linear infinite,hue 4s linear infinite}
+body.lite .aurora i,body.lite .rgb::before,body.lite .opt.sel::before,body.lite .btn.primary,body.lite .btn.primary::before,body.lite .dial,body.lite .logo,body.lite h1 span,body.lite .fbar i::after,body.lite .bench .bar i::after,body.lite .badge{animation:none!important}
+body.lite .part{filter:none}
+@media (prefers-reduced-motion:reduce){*::before,*::after{animation:none!important}}
+.opt .pr{display:flex;flex-direction:column;gap:1px}.opt .pr .ar{font-size:.7rem;font-weight:700;color:#86efac}
+.sec-head .hint{margin-left:auto;text-align:right}
+
+html,body{overflow-x:clip}
+.qrwrap{display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:center}
+.qrwrap canvas{border-radius:14px;background:#fff;box-shadow:0 0 30px rgba(168,85,247,.5);image-rendering:pixelated;max-width:100%;height:auto}
+.qrside{flex:1 1 220px;max-width:360px;font-size:.84rem;color:var(--muted);display:grid;gap:10px}
+.qrcard h3{justify-content:center}
+
+.glass.topbar{position:fixed!important;top:6px;left:0;right:0;margin:0 auto!important;width:1472px;max-width:calc(100% - 28px);border-radius:var(--r2);z-index:80}
+body.kiosk .glass.topbar{width:1672px}
+
+.rcol{display:flex;flex-direction:column;gap:14px;min-width:0}
+.pwr{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center}
+.meters{display:grid;gap:13px;min-width:0}
+.mt .mh{display:flex;justify-content:space-between;gap:8px;font-size:.78rem;color:var(--muted);margin-bottom:5px}
+.mt .mh b{color:var(--txt);font-weight:700;text-align:right}
+.mt .mb{height:9px;border-radius:9px;background:rgba(255,255,255,.08);overflow:hidden}
+.mt .mb i{display:block;height:100%;border-radius:9px;box-shadow:0 0 10px currentColor;transition:width .8s cubic-bezier(.2,.9,.3,1)}
+.pwr-foot{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.pwr-foot span{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;border:1px solid var(--stroke);background:rgba(255,255,255,.04);font-size:.72rem;color:var(--muted)}
+@media(max-width:480px){.pwr{grid-template-columns:1fr;justify-items:center}.meters{width:100%}}
+.qrcard{text-align:center}
+.qrwrap{flex-direction:column;gap:12px}
+.qrside{max-width:none;width:100%;justify-items:center;text-align:center}
+.qrside .btn{width:100%}
+.rcol{align-self:start}.rcol>.card{flex:0 0 auto}.qrside{align-content:start}.qrside .btn{height:auto;min-height:48px;align-self:start}
+.qrside{flex:0 0 auto!important}
+</style>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+<canvas id="particles" aria-hidden="true"></canvas>
+<canvas id="confetti" aria-hidden="true"></canvas>
+
+<div class="wrap">
+  <header class="glass topbar rgb" role="banner">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"><b>PC</b></div>
+      <div style="flex:1;min-width:200px">
+        <h1><span>BUILD YOUR DREAM PC</span> — What is your FPS?</h1>
+        <div class="sub" id="tagline">Armá tu PC, verificá compatibilidad y descubrí tus FPS.</div>
+      </div>
+      <div class="toolbar" style="flex-wrap:wrap">
+        <button class="btn sm ghost" id="langBtn" aria-label="Cambiar idioma">ES</button>
+        <button class="btn sm ghost" id="techBtn" aria-pressed="false"><span data-i18n="techMode">Technician Mode</span></button>
+        <button class="btn sm ghost" id="liteBtn" aria-pressed="false"><span data-i18n="lite">Lite</span></button>
+        <button class="btn sm ghost hide-kiosk" id="kioskBtn" aria-pressed="false"><span data-i18n="kiosk">Kiosco</span></button>
+        <button class="btn sm ghost hide-kiosk" id="adminBtn"><span data-i18n="admin">Admin</span></button>
+        <a class="btn sm ghost" id="glossaryBtn" href="Glosario de PC Gamer.html" aria-label="Glosario"><span data-i18n="glossary">Glosario</span></a>
+      </div>
+    </div>
+    <div class="toolbar">
+      <span class="badge-count"><span data-i18n="builds">Builds</span>: <b id="buildCount">0</b></span>
+      <span class="badge-count" style="background:rgba(129,140,248,.16);border-color:rgba(129,140,248,.45);color:#dfe3ff">1 USD = <b id="rateMini">0</b> ARS</span>
+      <div class="spacer"></div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <main class="col-left" id="builder" aria-label="Componentes"></main>
+
+    <aside class="col-right" aria-label="Resumen">
+      <section class="glass casebox" aria-label="Gabinete virtual">
+        <div class="sec-head"><h2 data-i18n="virtualCase">Gabinete virtual</h2></div>
+        <div class="case-stage">
+          <div class="case-frame" id="caseFrame"></div>
+        </div>
+        <div class="chips" id="caseChips"></div>
+        <div class="case-cap">
+          <span id="caseName">—</span>
+          <span id="caseNote" class="kiosk-note"></span>
+        </div>
+      </section>
+
+      <section class="glass summary rgb" aria-label="Resumen de precio">
+        <div class="sec-head"><h2 data-i18n="summary">Resumen</h2></div>
+        <div class="sumrow"><span class="k" data-i18n="totalUsd">Total USD</span><span class="v usd" id="sumUsd">$0</span></div>
+        <div class="sumrow"><span class="k" data-i18n="totalArs">Total ARS</span><span class="v ars" id="sumArs">$0</span></div>
+        <div class="sumrow"><span class="k" data-i18n="maxBudget">Presupuesto máx (USD)</span><span class="v" id="budgetStatus">—</span></div>
+        <div class="rate">
+          <label class="sr" for="rateInput">Cotización ARS</label>
+          <input id="rateInput" type="number" min="1" step="10" inputmode="numeric" aria-label="Cotización ARS por USD">
+          <label class="sr" for="budgetInput">Presupuesto</label>
+          <input id="budgetInput" type="number" min="0" step="50" inputmode="numeric" placeholder="Budget" aria-label="Presupuesto máximo">
+        </div>
+        <div class="comp-list" id="compatList" aria-live="polite" style="margin-top:12px"></div>
+        <div class="presets" id="presets" aria-label="Presets">
+          <button class="btn sm ghost" data-preset="budget"><span data-i18n="pBudget">Budget</span></button>
+          <button class="btn sm ghost" data-preset="esports"><span data-i18n="pEsports">Esports</span></button>
+          <button class="btn sm ghost" data-preset="mid"><span data-i18n="pMid">Mid-range</span></button>
+          <button class="btn sm ghost" data-preset="high"><span data-i18n="pHigh">High-end</span></button>
+          <button class="btn sm ghost" data-preset="creator"><span data-i18n="pCreator">Creator</span></button>
+        </div>
+        <div class="actions">
+          <button class="btn primary wide" id="calcBtn"><span data-i18n="calculate">Calculate my FPS</span></button>
+          <button class="btn ghost" id="surpriseBtn"><span data-i18n="surprise">Surprise me</span></button>
+          <button class="btn ghost" id="printBtn"><span data-i18n="budget">Ficha BUDGET</span></button>
+          <button class="btn ghost" id="compareBtn"><span data-i18n="compare">Comparar</span></button>
+          <button class="btn ghost" id="resetBtn"><span data-i18n="reset">Reiniciar</span></button>
+        </div>
+      </section>
+
+      <section class="glass techonly" id="techPanel" aria-label="Technician mode">
+        <div class="techphrase" id="techPhrase">—</div>
+      </section>
+    </aside>
+  </div>
+</div>
+
+<div class="modal" id="resultModal" role="dialog" aria-modal="true" aria-label="Resultados">
+  <div class="glass box rgb">
+    <button class="btn sm close" data-close><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg> <span data-i18n="close">Cerrar</span></button>
+    <div id="resultBody"></div>
+  </div>
+</div>
+
+<div class="modal" id="cardModal" role="dialog" aria-modal="true" aria-label="Glosario">
+  <div class="glass box">
+    <button class="btn sm close" data-close><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <div class="sec-head"><h2 data-i18n="drawCard">Draw a card</h2><span class="hint" id="cardCount"></span></div>
+    <div class="glossary" id="cardBody"></div>
+    <div class="tbl-actions"><button class="btn primary" id="drawAgain"><span data-i18n="drawAgain">Otra carta</span></button></div>
+  </div>
+</div>
+
+<div class="modal" id="compareModal" role="dialog" aria-modal="true" aria-label="Comparar">
+  <div class="glass box">
+    <button class="btn sm close" data-close><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <div class="sec-head"><h2 data-i18n="compare">Comparar builds</h2><span class="hint" id="savedCount"></span></div>
+    <div class="saved" id="savedList"></div>
+    <div class="cmp-grid" id="cmpBody"></div>
+  </div>
+</div>
+
+<div class="modal" id="adminModal" role="dialog" aria-modal="true" aria-label="Admin">
+  <div class="glass box slim">
+    <button class="btn sm close" data-close><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <div class="sec-head"><h2 data-i18n="admin">Panel Admin</h2></div>
+    <div id="adminLock">
+      <div class="adminfield"><label for="pinInput" data-i18n="enterPin">PIN de acceso</label><input id="pinInput" type="password" inputmode="numeric" autocomplete="off"></div>
+      <button class="btn primary" id="pinGo"><span data-i18n="unlock">Desbloquear</span></button>
+    </div>
+    <div id="adminPanel" hidden>
+      <div class="adminfield"><label for="adminRate" data-i18n="rateLabel">Cotización ARS por USD</label><input id="adminRate" type="number" min="1" step="10"></div>
+      <div class="adminfield"><label for="adminPin" data-i18n="newPin">Nuevo PIN</label><input id="adminPin" type="text" inputmode="numeric" placeholder="1234"></div>
+      <div class="adminfield"><label><input type="checkbox" id="adminIdle" style="min-height:auto"> <span data-i18n="idleReset">Reinicio automático a 90 s</span></label></div>
+      <div class="adminfield"><label for="adminDb" data-i18n="editDb">Editor DB (JSON)</label><textarea id="adminDb" spellcheck="false"></textarea></div>
+      <div class="tbl-actions">
+        <button class="btn primary" id="saveAdmin"><span data-i18n="save">Guardar</span></button>
+        <button class="btn ghost" id="restoreAdmin"><span data-i18n="restore">Restaurar DB</span></button>
+        <button class="btn danger" id="resetCounter"><span data-i18n="resetCounter">Reset contador</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="printsheet" id="printSheet" aria-hidden="true"></section>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* qrcode-generator (MIT) (c) Kazuhiko Arase */
+//---------------------------------------------------------------------
+//
+// QR Code Generator for JavaScript
+//
+// Copyright (c) 2009 Kazuhiko Arase
+//
+// URL: http://www.d-project.com/
+//
+// Licensed under the MIT license:
+//  http://www.opensource.org/licenses/mit-license.php
+//
+// The word 'QR Code' is registered trademark of
+// DENSO WAVE INCORPORATED
+//  http://www.denso-wave.com/qrcode/faqpatent-e.html
+//
+//---------------------------------------------------------------------
+
+var qrcode = function() {
+
+  //---------------------------------------------------------------------
+  // qrcode
+  //---------------------------------------------------------------------
+
+  /**
+   * qrcode
+   * @param typeNumber 1 to 40
+   * @param errorCorrectionLevel 'L','M','Q','H'
+   */
+  var qrcode = function(typeNumber, errorCorrectionLevel) {
+
+    var PAD0 = 0xEC;
+    var PAD1 = 0x11;
+
+    var _typeNumber = typeNumber;
+    var _errorCorrectionLevel = QRErrorCorrectionLevel[errorCorrectionLevel];
+    var _modules = null;
+    var _moduleCount = 0;
+    var _dataCache = null;
+    var _dataList = [];
+
+    var _this = {};
+
+    var makeImpl = function(test, maskPattern) {
+
+      _moduleCount = _typeNumber * 4 + 17;
+      _modules = function(moduleCount) {
+        var modules = new Array(moduleCount);
+        for (var row = 0; row < moduleCount; row += 1) {
+          modules[row] = new Array(moduleCount);
+          for (var col = 0; col < moduleCount; col += 1) {
+            modules[row][col] = null;
+          }
+        }
+        return modules;
+      }(_moduleCount);
+
+      setupPositionProbePattern(0, 0);
+      setupPositionProbePattern(_moduleCount - 7, 0);
+      setupPositionProbePattern(0, _moduleCount - 7);
+      setupPositionAdjustPattern();
+      setupTimingPattern();
+      setupTypeInfo(test, maskPattern);
+
+      if (_typeNumber >= 7) {
+        setupTypeNumber(test);
+      }
+
+      if (_dataCache == null) {
+        _dataCache = createData(_typeNumber, _errorCorrectionLevel, _dataList);
+      }
+
+      mapData(_dataCache, maskPattern);
+    };
+
+    var setupPositionProbePattern = function(row, col) {
+
+      for (var r = -1; r <= 7; r += 1) {
+
+        if (row + r <= -1 || _moduleCount <= row + r) continue;
+
+        for (var c = -1; c <= 7; c += 1) {
+
+          if (col + c <= -1 || _moduleCount <= col + c) continue;
+
+          if ( (0 <= r && r <= 6 && (c == 0 || c == 6) )
+              || (0 <= c && c <= 6 && (r == 0 || r == 6) )
+              || (2 <= r && r <= 4 && 2 <= c && c <= 4) ) {
+            _modules[row + r][col + c] = true;
+          } else {
+            _modules[row + r][col + c] = false;
+          }
+        }
+      }
+    };
+
+    var getBestMaskPattern = function() {
+
+      var minLostPoint = 0;
+      var pattern = 0;
+
+      for (var i = 0; i < 8; i += 1) {
+
+        makeImpl(true, i);
+
+        var lostPoint = QRUtil.getLostPoint(_this);
+
+        if (i == 0 || minLostPoint > lostPoint) {
+          minLostPoint = lostPoint;
+          pattern = i;
+        }
+      }
+
+      return pattern;
+    };
+
+    var setupTimingPattern = function() {
+
+      for (var r = 8; r < _moduleCount - 8; r += 1) {
+        if (_modules[r][6] != null) {
+          continue;
+        }
+        _modules[r][6] = (r % 2 == 0);
+      }
+
+      for (var c = 8; c < _moduleCount - 8; c += 1) {
+        if (_modules[6][c] != null) {
+          continue;
+        }
+        _modules[6][c] = (c % 2 == 0);
+      }
+    };
+
+    var setupPositionAdjustPattern = function() {
+
+      var pos = QRUtil.getPatternPosition(_typeNumber);
+
+      for (var i = 0; i < pos.length; i += 1) {
+
+        for (var j = 0; j < pos.length; j += 1) {
+
+          var row = pos[i];
+          var col = pos[j];
+
+          if (_modules[row][col] != null) {
+            continue;
+          }
+
+          for (var r = -2; r <= 2; r += 1) {
+
+            for (var c = -2; c <= 2; c += 1) {
+
+              if (r == -2 || r == 2 || c == -2 || c == 2
+                  || (r == 0 && c == 0) ) {
+                _modules[row + r][col + c] = true;
+              } else {
+                _modules[row + r][col + c] = false;
+              }
+            }
+          }
+        }
+      }
+    };
+
+    var setupTypeNumber = function(test) {
+
+      var bits = QRUtil.getBCHTypeNumber(_typeNumber);
+
+      for (var i = 0; i < 18; i += 1) {
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+        _modules[Math.floor(i / 3)][i % 3 + _moduleCount - 8 - 3] = mod;
+      }
+
+      for (var i = 0; i < 18; i += 1) {
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+        _modules[i % 3 + _moduleCount - 8 - 3][Math.floor(i / 3)] = mod;
+      }
+    };
+
+    var setupTypeInfo = function(test, maskPattern) {
+
+      var data = (_errorCorrectionLevel << 3) | maskPattern;
+      var bits = QRUtil.getBCHTypeInfo(data);
+
+      // vertical
+      for (var i = 0; i < 15; i += 1) {
+
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+
+        if (i < 6) {
+          _modules[i][8] = mod;
+        } else if (i < 8) {
+          _modules[i + 1][8] = mod;
+        } else {
+          _modules[_moduleCount - 15 + i][8] = mod;
+        }
+      }
+
+      // horizontal
+      for (var i = 0; i < 15; i += 1) {
+
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+
+        if (i < 8) {
+          _modules[8][_moduleCount - i - 1] = mod;
+        } else if (i < 9) {
+          _modules[8][15 - i - 1 + 1] = mod;
+        } else {
+          _modules[8][15 - i - 1] = mod;
+        }
+      }
+
+      // fixed module
+      _modules[_moduleCount - 8][8] = (!test);
+    };
+
+    var mapData = function(data, maskPattern) {
+
+      var inc = -1;
+      var row = _moduleCount - 1;
+      var bitIndex = 7;
+      var byteIndex = 0;
+      var maskFunc = QRUtil.getMaskFunction(maskPattern);
+
+      for (var col = _moduleCount - 1; col > 0; col -= 2) {
+
+        if (col == 6) col -= 1;
+
+        while (true) {
+
+          for (var c = 0; c < 2; c += 1) {
+
+            if (_modules[row][col - c] == null) {
+
+              var dark = false;
+
+              if (byteIndex < data.length) {
+                dark = ( ( (data[byteIndex] >>> bitIndex) & 1) == 1);
+              }
+
+              var mask = maskFunc(row, col - c);
+
+              if (mask) {
+                dark = !dark;
+              }
+
+              _modules[row][col - c] = dark;
+              bitIndex -= 1;
+
+              if (bitIndex == -1) {
+                byteIndex += 1;
+                bitIndex = 7;
+              }
+            }
+          }
+
+          row += inc;
+
+          if (row < 0 || _moduleCount <= row) {
+            row -= inc;
+            inc = -inc;
+            break;
+          }
+        }
+      }
+    };
+
+    var createBytes = function(buffer, rsBlocks) {
+
+      var offset = 0;
+
+      var maxDcCount = 0;
+      var maxEcCount = 0;
+
+      var dcdata = new Array(rsBlocks.length);
+      var ecdata = new Array(rsBlocks.length);
+
+      for (var r = 0; r < rsBlocks.length; r += 1) {
+
+        var dcCount = rsBlocks[r].dataCount;
+        var ecCount = rsBlocks[r].totalCount - dcCount;
+
+        maxDcCount = Math.max(maxDcCount, dcCount);
+        maxEcCount = Math.max(maxEcCount, ecCount);
+
+        dcdata[r] = new Array(dcCount);
+
+        for (var i = 0; i < dcdata[r].length; i += 1) {
+          dcdata[r][i] = 0xff & buffer.getBuffer()[i + offset];
+        }
+        offset += dcCount;
+
+        var rsPoly = QRUtil.getErrorCorrectPolynomial(ecCount);
+        var rawPoly = qrPolynomial(dcdata[r], rsPoly.getLength() - 1);
+
+        var modPoly = rawPoly.mod(rsPoly);
+        ecdata[r] = new Array(rsPoly.getLength() - 1);
+        for (var i = 0; i < ecdata[r].length; i += 1) {
+          var modIndex = i + modPoly.getLength() - ecdata[r].length;
+          ecdata[r][i] = (modIndex >= 0)? modPoly.getAt(modIndex) : 0;
+        }
+      }
+
+      var totalCodeCount = 0;
+      for (var i = 0; i < rsBlocks.length; i += 1) {
+        totalCodeCount += rsBlocks[i].totalCount;
+      }
+
+      var data = new Array(totalCodeCount);
+      var index = 0;
+
+      for (var i = 0; i < maxDcCount; i += 1) {
+        for (var r = 0; r < rsBlocks.length; r += 1) {
+          if (i < dcdata[r].length) {
+            data[index] = dcdata[r][i];
+            index += 1;
+          }
+        }
+      }
+
+      for (var i = 0; i < maxEcCount; i += 1) {
+        for (var r = 0; r < rsBlocks.length; r += 1) {
+          if (i < ecdata[r].length) {
+            data[index] = ecdata[r][i];
+            index += 1;
+          }
+        }
+      }
+
+      return data;
+    };
+
+    var createData = function(typeNumber, errorCorrectionLevel, dataList) {
+
+      var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, errorCorrectionLevel);
+
+      var buffer = qrBitBuffer();
+
+      for (var i = 0; i < dataList.length; i += 1) {
+        var data = dataList[i];
+        buffer.put(data.getMode(), 4);
+        buffer.put(data.getLength(), QRUtil.getLengthInBits(data.getMode(), typeNumber) );
+        data.write(buffer);
+      }
+
+      // calc num max data.
+      var totalDataCount = 0;
+      for (var i = 0; i < rsBlocks.length; i += 1) {
+        totalDataCount += rsBlocks[i].dataCount;
+      }
+
+      if (buffer.getLengthInBits() > totalDataCount * 8) {
+        throw 'code length overflow. ('
+          + buffer.getLengthInBits()
+          + '>'
+          + totalDataCount * 8
+          + ')';
+      }
+
+      // end code
+      if (buffer.getLengthInBits() + 4 <= totalDataCount * 8) {
+        buffer.put(0, 4);
+      }
+
+      // padding
+      while (buffer.getLengthInBits() % 8 != 0) {
+        buffer.putBit(false);
+      }
+
+      // padding
+      while (true) {
+
+        if (buffer.getLengthInBits() >= totalDataCount * 8) {
+          break;
+        }
+        buffer.put(PAD0, 8);
+
+        if (buffer.getLengthInBits() >= totalDataCount * 8) {
+          break;
+        }
+        buffer.put(PAD1, 8);
+      }
+
+      return createBytes(buffer, rsBlocks);
+    };
+
+    _this.addData = function(data, mode) {
+
+      mode = mode || 'Byte';
+
+      var newData = null;
+
+      switch(mode) {
+      case 'Numeric' :
+        newData = qrNumber(data);
+        break;
+      case 'Alphanumeric' :
+        newData = qrAlphaNum(data);
+        break;
+      case 'Byte' :
+        newData = qr8BitByte(data);
+        break;
+      case 'Kanji' :
+        newData = qrKanji(data);
+        break;
+      default :
+        throw 'mode:' + mode;
+      }
+
+      _dataList.push(newData);
+      _dataCache = null;
+    };
+
+    _this.isDark = function(row, col) {
+      if (row < 0 || _moduleCount <= row || col < 0 || _moduleCount <= col) {
+        throw row + ',' + col;
+      }
+      return _modules[row][col];
+    };
+
+    _this.getModuleCount = function() {
+      return _moduleCount;
+    };
+
+    _this.make = function() {
+      if (_typeNumber < 1) {
+        var typeNumber = 1;
+
+        for (; typeNumber < 40; typeNumber++) {
+          var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, _errorCorrectionLevel);
+          var buffer = qrBitBuffer();
+
+          for (var i = 0; i < _dataList.length; i++) {
+            var data = _dataList[i];
+            buffer.put(data.getMode(), 4);
+            buffer.put(data.getLength(), QRUtil.getLengthInBits(data.getMode(), typeNumber) );
+            data.write(buffer);
+          }
+
+          var totalDataCount = 0;
+          for (var i = 0; i < rsBlocks.length; i++) {
+            totalDataCount += rsBlocks[i].dataCount;
+          }
+
+          if (buffer.getLengthInBits() <= totalDataCount * 8) {
+            break;
+          }
+        }
+
+        _typeNumber = typeNumber;
+      }
+
+      makeImpl(false, getBestMaskPattern() );
+    };
+
+    _this.createTableTag = function(cellSize, margin) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var qrHtml = '';
+
+      qrHtml += '<table style="';
+      qrHtml += ' border-width: 0px; border-style: none;';
+      qrHtml += ' border-collapse: collapse;';
+      qrHtml += ' padding: 0px; margin: ' + margin + 'px;';
+      qrHtml += '">';
+      qrHtml += '<tbody>';
+
+      for (var r = 0; r < _this.getModuleCount(); r += 1) {
+
+        qrHtml += '<tr>';
+
+        for (var c = 0; c < _this.getModuleCount(); c += 1) {
+          qrHtml += '<td style="';
+          qrHtml += ' border-width: 0px; border-style: none;';
+          qrHtml += ' border-collapse: collapse;';
+          qrHtml += ' padding: 0px; margin: 0px;';
+          qrHtml += ' width: ' + cellSize + 'px;';
+          qrHtml += ' height: ' + cellSize + 'px;';
+          qrHtml += ' background-color: ';
+          qrHtml += _this.isDark(r, c)? '#000000' : '#ffffff';
+          qrHtml += ';';
+          qrHtml += '"/>';
+        }
+
+        qrHtml += '</tr>';
+      }
+
+      qrHtml += '</tbody>';
+      qrHtml += '</table>';
+
+      return qrHtml;
+    };
+
+    _this.createSvgTag = function(cellSize, margin, alt, title) {
+
+      var opts = {};
+      if (typeof arguments[0] == 'object') {
+        // Called by options.
+        opts = arguments[0];
+        // overwrite cellSize and margin.
+        cellSize = opts.cellSize;
+        margin = opts.margin;
+        alt = opts.alt;
+        title = opts.title;
+      }
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      // Compose alt property surrogate
+      alt = (typeof alt === 'string') ? {text: alt} : alt || {};
+      alt.text = alt.text || null;
+      alt.id = (alt.text) ? alt.id || 'qrcode-description' : null;
+
+      // Compose title property surrogate
+      title = (typeof title === 'string') ? {text: title} : title || {};
+      title.text = title.text || null;
+      title.id = (title.text) ? title.id || 'qrcode-title' : null;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var c, mc, r, mr, qrSvg='', rect;
+
+      rect = 'l' + cellSize + ',0 0,' + cellSize +
+        ' -' + cellSize + ',0 0,-' + cellSize + 'z ';
+
+      qrSvg += '<svg version="1.1" xmlns="http://www.w3.org/2000/svg"';
+      qrSvg += !opts.scalable ? ' width="' + size + 'px" height="' + size + 'px"' : '';
+      qrSvg += ' viewBox="0 0 ' + size + ' ' + size + '" ';
+      qrSvg += ' preserveAspectRatio="xMinYMin meet"';
+      qrSvg += (title.text || alt.text) ? ' role="img" aria-labelledby="' +
+          escapeXml([title.id, alt.id].join(' ').trim() ) + '"' : '';
+      qrSvg += '>';
+      qrSvg += (title.text) ? '<title id="' + escapeXml(title.id) + '">' +
+          escapeXml(title.text) + '</title>' : '';
+      qrSvg += (alt.text) ? '<description id="' + escapeXml(alt.id) + '">' +
+          escapeXml(alt.text) + '</description>' : '';
+      qrSvg += '<rect width="100%" height="100%" fill="white" cx="0" cy="0"/>';
+      qrSvg += '<path d="';
+
+      for (r = 0; r < _this.getModuleCount(); r += 1) {
+        mr = r * cellSize + margin;
+        for (c = 0; c < _this.getModuleCount(); c += 1) {
+          if (_this.isDark(r, c) ) {
+            mc = c*cellSize+margin;
+            qrSvg += 'M' + mc + ',' + mr + rect;
+          }
+        }
+      }
+
+      qrSvg += '" stroke="transparent" fill="black"/>';
+      qrSvg += '</svg>';
+
+      return qrSvg;
+    };
+
+    _this.createDataURL = function(cellSize, margin) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      return createDataURL(size, size, function(x, y) {
+        if (min <= x && x < max && min <= y && y < max) {
+          var c = Math.floor( (x - min) / cellSize);
+          var r = Math.floor( (y - min) / cellSize);
+          return _this.isDark(r, c)? 0 : 1;
+        } else {
+          return 1;
+        }
+      } );
+    };
+
+    _this.createImgTag = function(cellSize, margin, alt) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+
+      var img = '';
+      img += '<img';
+      img += '\u0020src="';
+      img += _this.createDataURL(cellSize, margin);
+      img += '"';
+      img += '\u0020width="';
+      img += size;
+      img += '"';
+      img += '\u0020height="';
+      img += size;
+      img += '"';
+      if (alt) {
+        img += '\u0020alt="';
+        img += escapeXml(alt);
+        img += '"';
+      }
+      img += '/>';
+
+      return img;
+    };
+
+    var escapeXml = function(s) {
+      var escaped = '';
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charAt(i);
+        switch(c) {
+        case '<': escaped += '&lt;'; break;
+        case '>': escaped += '&gt;'; break;
+        case '&': escaped += '&amp;'; break;
+        case '"': escaped += '&quot;'; break;
+        default : escaped += c; break;
+        }
+      }
+      return escaped;
+    };
+
+    var _createHalfASCII = function(margin) {
+      var cellSize = 1;
+      margin = (typeof margin == 'undefined')? cellSize * 2 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      var y, x, r1, r2, p;
+
+      var blocks = {
+        '██': '█',
+        '█ ': '▀',
+        ' █': '▄',
+        '  ': ' '
+      };
+
+      var blocksLastLineNoMargin = {
+        '██': '▀',
+        '█ ': '▀',
+        ' █': ' ',
+        '  ': ' '
+      };
+
+      var ascii = '';
+      for (y = 0; y < size; y += 2) {
+        r1 = Math.floor((y - min) / cellSize);
+        r2 = Math.floor((y + 1 - min) / cellSize);
+        for (x = 0; x < size; x += 1) {
+          p = '█';
+
+          if (min <= x && x < max && min <= y && y < max && _this.isDark(r1, Math.floor((x - min) / cellSize))) {
+            p = ' ';
+          }
+
+          if (min <= x && x < max && min <= y+1 && y+1 < max && _this.isDark(r2, Math.floor((x - min) / cellSize))) {
+            p += ' ';
+          }
+          else {
+            p += '█';
+          }
+
+          // Output 2 characters per pixel, to create full square. 1 character per pixels gives only half width of square.
+          ascii += (margin < 1 && y+1 >= max) ? blocksLastLineNoMargin[p] : blocks[p];
+        }
+
+        ascii += '\n';
+      }
+
+      if (size % 2 && margin > 0) {
+        return ascii.substring(0, ascii.length - size - 1) + Array(size+1).join('▀');
+      }
+
+      return ascii.substring(0, ascii.length-1);
+    };
+
+    _this.createASCII = function(cellSize, margin) {
+      cellSize = cellSize || 1;
+
+      if (cellSize < 2) {
+        return _createHalfASCII(margin);
+      }
+
+      cellSize -= 1;
+      margin = (typeof margin == 'undefined')? cellSize * 2 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      var y, x, r, p;
+
+      var white = Array(cellSize+1).join('██');
+      var black = Array(cellSize+1).join('  ');
+
+      var ascii = '';
+      var line = '';
+      for (y = 0; y < size; y += 1) {
+        r = Math.floor( (y - min) / cellSize);
+        line = '';
+        for (x = 0; x < size; x += 1) {
+          p = 1;
+
+          if (min <= x && x < max && min <= y && y < max && _this.isDark(r, Math.floor((x - min) / cellSize))) {
+            p = 0;
+          }
+
+          // Output 2 characters per pixel, to create full square. 1 character per pixels gives only half width of square.
+          line += p ? white : black;
+        }
+
+        for (r = 0; r < cellSize; r += 1) {
+          ascii += line + '\n';
+        }
+      }
+
+      return ascii.substring(0, ascii.length-1);
+    };
+
+    _this.renderTo2dContext = function(context, cellSize) {
+      cellSize = cellSize || 2;
+      var length = _this.getModuleCount();
+      for (var row = 0; row < length; row++) {
+        for (var col = 0; col < length; col++) {
+          context.fillStyle = _this.isDark(row, col) ? 'black' : 'white';
+          context.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
+        }
+      }
+    }
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrcode.stringToBytes
+  //---------------------------------------------------------------------
+
+  qrcode.stringToBytesFuncs = {
+    'default' : function(s) {
+      var bytes = [];
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charCodeAt(i);
+        bytes.push(c & 0xff);
+      }
+      return bytes;
+    }
+  };
+
+  qrcode.stringToBytes = qrcode.stringToBytesFuncs['default'];
+
+  //---------------------------------------------------------------------
+  // qrcode.createStringToBytes
+  //---------------------------------------------------------------------
+
+  /**
+   * @param unicodeData base64 string of byte array.
+   * [16bit Unicode],[16bit Bytes], ...
+   * @param numChars
+   */
+  qrcode.createStringToBytes = function(unicodeData, numChars) {
+
+    // create conversion map.
+
+    var unicodeMap = function() {
+
+      var bin = base64DecodeInputStream(unicodeData);
+      var read = function() {
+        var b = bin.read();
+        if (b == -1) throw 'eof';
+        return b;
+      };
+
+      var count = 0;
+      var unicodeMap = {};
+      while (true) {
+        var b0 = bin.read();
+        if (b0 == -1) break;
+        var b1 = read();
+        var b2 = read();
+        var b3 = read();
+        var k = String.fromCharCode( (b0 << 8) | b1);
+        var v = (b2 << 8) | b3;
+        unicodeMap[k] = v;
+        count += 1;
+      }
+      if (count != numChars) {
+        throw count + ' != ' + numChars;
+      }
+
+      return unicodeMap;
+    }();
+
+    var unknownChar = '?'.charCodeAt(0);
+
+    return function(s) {
+      var bytes = [];
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charCodeAt(i);
+        if (c < 128) {
+          bytes.push(c);
+        } else {
+          var b = unicodeMap[s.charAt(i)];
+          if (typeof b == 'number') {
+            if ( (b & 0xff) == b) {
+              // 1byte
+              bytes.push(b);
+            } else {
+              // 2bytes
+              bytes.push(b >>> 8);
+              bytes.push(b & 0xff);
+            }
+          } else {
+            bytes.push(unknownChar);
+          }
+        }
+      }
+      return bytes;
+    };
+  };
+
+  //---------------------------------------------------------------------
+  // QRMode
+  //---------------------------------------------------------------------
+
+  var QRMode = {
+    MODE_NUMBER :    1 << 0,
+    MODE_ALPHA_NUM : 1 << 1,
+    MODE_8BIT_BYTE : 1 << 2,
+    MODE_KANJI :     1 << 3
+  };
+
+  //---------------------------------------------------------------------
+  // QRErrorCorrectionLevel
+  //---------------------------------------------------------------------
+
+  var QRErrorCorrectionLevel = {
+    L : 1,
+    M : 0,
+    Q : 3,
+    H : 2
+  };
+
+  //---------------------------------------------------------------------
+  // QRMaskPattern
+  //---------------------------------------------------------------------
+
+  var QRMaskPattern = {
+    PATTERN000 : 0,
+    PATTERN001 : 1,
+    PATTERN010 : 2,
+    PATTERN011 : 3,
+    PATTERN100 : 4,
+    PATTERN101 : 5,
+    PATTERN110 : 6,
+    PATTERN111 : 7
+  };
+
+  //---------------------------------------------------------------------
+  // QRUtil
+  //---------------------------------------------------------------------
+
+  var QRUtil = function() {
+
+    var PATTERN_POSITION_TABLE = [
+      [],
+      [6, 18],
+      [6, 22],
+      [6, 26],
+      [6, 30],
+      [6, 34],
+      [6, 22, 38],
+      [6, 24, 42],
+      [6, 26, 46],
+      [6, 28, 50],
+      [6, 30, 54],
+      [6, 32, 58],
+      [6, 34, 62],
+      [6, 26, 46, 66],
+      [6, 26, 48, 70],
+      [6, 26, 50, 74],
+      [6, 30, 54, 78],
+      [6, 30, 56, 82],
+      [6, 30, 58, 86],
+      [6, 34, 62, 90],
+      [6, 28, 50, 72, 94],
+      [6, 26, 50, 74, 98],
+      [6, 30, 54, 78, 102],
+      [6, 28, 54, 80, 106],
+      [6, 32, 58, 84, 110],
+      [6, 30, 58, 86, 114],
+      [6, 34, 62, 90, 118],
+      [6, 26, 50, 74, 98, 122],
+      [6, 30, 54, 78, 102, 126],
+      [6, 26, 52, 78, 104, 130],
+      [6, 30, 56, 82, 108, 134],
+      [6, 34, 60, 86, 112, 138],
+      [6, 30, 58, 86, 114, 142],
+      [6, 34, 62, 90, 118, 146],
+      [6, 30, 54, 78, 102, 126, 150],
+      [6, 24, 50, 76, 102, 128, 154],
+      [6, 28, 54, 80, 106, 132, 158],
+      [6, 32, 58, 84, 110, 136, 162],
+      [6, 26, 54, 82, 110, 138, 166],
+      [6, 30, 58, 86, 114, 142, 170]
+    ];
+    var G15 = (1 << 10) | (1 << 8) | (1 << 5) | (1 << 4) | (1 << 2) | (1 << 1) | (1 << 0);
+    var G18 = (1 << 12) | (1 << 11) | (1 << 10) | (1 << 9) | (1 << 8) | (1 << 5) | (1 << 2) | (1 << 0);
+    var G15_MASK = (1 << 14) | (1 << 12) | (1 << 10) | (1 << 4) | (1 << 1);
+
+    var _this = {};
+
+    var getBCHDigit = function(data) {
+      var digit = 0;
+      while (data != 0) {
+        digit += 1;
+        data >>>= 1;
+      }
+      return digit;
+    };
+
+    _this.getBCHTypeInfo = function(data) {
+      var d = data << 10;
+      while (getBCHDigit(d) - getBCHDigit(G15) >= 0) {
+        d ^= (G15 << (getBCHDigit(d) - getBCHDigit(G15) ) );
+      }
+      return ( (data << 10) | d) ^ G15_MASK;
+    };
+
+    _this.getBCHTypeNumber = function(data) {
+      var d = data << 12;
+      while (getBCHDigit(d) - getBCHDigit(G18) >= 0) {
+        d ^= (G18 << (getBCHDigit(d) - getBCHDigit(G18) ) );
+      }
+      return (data << 12) | d;
+    };
+
+    _this.getPatternPosition = function(typeNumber) {
+      return PATTERN_POSITION_TABLE[typeNumber - 1];
+    };
+
+    _this.getMaskFunction = function(maskPattern) {
+
+      switch (maskPattern) {
+
+      case QRMaskPattern.PATTERN000 :
+        return function(i, j) { return (i + j) % 2 == 0; };
+      case QRMaskPattern.PATTERN001 :
+        return function(i, j) { return i % 2 == 0; };
+      case QRMaskPattern.PATTERN010 :
+        return function(i, j) { return j % 3 == 0; };
+      case QRMaskPattern.PATTERN011 :
+        return function(i, j) { return (i + j) % 3 == 0; };
+      case QRMaskPattern.PATTERN100 :
+        return function(i, j) { return (Math.floor(i / 2) + Math.floor(j / 3) ) % 2 == 0; };
+      case QRMaskPattern.PATTERN101 :
+        return function(i, j) { return (i * j) % 2 + (i * j) % 3 == 0; };
+      case QRMaskPattern.PATTERN110 :
+        return function(i, j) { return ( (i * j) % 2 + (i * j) % 3) % 2 == 0; };
+      case QRMaskPattern.PATTERN111 :
+        return function(i, j) { return ( (i * j) % 3 + (i + j) % 2) % 2 == 0; };
+
+      default :
+        throw 'bad maskPattern:' + maskPattern;
+      }
+    };
+
+    _this.getErrorCorrectPolynomial = function(errorCorrectLength) {
+      var a = qrPolynomial([1], 0);
+      for (var i = 0; i < errorCorrectLength; i += 1) {
+        a = a.multiply(qrPolynomial([1, QRMath.gexp(i)], 0) );
+      }
+      return a;
+    };
+
+    _this.getLengthInBits = function(mode, type) {
+
+      if (1 <= type && type < 10) {
+
+        // 1 - 9
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 10;
+        case QRMode.MODE_ALPHA_NUM : return 9;
+        case QRMode.MODE_8BIT_BYTE : return 8;
+        case QRMode.MODE_KANJI     : return 8;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else if (type < 27) {
+
+        // 10 - 26
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 12;
+        case QRMode.MODE_ALPHA_NUM : return 11;
+        case QRMode.MODE_8BIT_BYTE : return 16;
+        case QRMode.MODE_KANJI     : return 10;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else if (type < 41) {
+
+        // 27 - 40
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 14;
+        case QRMode.MODE_ALPHA_NUM : return 13;
+        case QRMode.MODE_8BIT_BYTE : return 16;
+        case QRMode.MODE_KANJI     : return 12;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else {
+        throw 'type:' + type;
+      }
+    };
+
+    _this.getLostPoint = function(qrcode) {
+
+      var moduleCount = qrcode.getModuleCount();
+
+      var lostPoint = 0;
+
+      // LEVEL1
+
+      for (var row = 0; row < moduleCount; row += 1) {
+        for (var col = 0; col < moduleCount; col += 1) {
+
+          var sameCount = 0;
+          var dark = qrcode.isDark(row, col);
+
+          for (var r = -1; r <= 1; r += 1) {
+
+            if (row + r < 0 || moduleCount <= row + r) {
+              continue;
+            }
+
+            for (var c = -1; c <= 1; c += 1) {
+
+              if (col + c < 0 || moduleCount <= col + c) {
+                continue;
+              }
+
+              if (r == 0 && c == 0) {
+                continue;
+              }
+
+              if (dark == qrcode.isDark(row + r, col + c) ) {
+                sameCount += 1;
+              }
+            }
+          }
+
+          if (sameCount > 5) {
+            lostPoint += (3 + sameCount - 5);
+          }
+        }
+      };
+
+      // LEVEL2
+
+      for (var row = 0; row < moduleCount - 1; row += 1) {
+        for (var col = 0; col < moduleCount - 1; col += 1) {
+          var count = 0;
+          if (qrcode.isDark(row, col) ) count += 1;
+          if (qrcode.isDark(row + 1, col) ) count += 1;
+          if (qrcode.isDark(row, col + 1) ) count += 1;
+          if (qrcode.isDark(row + 1, col + 1) ) count += 1;
+          if (count == 0 || count == 4) {
+            lostPoint += 3;
+          }
+        }
+      }
+
+      // LEVEL3
+
+      for (var row = 0; row < moduleCount; row += 1) {
+        for (var col = 0; col < moduleCount - 6; col += 1) {
+          if (qrcode.isDark(row, col)
+              && !qrcode.isDark(row, col + 1)
+              &&  qrcode.isDark(row, col + 2)
+              &&  qrcode.isDark(row, col + 3)
+              &&  qrcode.isDark(row, col + 4)
+              && !qrcode.isDark(row, col + 5)
+              &&  qrcode.isDark(row, col + 6) ) {
+            lostPoint += 40;
+          }
+        }
+      }
+
+      for (var col = 0; col < moduleCount; col += 1) {
+        for (var row = 0; row < moduleCount - 6; row += 1) {
+          if (qrcode.isDark(row, col)
+              && !qrcode.isDark(row + 1, col)
+              &&  qrcode.isDark(row + 2, col)
+              &&  qrcode.isDark(row + 3, col)
+              &&  qrcode.isDark(row + 4, col)
+              && !qrcode.isDark(row + 5, col)
+              &&  qrcode.isDark(row + 6, col) ) {
+            lostPoint += 40;
+          }
+        }
+      }
+
+      // LEVEL4
+
+      var darkCount = 0;
+
+      for (var col = 0; col < moduleCount; col += 1) {
+        for (var row = 0; row < moduleCount; row += 1) {
+          if (qrcode.isDark(row, col) ) {
+            darkCount += 1;
+          }
+        }
+      }
+
+      var ratio = Math.abs(100 * darkCount / moduleCount / moduleCount - 50) / 5;
+      lostPoint += ratio * 10;
+
+      return lostPoint;
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // QRMath
+  //---------------------------------------------------------------------
+
+  var QRMath = function() {
+
+    var EXP_TABLE = new Array(256);
+    var LOG_TABLE = new Array(256);
+
+    // initialize tables
+    for (var i = 0; i < 8; i += 1) {
+      EXP_TABLE[i] = 1 << i;
+    }
+    for (var i = 8; i < 256; i += 1) {
+      EXP_TABLE[i] = EXP_TABLE[i - 4]
+        ^ EXP_TABLE[i - 5]
+        ^ EXP_TABLE[i - 6]
+        ^ EXP_TABLE[i - 8];
+    }
+    for (var i = 0; i < 255; i += 1) {
+      LOG_TABLE[EXP_TABLE[i] ] = i;
+    }
+
+    var _this = {};
+
+    _this.glog = function(n) {
+
+      if (n < 1) {
+        throw 'glog(' + n + ')';
+      }
+
+      return LOG_TABLE[n];
+    };
+
+    _this.gexp = function(n) {
+
+      while (n < 0) {
+        n += 255;
+      }
+
+      while (n >= 256) {
+        n -= 255;
+      }
+
+      return EXP_TABLE[n];
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // qrPolynomial
+  //---------------------------------------------------------------------
+
+  function qrPolynomial(num, shift) {
+
+    if (typeof num.length == 'undefined') {
+      throw num.length + '/' + shift;
+    }
+
+    var _num = function() {
+      var offset = 0;
+      while (offset < num.length && num[offset] == 0) {
+        offset += 1;
+      }
+      var _num = new Array(num.length - offset + shift);
+      for (var i = 0; i < num.length - offset; i += 1) {
+        _num[i] = num[i + offset];
+      }
+      return _num;
+    }();
+
+    var _this = {};
+
+    _this.getAt = function(index) {
+      return _num[index];
+    };
+
+    _this.getLength = function() {
+      return _num.length;
+    };
+
+    _this.multiply = function(e) {
+
+      var num = new Array(_this.getLength() + e.getLength() - 1);
+
+      for (var i = 0; i < _this.getLength(); i += 1) {
+        for (var j = 0; j < e.getLength(); j += 1) {
+          num[i + j] ^= QRMath.gexp(QRMath.glog(_this.getAt(i) ) + QRMath.glog(e.getAt(j) ) );
+        }
+      }
+
+      return qrPolynomial(num, 0);
+    };
+
+    _this.mod = function(e) {
+
+      if (_this.getLength() - e.getLength() < 0) {
+        return _this;
+      }
+
+      var ratio = QRMath.glog(_this.getAt(0) ) - QRMath.glog(e.getAt(0) );
+
+      var num = new Array(_this.getLength() );
+      for (var i = 0; i < _this.getLength(); i += 1) {
+        num[i] = _this.getAt(i);
+      }
+
+      for (var i = 0; i < e.getLength(); i += 1) {
+        num[i] ^= QRMath.gexp(QRMath.glog(e.getAt(i) ) + ratio);
+      }
+
+      // recursive call
+      return qrPolynomial(num, 0).mod(e);
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // QRRSBlock
+  //---------------------------------------------------------------------
+
+  var QRRSBlock = function() {
+
+    var RS_BLOCK_TABLE = [
+
+      // L
+      // M
+      // Q
+      // H
+
+      // 1
+      [1, 26, 19],
+      [1, 26, 16],
+      [1, 26, 13],
+      [1, 26, 9],
+
+      // 2
+      [1, 44, 34],
+      [1, 44, 28],
+      [1, 44, 22],
+      [1, 44, 16],
+
+      // 3
+      [1, 70, 55],
+      [1, 70, 44],
+      [2, 35, 17],
+      [2, 35, 13],
+
+      // 4
+      [1, 100, 80],
+      [2, 50, 32],
+      [2, 50, 24],
+      [4, 25, 9],
+
+      // 5
+      [1, 134, 108],
+      [2, 67, 43],
+      [2, 33, 15, 2, 34, 16],
+      [2, 33, 11, 2, 34, 12],
+
+      // 6
+      [2, 86, 68],
+      [4, 43, 27],
+      [4, 43, 19],
+      [4, 43, 15],
+
+      // 7
+      [2, 98, 78],
+      [4, 49, 31],
+      [2, 32, 14, 4, 33, 15],
+      [4, 39, 13, 1, 40, 14],
+
+      // 8
+      [2, 121, 97],
+      [2, 60, 38, 2, 61, 39],
+      [4, 40, 18, 2, 41, 19],
+      [4, 40, 14, 2, 41, 15],
+
+      // 9
+      [2, 146, 116],
+      [3, 58, 36, 2, 59, 37],
+      [4, 36, 16, 4, 37, 17],
+      [4, 36, 12, 4, 37, 13],
+
+      // 10
+      [2, 86, 68, 2, 87, 69],
+      [4, 69, 43, 1, 70, 44],
+      [6, 43, 19, 2, 44, 20],
+      [6, 43, 15, 2, 44, 16],
+
+      // 11
+      [4, 101, 81],
+      [1, 80, 50, 4, 81, 51],
+      [4, 50, 22, 4, 51, 23],
+      [3, 36, 12, 8, 37, 13],
+
+      // 12
+      [2, 116, 92, 2, 117, 93],
+      [6, 58, 36, 2, 59, 37],
+      [4, 46, 20, 6, 47, 21],
+      [7, 42, 14, 4, 43, 15],
+
+      // 13
+      [4, 133, 107],
+      [8, 59, 37, 1, 60, 38],
+      [8, 44, 20, 4, 45, 21],
+      [12, 33, 11, 4, 34, 12],
+
+      // 14
+      [3, 145, 115, 1, 146, 116],
+      [4, 64, 40, 5, 65, 41],
+      [11, 36, 16, 5, 37, 17],
+      [11, 36, 12, 5, 37, 13],
+
+      // 15
+      [5, 109, 87, 1, 110, 88],
+      [5, 65, 41, 5, 66, 42],
+      [5, 54, 24, 7, 55, 25],
+      [11, 36, 12, 7, 37, 13],
+
+      // 16
+      [5, 122, 98, 1, 123, 99],
+      [7, 73, 45, 3, 74, 46],
+      [15, 43, 19, 2, 44, 20],
+      [3, 45, 15, 13, 46, 16],
+
+      // 17
+      [1, 135, 107, 5, 136, 108],
+      [10, 74, 46, 1, 75, 47],
+      [1, 50, 22, 15, 51, 23],
+      [2, 42, 14, 17, 43, 15],
+
+      // 18
+      [5, 150, 120, 1, 151, 121],
+      [9, 69, 43, 4, 70, 44],
+      [17, 50, 22, 1, 51, 23],
+      [2, 42, 14, 19, 43, 15],
+
+      // 19
+      [3, 141, 113, 4, 142, 114],
+      [3, 70, 44, 11, 71, 45],
+      [17, 47, 21, 4, 48, 22],
+      [9, 39, 13, 16, 40, 14],
+
+      // 20
+      [3, 135, 107, 5, 136, 108],
+      [3, 67, 41, 13, 68, 42],
+      [15, 54, 24, 5, 55, 25],
+      [15, 43, 15, 10, 44, 16],
+
+      // 21
+      [4, 144, 116, 4, 145, 117],
+      [17, 68, 42],
+      [17, 50, 22, 6, 51, 23],
+      [19, 46, 16, 6, 47, 17],
+
+      // 22
+      [2, 139, 111, 7, 140, 112],
+      [17, 74, 46],
+      [7, 54, 24, 16, 55, 25],
+      [34, 37, 13],
+
+      // 23
+      [4, 151, 121, 5, 152, 122],
+      [4, 75, 47, 14, 76, 48],
+      [11, 54, 24, 14, 55, 25],
+      [16, 45, 15, 14, 46, 16],
+
+      // 24
+      [6, 147, 117, 4, 148, 118],
+      [6, 73, 45, 14, 74, 46],
+      [11, 54, 24, 16, 55, 25],
+      [30, 46, 16, 2, 47, 17],
+
+      // 25
+      [8, 132, 106, 4, 133, 107],
+      [8, 75, 47, 13, 76, 48],
+      [7, 54, 24, 22, 55, 25],
+      [22, 45, 15, 13, 46, 16],
+
+      // 26
+      [10, 142, 114, 2, 143, 115],
+      [19, 74, 46, 4, 75, 47],
+      [28, 50, 22, 6, 51, 23],
+      [33, 46, 16, 4, 47, 17],
+
+      // 27
+      [8, 152, 122, 4, 153, 123],
+      [22, 73, 45, 3, 74, 46],
+      [8, 53, 23, 26, 54, 24],
+      [12, 45, 15, 28, 46, 16],
+
+      // 28
+      [3, 147, 117, 10, 148, 118],
+      [3, 73, 45, 23, 74, 46],
+      [4, 54, 24, 31, 55, 25],
+      [11, 45, 15, 31, 46, 16],
+
+      // 29
+      [7, 146, 116, 7, 147, 117],
+      [21, 73, 45, 7, 74, 46],
+      [1, 53, 23, 37, 54, 24],
+      [19, 45, 15, 26, 46, 16],
+
+      // 30
+      [5, 145, 115, 10, 146, 116],
+      [19, 75, 47, 10, 76, 48],
+      [15, 54, 24, 25, 55, 25],
+      [23, 45, 15, 25, 46, 16],
+
+      // 31
+      [13, 145, 115, 3, 146, 116],
+      [2, 74, 46, 29, 75, 47],
+      [42, 54, 24, 1, 55, 25],
+      [23, 45, 15, 28, 46, 16],
+
+      // 32
+      [17, 145, 115],
+      [10, 74, 46, 23, 75, 47],
+      [10, 54, 24, 35, 55, 25],
+      [19, 45, 15, 35, 46, 16],
+
+      // 33
+      [17, 145, 115, 1, 146, 116],
+      [14, 74, 46, 21, 75, 47],
+      [29, 54, 24, 19, 55, 25],
+      [11, 45, 15, 46, 46, 16],
+
+      // 34
+      [13, 145, 115, 6, 146, 116],
+      [14, 74, 46, 23, 75, 47],
+      [44, 54, 24, 7, 55, 25],
+      [59, 46, 16, 1, 47, 17],
+
+      // 35
+      [12, 151, 121, 7, 152, 122],
+      [12, 75, 47, 26, 76, 48],
+      [39, 54, 24, 14, 55, 25],
+      [22, 45, 15, 41, 46, 16],
+
+      // 36
+      [6, 151, 121, 14, 152, 122],
+      [6, 75, 47, 34, 76, 48],
+      [46, 54, 24, 10, 55, 25],
+      [2, 45, 15, 64, 46, 16],
+
+      // 37
+      [17, 152, 122, 4, 153, 123],
+      [29, 74, 46, 14, 75, 47],
+      [49, 54, 24, 10, 55, 25],
+      [24, 45, 15, 46, 46, 16],
+
+      // 38
+      [4, 152, 122, 18, 153, 123],
+      [13, 74, 46, 32, 75, 47],
+      [48, 54, 24, 14, 55, 25],
+      [42, 45, 15, 32, 46, 16],
+
+      // 39
+      [20, 147, 117, 4, 148, 118],
+      [40, 75, 47, 7, 76, 48],
+      [43, 54, 24, 22, 55, 25],
+      [10, 45, 15, 67, 46, 16],
+
+      // 40
+      [19, 148, 118, 6, 149, 119],
+      [18, 75, 47, 31, 76, 48],
+      [34, 54, 24, 34, 55, 25],
+      [20, 45, 15, 61, 46, 16]
+    ];
+
+    var qrRSBlock = function(totalCount, dataCount) {
+      var _this = {};
+      _this.totalCount = totalCount;
+      _this.dataCount = dataCount;
+      return _this;
+    };
+
+    var _this = {};
+
+    var getRsBlockTable = function(typeNumber, errorCorrectionLevel) {
+
+      switch(errorCorrectionLevel) {
+      case QRErrorCorrectionLevel.L :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 0];
+      case QRErrorCorrectionLevel.M :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 1];
+      case QRErrorCorrectionLevel.Q :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 2];
+      case QRErrorCorrectionLevel.H :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 3];
+      default :
+        return undefined;
+      }
+    };
+
+    _this.getRSBlocks = function(typeNumber, errorCorrectionLevel) {
+
+      var rsBlock = getRsBlockTable(typeNumber, errorCorrectionLevel);
+
+      if (typeof rsBlock == 'undefined') {
+        throw 'bad rs block @ typeNumber:' + typeNumber +
+            '/errorCorrectionLevel:' + errorCorrectionLevel;
+      }
+
+      var length = rsBlock.length / 3;
+
+      var list = [];
+
+      for (var i = 0; i < length; i += 1) {
+
+        var count = rsBlock[i * 3 + 0];
+        var totalCount = rsBlock[i * 3 + 1];
+        var dataCount = rsBlock[i * 3 + 2];
+
+        for (var j = 0; j < count; j += 1) {
+          list.push(qrRSBlock(totalCount, dataCount) );
+        }
+      }
+
+      return list;
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // qrBitBuffer
+  //---------------------------------------------------------------------
+
+  var qrBitBuffer = function() {
+
+    var _buffer = [];
+    var _length = 0;
+
+    var _this = {};
+
+    _this.getBuffer = function() {
+      return _buffer;
+    };
+
+    _this.getAt = function(index) {
+      var bufIndex = Math.floor(index / 8);
+      return ( (_buffer[bufIndex] >>> (7 - index % 8) ) & 1) == 1;
+    };
+
+    _this.put = function(num, length) {
+      for (var i = 0; i < length; i += 1) {
+        _this.putBit( ( (num >>> (length - i - 1) ) & 1) == 1);
+      }
+    };
+
+    _this.getLengthInBits = function() {
+      return _length;
+    };
+
+    _this.putBit = function(bit) {
+
+      var bufIndex = Math.floor(_length / 8);
+      if (_buffer.length <= bufIndex) {
+        _buffer.push(0);
+      }
+
+      if (bit) {
+        _buffer[bufIndex] |= (0x80 >>> (_length % 8) );
+      }
+
+      _length += 1;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrNumber
+  //---------------------------------------------------------------------
+
+  var qrNumber = function(data) {
+
+    var _mode = QRMode.MODE_NUMBER;
+    var _data = data;
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _data.length;
+    };
+
+    _this.write = function(buffer) {
+
+      var data = _data;
+
+      var i = 0;
+
+      while (i + 2 < data.length) {
+        buffer.put(strToNum(data.substring(i, i + 3) ), 10);
+        i += 3;
+      }
+
+      if (i < data.length) {
+        if (data.length - i == 1) {
+          buffer.put(strToNum(data.substring(i, i + 1) ), 4);
+        } else if (data.length - i == 2) {
+          buffer.put(strToNum(data.substring(i, i + 2) ), 7);
+        }
+      }
+    };
+
+    var strToNum = function(s) {
+      var num = 0;
+      for (var i = 0; i < s.length; i += 1) {
+        num = num * 10 + chatToNum(s.charAt(i) );
+      }
+      return num;
+    };
+
+    var chatToNum = function(c) {
+      if ('0' <= c && c <= '9') {
+        return c.charCodeAt(0) - '0'.charCodeAt(0);
+      }
+      throw 'illegal char :' + c;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrAlphaNum
+  //---------------------------------------------------------------------
+
+  var qrAlphaNum = function(data) {
+
+    var _mode = QRMode.MODE_ALPHA_NUM;
+    var _data = data;
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _data.length;
+    };
+
+    _this.write = function(buffer) {
+
+      var s = _data;
+
+      var i = 0;
+
+      while (i + 1 < s.length) {
+        buffer.put(
+          getCode(s.charAt(i) ) * 45 +
+          getCode(s.charAt(i + 1) ), 11);
+        i += 2;
+      }
+
+      if (i < s.length) {
+        buffer.put(getCode(s.charAt(i) ), 6);
+      }
+    };
+
+    var getCode = function(c) {
+
+      if ('0' <= c && c <= '9') {
+        return c.charCodeAt(0) - '0'.charCodeAt(0);
+      } else if ('A' <= c && c <= 'Z') {
+        return c.charCodeAt(0) - 'A'.charCodeAt(0) + 10;
+      } else {
+        switch (c) {
+        case ' ' : return 36;
+        case '$' : return 37;
+        case '%' : return 38;
+        case '*' : return 39;
+        case '+' : return 40;
+        case '-' : return 41;
+        case '.' : return 42;
+        case '/' : return 43;
+        case ':' : return 44;
+        default :
+          throw 'illegal char :' + c;
+        }
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qr8BitByte
+  //---------------------------------------------------------------------
+
+  var qr8BitByte = function(data) {
+
+    var _mode = QRMode.MODE_8BIT_BYTE;
+    var _data = data;
+    var _bytes = qrcode.stringToBytes(data);
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _bytes.length;
+    };
+
+    _this.write = function(buffer) {
+      for (var i = 0; i < _bytes.length; i += 1) {
+        buffer.put(_bytes[i], 8);
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrKanji
+  //---------------------------------------------------------------------
+
+  var qrKanji = function(data) {
+
+    var _mode = QRMode.MODE_KANJI;
+    var _data = data;
+
+    var stringToBytes = qrcode.stringToBytesFuncs['SJIS'];
+    if (!stringToBytes) {
+      throw 'sjis not supported.';
+    }
+    !function(c, code) {
+      // self test for sjis support.
+      var test = stringToBytes(c);
+      if (test.length != 2 || ( (test[0] << 8) | test[1]) != code) {
+        throw 'sjis not supported.';
+      }
+    }('\u53cb', 0x9746);
+
+    var _bytes = stringToBytes(data);
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return ~~(_bytes.length / 2);
+    };
+
+    _this.write = function(buffer) {
+
+      var data = _bytes;
+
+      var i = 0;
+
+      while (i + 1 < data.length) {
+
+        var c = ( (0xff & data[i]) << 8) | (0xff & data[i + 1]);
+
+        if (0x8140 <= c && c <= 0x9FFC) {
+          c -= 0x8140;
+        } else if (0xE040 <= c && c <= 0xEBBF) {
+          c -= 0xC140;
+        } else {
+          throw 'illegal char at ' + (i + 1) + '/' + c;
+        }
+
+        c = ( (c >>> 8) & 0xff) * 0xC0 + (c & 0xff);
+
+        buffer.put(c, 13);
+
+        i += 2;
+      }
+
+      if (i < data.length) {
+        throw 'illegal char at ' + (i + 1);
+      }
+    };
+
+    return _this;
+  };
+
+  //=====================================================================
+  // GIF Support etc.
+  //
+
+  //---------------------------------------------------------------------
+  // byteArrayOutputStream
+  //---------------------------------------------------------------------
+
+  var byteArrayOutputStream = function() {
+
+    var _bytes = [];
+
+    var _this = {};
+
+    _this.writeByte = function(b) {
+      _bytes.push(b & 0xff);
+    };
+
+    _this.writeShort = function(i) {
+      _this.writeByte(i);
+      _this.writeByte(i >>> 8);
+    };
+
+    _this.writeBytes = function(b, off, len) {
+      off = off || 0;
+      len = len || b.length;
+      for (var i = 0; i < len; i += 1) {
+        _this.writeByte(b[i + off]);
+      }
+    };
+
+    _this.writeString = function(s) {
+      for (var i = 0; i < s.length; i += 1) {
+        _this.writeByte(s.charCodeAt(i) );
+      }
+    };
+
+    _this.toByteArray = function() {
+      return _bytes;
+    };
+
+    _this.toString = function() {
+      var s = '';
+      s += '[';
+      for (var i = 0; i < _bytes.length; i += 1) {
+        if (i > 0) {
+          s += ',';
+        }
+        s += _bytes[i];
+      }
+      s += ']';
+      return s;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // base64EncodeOutputStream
+  //---------------------------------------------------------------------
+
+  var base64EncodeOutputStream = function() {
+
+    var _buffer = 0;
+    var _buflen = 0;
+    var _length = 0;
+    var _base64 = '';
+
+    var _this = {};
+
+    var writeEncoded = function(b) {
+      _base64 += String.fromCharCode(encode(b & 0x3f) );
+    };
+
+    var encode = function(n) {
+      if (n < 0) {
+        // error.
+      } else if (n < 26) {
+        return 0x41 + n;
+      } else if (n < 52) {
+        return 0x61 + (n - 26);
+      } else if (n < 62) {
+        return 0x30 + (n - 52);
+      } else if (n == 62) {
+        return 0x2b;
+      } else if (n == 63) {
+        return 0x2f;
+      }
+      throw 'n:' + n;
+    };
+
+    _this.writeByte = function(n) {
+
+      _buffer = (_buffer << 8) | (n & 0xff);
+      _buflen += 8;
+      _length += 1;
+
+      while (_buflen >= 6) {
+        writeEncoded(_buffer >>> (_buflen - 6) );
+        _buflen -= 6;
+      }
+    };
+
+    _this.flush = function() {
+
+      if (_buflen > 0) {
+        writeEncoded(_buffer << (6 - _buflen) );
+        _buffer = 0;
+        _buflen = 0;
+      }
+
+      if (_length % 3 != 0) {
+        // padding
+        var padlen = 3 - _length % 3;
+        for (var i = 0; i < padlen; i += 1) {
+          _base64 += '=';
+        }
+      }
+    };
+
+    _this.toString = function() {
+      return _base64;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // base64DecodeInputStream
+  //---------------------------------------------------------------------
+
+  var base64DecodeInputStream = function(str) {
+
+    var _str = str;
+    var _pos = 0;
+    var _buffer = 0;
+    var _buflen = 0;
+
+    var _this = {};
+
+    _this.read = function() {
+
+      while (_buflen < 8) {
+
+        if (_pos >= _str.length) {
+          if (_buflen == 0) {
+            return -1;
+          }
+          throw 'unexpected end of file./' + _buflen;
+        }
+
+        var c = _str.charAt(_pos);
+        _pos += 1;
+
+        if (c == '=') {
+          _buflen = 0;
+          return -1;
+        } else if (c.match(/^\s$/) ) {
+          // ignore if whitespace.
+          continue;
+        }
+
+        _buffer = (_buffer << 6) | decode(c.charCodeAt(0) );
+        _buflen += 6;
+      }
+
+      var n = (_buffer >>> (_buflen - 8) ) & 0xff;
+      _buflen -= 8;
+      return n;
+    };
+
+    var decode = function(c) {
+      if (0x41 <= c && c <= 0x5a) {
+        return c - 0x41;
+      } else if (0x61 <= c && c <= 0x7a) {
+        return c - 0x61 + 26;
+      } else if (0x30 <= c && c <= 0x39) {
+        return c - 0x30 + 52;
+      } else if (c == 0x2b) {
+        return 62;
+      } else if (c == 0x2f) {
+        return 63;
+      } else {
+        throw 'c:' + c;
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // gifImage (B/W)
+  //---------------------------------------------------------------------
+
+  var gifImage = function(width, height) {
+
+    var _width = width;
+    var _height = height;
+    var _data = new Array(width * height);
+
+    var _this = {};
+
+    _this.setPixel = function(x, y, pixel) {
+      _data[y * _width + x] = pixel;
+    };
+
+    _this.write = function(out) {
+
+      //---------------------------------
+      // GIF Signature
+
+      out.writeString('GIF87a');
+
+      //---------------------------------
+      // Screen Descriptor
+
+      out.writeShort(_width);
+      out.writeShort(_height);
+
+      out.writeByte(0x80); // 2bit
+      out.writeByte(0);
+      out.writeByte(0);
+
+      //---------------------------------
+      // Global Color Map
+
+      // black
+      out.writeByte(0x00);
+      out.writeByte(0x00);
+      out.writeByte(0x00);
+
+      // white
+      out.writeByte(0xff);
+      out.writeByte(0xff);
+      out.writeByte(0xff);
+
+      //---------------------------------
+      // Image Descriptor
+
+      out.writeString(',');
+      out.writeShort(0);
+      out.writeShort(0);
+      out.writeShort(_width);
+      out.writeShort(_height);
+      out.writeByte(0);
+
+      //---------------------------------
+      // Local Color Map
+
+      //---------------------------------
+      // Raster Data
+
+      var lzwMinCodeSize = 2;
+      var raster = getLZWRaster(lzwMinCodeSize);
+
+      out.writeByte(lzwMinCodeSize);
+
+      var offset = 0;
+
+      while (raster.length - offset > 255) {
+        out.writeByte(255);
+        out.writeBytes(raster, offset, 255);
+        offset += 255;
+      }
+
+      out.writeByte(raster.length - offset);
+      out.writeBytes(raster, offset, raster.length - offset);
+      out.writeByte(0x00);
+
+      //---------------------------------
+      // GIF Terminator
+      out.writeString(';');
+    };
+
+    var bitOutputStream = function(out) {
+
+      var _out = out;
+      var _bitLength = 0;
+      var _bitBuffer = 0;
+
+      var _this = {};
+
+      _this.write = function(data, length) {
+
+        if ( (data >>> length) != 0) {
+          throw 'length over';
+        }
+
+        while (_bitLength + length >= 8) {
+          _out.writeByte(0xff & ( (data << _bitLength) | _bitBuffer) );
+          length -= (8 - _bitLength);
+          data >>>= (8 - _bitLength);
+          _bitBuffer = 0;
+          _bitLength = 0;
+        }
+
+        _bitBuffer = (data << _bitLength) | _bitBuffer;
+        _bitLength = _bitLength + length;
+      };
+
+      _this.flush = function() {
+        if (_bitLength > 0) {
+          _out.writeByte(_bitBuffer);
+        }
+      };
+
+      return _this;
+    };
+
+    var getLZWRaster = function(lzwMinCodeSize) {
+
+      var clearCode = 1 << lzwMinCodeSize;
+      var endCode = (1 << lzwMinCodeSize) + 1;
+      var bitLength = lzwMinCodeSize + 1;
+
+      // Setup LZWTable
+      var table = lzwTable();
+
+      for (var i = 0; i < clearCode; i += 1) {
+        table.add(String.fromCharCode(i) );
+      }
+      table.add(String.fromCharCode(clearCode) );
+      table.add(String.fromCharCode(endCode) );
+
+      var byteOut = byteArrayOutputStream();
+      var bitOut = bitOutputStream(byteOut);
+
+      // clear code
+      bitOut.write(clearCode, bitLength);
+
+      var dataIndex = 0;
+
+      var s = String.fromCharCode(_data[dataIndex]);
+      dataIndex += 1;
+
+      while (dataIndex < _data.length) {
+
+        var c = String.fromCharCode(_data[dataIndex]);
+        dataIndex += 1;
+
+        if (table.contains(s + c) ) {
+
+          s = s + c;
+
+        } else {
+
+          bitOut.write(table.indexOf(s), bitLength);
+
+          if (table.size() < 0xfff) {
+
+            if (table.size() == (1 << bitLength) ) {
+              bitLength += 1;
+            }
+
+            table.add(s + c);
+          }
+
+          s = c;
+        }
+      }
+
+      bitOut.write(table.indexOf(s), bitLength);
+
+      // end code
+      bitOut.write(endCode, bitLength);
+
+      bitOut.flush();
+
+      return byteOut.toByteArray();
+    };
+
+    var lzwTable = function() {
+
+      var _map = {};
+      var _size = 0;
+
+      var _this = {};
+
+      _this.add = function(key) {
+        if (_this.contains(key) ) {
+          throw 'dup key:' + key;
+        }
+        _map[key] = _size;
+        _size += 1;
+      };
+
+      _this.size = function() {
+        return _size;
+      };
+
+      _this.indexOf = function(key) {
+        return _map[key];
+      };
+
+      _this.contains = function(key) {
+        return typeof _map[key] != 'undefined';
+      };
+
+      return _this;
+    };
+
+    return _this;
+  };
+
+  var createDataURL = function(width, height, getPixel) {
+    var gif = gifImage(width, height);
+    for (var y = 0; y < height; y += 1) {
+      for (var x = 0; x < width; x += 1) {
+        gif.setPixel(x, y, getPixel(x, y) );
+      }
+    }
+
+    var b = byteArrayOutputStream();
+    gif.write(b);
+
+    var base64 = base64EncodeOutputStream();
+    var bytes = b.toByteArray();
+    for (var i = 0; i < bytes.length; i += 1) {
+      base64.writeByte(bytes[i]);
+    }
+    base64.flush();
+
+    return 'data:image/gif;base64,' + base64;
+  };
+
+  //---------------------------------------------------------------------
+  // returns qrcode function.
+
+  return qrcode;
+}();
+
+// multibyte support
+!function() {
+
+  qrcode.stringToBytesFuncs['UTF-8'] = function(s) {
+    // http://stackoverflow.com/questions/18729405/how-to-convert-utf8-string-to-byte-array
+    function toUTF8Array(str) {
+      var utf8 = [];
+      for (var i=0; i < str.length; i++) {
+        var charcode = str.charCodeAt(i);
+        if (charcode < 0x80) utf8.push(charcode);
+        else if (charcode < 0x800) {
+          utf8.push(0xc0 | (charcode >> 6),
+              0x80 | (charcode & 0x3f));
+        }
+        else if (charcode < 0xd800 || charcode >= 0xe000) {
+          utf8.push(0xe0 | (charcode >> 12),
+              0x80 | ((charcode>>6) & 0x3f),
+              0x80 | (charcode & 0x3f));
+        }
+        // surrogate pair
+        else {
+          i++;
+          // UTF-16 encodes 0x10000-0x10FFFF by
+          // subtracting 0x10000 and splitting the
+          // 20 bits of 0x0-0xFFFFF into two halves
+          charcode = 0x10000 + (((charcode & 0x3ff)<<10)
+            | (str.charCodeAt(i) & 0x3ff));
+          utf8.push(0xf0 | (charcode >>18),
+              0x80 | ((charcode>>12) & 0x3f),
+              0x80 | ((charcode>>6) & 0x3f),
+              0x80 | (charcode & 0x3f));
+        }
+      }
+      return utf8;
+    }
+    return toUTF8Array(s);
+  };
+
+}();
+
+(function (factory) {
+  if (typeof define === 'function' && define.amd) {
+      define([], factory);
+  } else if (typeof exports === 'object') {
+      module.exports = factory();
+  }
+}(function () {
+    return qrcode;
+}));
+
+</script>
+<script>
+"use strict";
+const DB = {
+  rate: 1550,
+  cpu: [
+    {id:"i3-12100f", name:"Intel Core i3-12100F", socket:"LGA1700", tdp:58, cap:150, cores:4, th:8, price:85, vendor:"Intel"},
+    {id:"i5-12400f", name:"Intel Core i5-12400F", socket:"LGA1700", tdp:65, cap:190, cores:6, th:12, price:150, vendor:"Intel"},
+    {id:"i5-13400f", name:"Intel Core i5-13400F", socket:"LGA1700", tdp:65, cap:210, cores:10, th:16, price:200, vendor:"Intel"},
+    {id:"i5-14600kf", name:"Intel Core i5-14600KF", socket:"LGA1700", tdp:125, cap:240, cores:14, th:20, price:290, vendor:"Intel"},
+    {id:"i7-13700k", name:"Intel Core i7-13700K", socket:"LGA1700", tdp:125, cap:262, cores:16, th:24, price:380, vendor:"Intel"},
+    {id:"i7-14700k", name:"Intel Core i7-14700K", socket:"LGA1700", tdp:125, cap:276, cores:20, th:28, price:420, vendor:"Intel"},
+    {id:"i9-14900k", name:"Intel Core i9-14900K", socket:"LGA1700", tdp:125, cap:300, cores:24, th:32, price:550, vendor:"Intel"},
+    {id:"r5-3600", name:"AMD Ryzen 5 3600", socket:"AM4", tdp:65, cap:140, cores:6, th:12, price:90, vendor:"AMD"},
+    {id:"r5-5600", name:"AMD Ryzen 5 5600", socket:"AM4", tdp:65, cap:180, cores:6, th:12, price:130, vendor:"AMD", ryzen5k:true},
+    {id:"r5-5600x", name:"AMD Ryzen 5 5600X", socket:"AM4", tdp:65, cap:186, cores:6, th:12, price:150, vendor:"AMD", ryzen5k:true},
+    {id:"r7-5700x", name:"AMD Ryzen 7 5700X", socket:"AM4", tdp:65, cap:202, cores:8, th:16, price:170, vendor:"AMD", ryzen5k:true},
+    {id:"r7-5800x3d", name:"AMD Ryzen 7 5800X3D", socket:"AM4", tdp:105, cap:232, cores:8, th:16, price:300, vendor:"AMD", ryzen5k:true},
+    {id:"r5-7600", name:"AMD Ryzen 5 7600", socket:"AM5", tdp:65, cap:222, cores:6, th:12, price:220, vendor:"AMD"},
+    {id:"r7-7800x3d", name:"AMD Ryzen 7 7800X3D", socket:"AM5", tdp:120, cap:282, cores:8, th:16, price:380, vendor:"AMD"},
+    {id:"r9-7950x", name:"AMD Ryzen 9 7950X", socket:"AM5", tdp:170, cap:292, cores:16, th:32, price:550, vendor:"AMD"}
+  ],
+  mobo: [
+    {id:"a320m", name:"MSI A320M-A PRO", socket:"AM4", ddr:"DDR4", form:"mATX", ryzen5kNoBios:true, price:55, vendor:"MSI"},
+    {id:"b450m", name:"Gigabyte B450M DS3H", socket:"AM4", ddr:"DDR4", form:"mATX", price:75, vendor:"Gigabyte"},
+    {id:"b550", name:"ASUS TUF Gaming B550-PLUS", socket:"AM4", ddr:"DDR4", form:"ATX", price:130, vendor:"ASUS"},
+    {id:"x570", name:"MSI MAG X570 Tomahawk", socket:"AM4", ddr:"DDR4", form:"ATX", price:180, vendor:"MSI"},
+    {id:"b650m", name:"ASRock B650M-HDV", socket:"AM5", ddr:"DDR5", form:"mATX", price:150, vendor:"ASRock"},
+    {id:"b650", name:"MSI MAG B650 Tomahawk", socket:"AM5", ddr:"DDR5", form:"ATX", price:210, vendor:"MSI"},
+    {id:"x670e", name:"ASUS ROG Crosshair X670E", socket:"AM5", ddr:"DDR5", form:"ATX", price:330, vendor:"ASUS"},
+    {id:"h610m", name:"Gigabyte H610M S2H", socket:"LGA1700", ddr:"DDR4", form:"mATX", price:95, vendor:"Gigabyte"},
+    {id:"b660m", name:"MSI PRO B660M-A", socket:"LGA1700", ddr:"DDR4", form:"mATX", price:120, vendor:"MSI"},
+    {id:"b760", name:"ASUS TUF B760-PLUS", socket:"LGA1700", ddr:"DDR5", form:"ATX", price:170, vendor:"ASUS"},
+    {id:"z790", name:"MSI MAG Z790 Tomahawk", socket:"LGA1700", ddr:"DDR5", form:"ATX", price:260, vendor:"MSI"},
+    {id:"z790r", name:"ASUS ROG Strix Z790-E", socket:"LGA1700", ddr:"DDR5", form:"ATX", price:400, vendor:"ASUS"}
+  ],
+  ram: [
+    {id:"d4-8-2666", name:"8GB DDR4-2666", ddr:"DDR4", gb:8, channels:1, speed:2666, price:20},
+    {id:"d4-8-3200", name:"8GB DDR4-3200", ddr:"DDR4", gb:8, channels:1, speed:3200, price:22},
+    {id:"d4-16-3200", name:"16GB (2×8) DDR4-3200", ddr:"DDR4", gb:16, channels:2, speed:3200, price:40},
+    {id:"d4-32-3600", name:"32GB (2×16) DDR4-3600", ddr:"DDR4", gb:32, channels:2, speed:3600, price:75},
+    {id:"d5-16-5600", name:"16GB (2×8) DDR5-5600", ddr:"DDR5", gb:16, channels:2, speed:5600, price:70},
+    {id:"d5-32-6000", name:"32GB (2×16) DDR5-6000", ddr:"DDR5", gb:32, channels:2, speed:6000, price:130},
+    {id:"d5-64-6000", name:"64GB (2×32) DDR5-6000", ddr:"DDR5", gb:64, channels:2, speed:6000, price:260}
+  ],
+  gpu: [
+    {id:"gtx1650", name:"NVIDIA GTX 1650", base:45, power:75, len:170, vram:4, price:150, vendor:"NVIDIA"},
+    {id:"rtx3050", name:"NVIDIA RTX 3050", base:70, power:130, len:200, vram:8, price:200, vendor:"NVIDIA"},
+    {id:"rx6600", name:"AMD Radeon RX 6600", base:80, power:132, len:200, vram:8, price:200, vendor:"AMD"},
+    {id:"a750", name:"Intel Arc A750", base:95, power:225, len:270, vram:8, price:220, vendor:"Intel"},
+    {id:"rtx3060", name:"NVIDIA RTX 3060", base:90, power:170, len:242, vram:12, price:250, vendor:"NVIDIA"},
+    {id:"rx6700xt", name:"AMD Radeon RX 6700 XT", base:110, power:230, len:267, vram:12, price:300, vendor:"AMD"},
+    {id:"rtx4060", name:"NVIDIA RTX 4060", base:120, power:115, len:200, vram:8, price:300, vendor:"NVIDIA"},
+    {id:"rtx4060ti", name:"NVIDIA RTX 4060 Ti", base:130, power:160, len:245, vram:8, price:390, vendor:"NVIDIA"},
+    {id:"rtx4070", name:"NVIDIA RTX 4070", base:144, power:200, len:244, vram:12, price:550, vendor:"NVIDIA"},
+    {id:"rx7800xt", name:"AMD Radeon RX 7800 XT", base:150, power:263, len:267, vram:16, price:500, vendor:"AMD"},
+    {id:"rtx4070s", name:"NVIDIA RTX 4070 Super", base:160, power:220, len:305, vram:12, price:600, vendor:"NVIDIA"},
+    {id:"rtx4070tis", name:"NVIDIA RTX 4070 Ti Super", base:175, power:285, len:305, vram:16, price:800, vendor:"NVIDIA"},
+    {id:"rx7900xtx", name:"AMD Radeon RX 7900 XTX", base:200, power:355, len:320, vram:24, price:1000, vendor:"AMD"},
+    {id:"rtx4080s", name:"NVIDIA RTX 4080 Super", base:210, power:320, len:310, vram:16, price:1000, vendor:"NVIDIA"},
+    {id:"rtx4090", name:"NVIDIA RTX 4090", base:260, power:450, len:336, vram:24, price:1800, vendor:"NVIDIA"}
+  ],
+  storage: [
+    {id:"ssd500", name:"SSD SATA 500GB", type:"SATA SSD", gb:500, price:35},
+    {id:"ssd1t", name:"SSD SATA 1TB", type:"SATA SSD", gb:1000, price:60},
+    {id:"nvme1t3", name:"NVMe Gen3 1TB", type:"NVMe Gen3", gb:1000, price:70},
+    {id:"nvme1t4", name:"NVMe Gen4 1TB", type:"NVMe Gen4", gb:1000, price:95},
+    {id:"nvme2t4", name:"NVMe Gen4 2TB", type:"NVMe Gen4", gb:2000, price:160},
+    {id:"nvme2t5", name:"NVMe Gen5 2TB", type:"NVMe Gen5", gb:2000, price:280},
+    {id:"hdd2t", name:"HDD 2TB 7200rpm", type:"HDD", gb:2000, price:55}
+  ],
+  psu: [
+    {id:"p450", name:"450W 80+ Bronze", watt:450, eff:"Bronze", price:40},
+    {id:"p550", name:"550W 80+ Bronze", watt:550, eff:"Bronze", price:55},
+    {id:"p650", name:"650W 80+ Gold", watt:650, eff:"Gold", price:85},
+    {id:"p750", name:"750W 80+ Gold", watt:750, eff:"Gold", price:110},
+    {id:"p850", name:"850W 80+ Gold", watt:850, eff:"Gold", price:140},
+    {id:"p1000", name:"1000W 80+ Platinum", watt:1000, eff:"Platinum", price:200},
+    {id:"p1200", name:"1200W 80+ Platinum", watt:1200, eff:"Platinum", price:280}
+  ],
+  cooling: [
+    {id:"stock", name:"Cooler Stock", level:1, tdp:65, height:55, aio:false, price:0},
+    {id:"wraith", name:"Wraith Prism RGB", level:2, tdp:105, height:85, aio:false, price:25},
+    {id:"tower", name:"Torre 120mm", level:3, tdp:150, height:155, aio:false, price:35},
+    {id:"nhd15", name:"Noctua NH-D15", level:4, tdp:220, height:165, aio:false, price:110},
+    {id:"aio240", name:"AIO 240mm", level:4, tdp:250, height:60, aio:true, price:110},
+    {id:"aio360", name:"AIO 360mm", level:5, tdp:320, height:60, aio:true, price:170}
+  ],
+  case: [
+    {id:"itx", name:"Mini-ITX Cube", supports:["ITX"], maxGpu:300, maxCooler:160, price:70},
+    {id:"matx", name:"mATX Compact", supports:["mATX","ITX"], maxGpu:320, maxCooler:165, price:80},
+    {id:"atxmid", name:"ATX Mid Tower", supports:["ATX","mATX","ITX"], maxGpu:360, maxCooler:170, price:100},
+    {id:"atxfull", name:"ATX Full Tower", supports:["ATX","mATX","ITX"], maxGpu:420, maxCooler:180, price:180},
+    {id:"bench", name:"Open Bench", supports:["ATX","mATX","ITX"], maxGpu:400, maxCooler:190, price:120}
+  ],
+  monitor: [
+    {id:"m1080-60", name:'24" 1080p 60Hz', res:"1080p", resFactor:1.0, hz:60, price:120},
+    {id:"m1080-144", name:'24" 1080p 144Hz', res:"1080p", resFactor:1.0, hz:144, price:180},
+    {id:"m1080-240", name:'27" 1080p 240Hz', res:"1080p", resFactor:1.0, hz:240, price:250},
+    {id:"m1440-144", name:'27" 1440p 144Hz', res:"1440p", resFactor:0.72, hz:144, price:300},
+    {id:"m1440-165", name:'32" 1440p 165Hz', res:"1440p", resFactor:0.72, hz:165, price:330},
+    {id:"m1440-240", name:'27" 1440p 240Hz', res:"1440p", resFactor:0.72, hz:240, price:450},
+    {id:"m4k-60", name:'32" 4K 60Hz', res:"4K", resFactor:0.46, hz:60, price:400},
+    {id:"m4k-144", name:'32" 4K 144Hz', res:"4K", resFactor:0.46, hz:144, price:700}
+  ],
+  keyboard: [
+    {id:"kb-basic", name:"Teclado membrana", price:25},
+    {id:"kb-mech", name:"Mecánico RGB", price:70},
+    {id:"kb-mechp", name:"Mecánico premium hot-swap", price:120}
+  ],
+  mouse: [
+    {id:"ms-basic", name:"Mouse básico", price:15},
+    {id:"ms-gaming", name:"Mouse gamer 8K DPI", price:40},
+    {id:"ms-wireless", name:"Mouse gamer inalámbrico", price:80}
+  ],
+  headset: [
+    {id:"hs-basic", name:"Auriculares básicos", price:30},
+    {id:"hs-gaming", name:"Headset gamer 7.1", price:70},
+    {id:"hs-wifi", name:"Headset inalámbrico premium", price:150}
+  ],
+  extras: [
+    {id:"ex-none", name:"— Sin extras —", price:0},
+    {id:"ex-mousepad", name:"Mousepad XL", price:15},
+    {id:"ex-webcam", name:"Webcam 1080p", price:80},
+    {id:"ex-capture", name:"Capture card", price:150},
+    {id:"ex-streamdeck", name:"Stream Deck", price:150}
+  ]
+};
+
+// Precios base (USD internacional) x factor de mercado argentino (impuestos, importación y margen).
+const AR_FACTOR = 1.45;
+Object.keys(DB).forEach(k => { if(Array.isArray(DB[k])) DB[k].forEach(x => { if(x.price) x.price = Math.round(x.price * AR_FACTOR / 5) * 5; }); });
+const DEFAULT_DB = JSON.parse(JSON.stringify(DB));
+
+const I18N = {
+  es:{
+    tagline:"Armá tu PC, verificá compatibilidad y descubrí tus FPS.",
+    techMode:"Modo Técnico", lite:"Lite", kiosk:"Kiosco", admin:"Admin", builds:"Builds",
+    virtualCase:"Gabinete virtual", summary:"Resumen", totalUsd:"Total USD", totalArs:"Total ARS",
+    maxBudget:"Presupuesto máx (USD)", calculate:"Calculate my FPS", surprise:"Sorprendeme",
+    budget:"Ficha BUDGET", drawCard:"Robá una carta", compare:"Comparar", reset:"Reiniciar", glossary:"Glosario",
+    close:"Cerrar", drawAgain:"Otra carta", enterPin:"PIN de acceso", unlock:"Desbloquear",
+    rateLabel:"Cotización ARS por USD", newPin:"Nuevo PIN", idleReset:"Reinicio automático a 90 s",
+    editDb:"Editor DB (JSON)", save:"Guardar", restore:"Restaurar DB", resetCounter:"Reset contador",
+    offline:"Funciona sin internet · un solo archivo",
+    pBudget:"Económico", pEsports:"Esports", pMid:"Gama media", pHigh:"Alta gama", pCreator:"Creador",
+    cats:{cpu:"Procesador (CPU)",mobo:"Motherboard",ram:"Memoria RAM",gpu:"Placa de video (GPU)",storage:"Almacenamiento",psu:"Fuente (PSU)",cooling:"Refrigeración",case:"Gabinete",monitor:"Monitor",keyboard:"Teclado",mouse:"Mouse",headset:"Auriculares",extras:"Extras"},
+    pick:"Elegí una opción", empty:"Sin seleccionar", bench:"Ejecutando benchmark", analyzing:"Analizando",
+    results:"Resultados del build", price:"Precio por componente", compatibility:"Compatibilidad",
+    bottleneck:"Cuello de botella", fpsGames:"FPS en juegos", fpsPrograms:"Rendimiento en programas",
+    verdict:"Veredicto", score:"Puntaje", upgrade:"Mejora recomendada", power:"Consumo y temperatura",
+    fpsAverage:"Promedio FPS", multiHint:"Podés elegir varios",
+    saveBuild:"Guardar build", noSaved:"No hay builds guardados todavía.", general:"Veredicto general",
+    balanced:"Equilibrado", missing:"Faltan componentes", complete:"Build completo",
+    overBudget:"¡Excede el presupuesto!", underBudget:"Dentro del presupuesto",
+    copied:"¡Copiado!", resetDone:"Build reiniciado", saved:"Build guardado",
+    adminOk:"Admin desbloqueado", adminBad:"PIN incorrecto", dbSaved:"DB guardada", dbRestored:"DB restaurada",
+    counterReset:"Contador reiniciado", kioskOn:"Modo kiosco activado", kioskOff:"Modo kiosco desactivado",
+    techOn:"Technician Mode activado", techOff:"Technician Mode desactivado",
+    techHint:"Elegí CPU + GPU + RAM y presioná «Calculate my FPS» para ver el análisis técnico.",
+    liteOn:"Lite mode activado", liteOff:"Lite mode desactivado",
+    bottleneckLvls:{low:"Equilibrado", mild:"Leve", moderate:"Moderado", severe:"Severo"},
+    verdicts:{notgood:"Not good",playable:"Playable",decent:"Decent",great:"Great",excellent:"Excellent"},
+    tempSafe:"Templado", tempWarm:"Cálido", tempHot:"Caliente",
+    printTitle:"FICHA DE PRESUPUESTO / BUDGET SHEET", printNo:"N°", printDate:"Fecha / Date",
+    printComp:"Componente / Component", printPrice:"USD", printPriceArs:"ARS", printTotal:"TOTAL",
+    printThanks:"¡Gracias por armar tu PC! / Thanks for building your PC!", buildOf:"Build",
+    bottleneckText:"El componente limitante es", gpuLabel:"GPU", cpuLabel:"CPU", ramLabel:"RAM",
+    fpsCapped:"limitado por monitor", tempCpu:"Temp. CPU", tempGpu:"Temp. GPU", totalWatt:"Consumo estimado"
+  },
+  en:{
+    tagline:"Build your PC, check compatibility and discover your FPS.",
+    techMode:"Technician Mode", lite:"Lite", kiosk:"Kiosk", admin:"Admin", builds:"Builds",
+    virtualCase:"Virtual case", summary:"Summary", totalUsd:"Total USD", totalArs:"Total ARS",
+    maxBudget:"Max budget (USD)", calculate:"Calculate my FPS", surprise:"Surprise me",
+    budget:"BUDGET sheet", drawCard:"Draw a card", compare:"Compare", reset:"Reset", glossary:"Glossary",
+    close:"Close", drawAgain:"Another card", enterPin:"Access PIN", unlock:"Unlock",
+    rateLabel:"ARS per USD rate", newPin:"New PIN", idleReset:"Auto reset after 90 s",
+    editDb:"DB editor (JSON)", save:"Save", restore:"Restore DB", resetCounter:"Reset counter",
+    offline:"Works offline · single file",
+    pBudget:"Budget", pEsports:"Esports", pMid:"Mid-range", pHigh:"High-end", pCreator:"Creator",
+    cats:{cpu:"Processor (CPU)",mobo:"Motherboard",ram:"Memory (RAM)",gpu:"Graphics card (GPU)",storage:"Storage",psu:"Power supply (PSU)",cooling:"Cooling",case:"Case",monitor:"Monitor",keyboard:"Keyboard",mouse:"Mouse",headset:"Headset",extras:"Extras"},
+    pick:"Pick an option", empty:"Not selected", bench:"Running benchmark", analyzing:"Analyzing",
+    results:"Build results", price:"Price per component", compatibility:"Compatibility",
+    bottleneck:"Bottleneck", fpsGames:"FPS in games", fpsPrograms:"Program performance",
+    verdict:"Verdict", score:"Score", upgrade:"Recommended upgrade", power:"Power & temperature",
+    fpsAverage:"Average FPS", multiHint:"Pick multiple",
+    saveBuild:"Save build", noSaved:"No saved builds yet.", general:"Overall verdict",
+    balanced:"Balanced", missing:"Missing components", complete:"Build complete",
+    overBudget:"Over budget!", underBudget:"Within budget",
+    copied:"Copied!", resetDone:"Build reset", saved:"Build saved",
+    adminOk:"Admin unlocked", adminBad:"Wrong PIN", dbSaved:"DB saved", dbRestored:"DB restored",
+    counterReset:"Counter reset", kioskOn:"Kiosk mode on", kioskOff:"Kiosk mode off",
+    techOn:"Technician Mode on", techOff:"Technician Mode off",
+    techHint:"Pick a CPU + GPU + RAM and press “Calculate my FPS” to see the technical analysis.",
+    liteOn:"Lite mode on", liteOff:"Lite mode off",
+    bottleneckLvls:{low:"Balanced", mild:"Mild", moderate:"Moderate", severe:"Severe"},
+    verdicts:{notgood:"Not good",playable:"Playable",decent:"Decent",great:"Great",excellent:"Excellent"},
+    tempSafe:"Cool", tempWarm:"Warm", tempHot:"Hot",
+    printTitle:"BUDGET SHEET / FICHA DE PRESUPUESTO", printNo:"No.", printDate:"Date / Fecha",
+    printComp:"Component / Componente", printPrice:"USD", printPriceArs:"ARS", printTotal:"TOTAL",
+    printThanks:"Thanks for building your PC! / ¡Gracias por armar tu PC!", buildOf:"Build",
+    bottleneckText:"The limiting component is", gpuLabel:"GPU", cpuLabel:"CPU", ramLabel:"RAM",
+    fpsCapped:"monitor limited", tempCpu:"CPU temp", tempGpu:"GPU temp", totalWatt:"Estimated draw"
+  }
+};
+
+const GAMES = [
+  {id:"valorant", name:"Valorant", gpu:0.12, cpu:0.85},
+  {id:"cs2", name:"CS2", gpu:0.18, cpu:1.00},
+  {id:"fortnite", name:"Fortnite", gpu:0.40, cpu:0.80},
+  {id:"gta5", name:"GTA V", gpu:0.60, cpu:0.65},
+  {id:"minecraft", name:"Minecraft", gpu:0.45, cpu:1.15},
+  {id:"warzone", name:"Warzone", gpu:0.80, cpu:0.80},
+  {id:"cyberpunk", name:"Cyberpunk 2077", gpu:1.45, cpu:0.90},
+  {id:"eldenring", name:"Elden Ring", gpu:1.10, cpu:0.70}
+];
+
+const PROGRAMS = [
+  {id:"blender", name:"Blender", gw:.5, cw:.4, rw:.1},
+  {id:"davinci", name:"DaVinci / Premiere", gw:.4, cw:.4, rw:.2},
+  {id:"photoshop", name:"Photoshop", gw:.3, cw:.4, rw:.3},
+  {id:"autocad", name:"AutoCAD / SketchUp", gw:.4, cw:.4, rw:.2},
+  {id:"obs", name:"OBS", gw:.3, cw:.5, rw:.2}
+];
+
+const GLOSSARY = [
+  {t:"CPU", c:"Hardware", es:"Unidad central de proceso: el cerebro que ejecuta juegos y programas.", en:"Central Processing Unit: the brain that runs games and apps."},
+  {t:"GPU", c:"Hardware", es:"Placa de video: renderiza los gráficos y define gran parte de tus FPS.", en:"Graphics card: renders visuals and drives most of your FPS."},
+  {t:"RAM", c:"Hardware", es:"Memoria temporal donde el sistema guarda datos en uso.", en:"Fast temporary memory the system keeps active data in."},
+  {t:"SSD", c:"Storage", es:"Unidad de estado sólido, sin partes móviles: arranca y carga rapidísimo.", en:"Solid State Drive with no moving parts: very fast boot and loading."},
+  {t:"HDD", c:"Storage", es:"Disco rígido mecánico: más barato por GB, pero mucho más lento.", en:"Mechanical hard drive: cheaper per GB but much slower."},
+  {t:"PSU", c:"Power", es:"Fuente de alimentación: convierte la corriente y alimenta todo el sistema.", en:"Power Supply Unit: converts wall power and feeds the whole system."},
+  {t:"Motherboard", c:"Hardware", es:"Placa madre: conecta CPU, RAM, GPU y almacenamiento.", en:"Motherboard: connects CPU, RAM, GPU and storage."},
+  {t:"Socket", c:"Compatibility", es:"Zócalo donde encaja la CPU; debe coincidir con la placa (AM4, AM5, LGA1700).", en:"CPU socket; must match the board (AM4, AM5, LGA1700)."},
+  {t:"DDR4 / DDR5", c:"Memory", es:"Tipos de RAM incompatibles entre sí; la placa define cuál usás.", en:"Mutually incompatible RAM types; the board defines which you use."},
+  {t:"VRAM", c:"Graphics", es:"Memoria propia de la GPU; más VRAM ayuda en texturas y 4K.", en:"Memory on the GPU; more VRAM helps with textures and 4K."},
+  {t:"TDP", c:"Power", es:"Potencia térmica de diseño: calor y consumo que genera un componente.", en:"Thermal Design Power: heat and power a component produces."},
+  {t:"Bottleneck", c:"Performance", es:"Cuello de botella: cuando un componente frena el rendimiento de otro.", en:"Bottleneck: when one component holds back another's performance."},
+  {t:"FPS", c:"Performance", es:"Cuadros por segundo; más FPS = movimiento más fluido.", en:"Frames per second; more FPS means smoother motion."},
+  {t:"Refresh Rate", c:"Display", es:"Frecuencia del monitor en Hz; limita los FPS que podés ver.", en:"Monitor refresh rate in Hz; caps the FPS you can actually see."},
+  {t:"Resolution", c:"Display", es:"Cantidad de píxeles (1080p, 1440p, 4K); más píxeles = menos FPS.", en:"Pixel count (1080p, 1440p, 4K); more pixels means fewer FPS."},
+  {t:"Overclocking", c:"Tuning", es:"Subir frecuencias por encima de fábrica para más rendimiento (y calor).", en:"Raising clocks above stock for more performance (and heat)."},
+  {t:"Thermal Paste", c:"Cooling", es:"Pasta térmica que mejora la transferencia de calor entre CPU y cooler.", en:"Thermal paste that improves heat transfer between CPU and cooler."},
+  {t:"AIO Cooler", c:"Cooling", es:"Refrigeración líquida todo-en-uno con radiador y bomba.", en:"All-In-One liquid cooling with a radiator and pump."},
+  {t:"Air Cooler", c:"Cooling", es:"Disipador de aire con torre y ventilador; simple y confiable.", en:"Air cooler with a tower and fan; simple and reliable."},
+  {t:"Case Airflow", c:"Cooling", es:"Flujo de aire del gabinete; entrada y salida bien ubicadas enfrían mejor.", en:"Case airflow; well-placed intake and exhaust cool better."},
+  {t:"PCIe", c:"Bus", es:"Bus de expansión para GPU, SSD y otras tarjetas.", en:"Expansion bus for GPU, SSD and other cards."},
+  {t:"NVMe", c:"Storage", es:"Protocolo de SSD por PCIe, mucho más rápido que SATA.", en:"SSD protocol over PCIe, much faster than SATA."},
+  {t:"M.2", c:"Storage", es:"Ranura pequeña en la placa para SSD NVMe.", en:"Small slot on the board for NVMe SSDs."},
+  {t:"Form Factor", c:"Compatibility", es:"Tamaño de placa y gabinete: ATX, mATX, ITX deben encajar.", en:"Board and case size: ATX, mATX, ITX must fit together."},
+  {t:"BIOS / UEFI", c:"Firmware", es:"Firmware de la placa; a veces necesita actualización para CPUs nuevas.", en:"Board firmware; sometimes needs updating for newer CPUs."},
+  {t:"Chipset", c:"Hardware", es:"Controla funciones y puertos de la placa (B650, Z790, B550).", en:"Controls board features and ports (B650, Z790, B550)."},
+  {t:"Ray Tracing", c:"Graphics", es:"Iluminación realista en tiempo real; exige mucho a la GPU.", en:"Real-time realistic lighting; very demanding on the GPU."},
+  {t:"DLSS / FSR", c:"Graphics", es:"Escalado por IA/software que sube FPS con mínima pérdida visual.", en:"AI/software upscaling that boosts FPS with minimal visual loss."},
+  {t:"Single / Dual Channel", c:"Memory", es:"Dos módulos (dual) dan más ancho de banda que uno (single).", en:"Two sticks (dual) give more bandwidth than one (single)."},
+  {t:"80+ Efficiency", c:"Power", es:"Certificación de eficiencia de la fuente: Bronze, Gold, Platinum.", en:"PSU efficiency rating: Bronze, Gold, Platinum."}
+];
+
+
+const P={cpu:'<rect x="7" y="7" width="10" height="10" rx="1.5"/><path d="M10 3v4M14 3v4M10 17v4M14 17v4M3 10h4M3 14h4M17 10h4M17 14h4"/><rect x="10" y="10" width="4" height="4"/>',
+mobo:'<rect x="4" y="3" width="16" height="18" rx="2"/><rect x="7" y="6" width="5" height="5"/><path d="M15 6v6M7 15h10M7 18h6"/>',
+ram:'<rect x="2" y="8" width="20" height="8" rx="1.5"/><path d="M6 8v8M10 8v8M14 8v8M18 8v8M5 16v3M9 16v3M13 16v3M17 16v3"/>',
+gpu:'<rect x="2" y="7" width="20" height="10" rx="2"/><circle cx="8" cy="12" r="3"/><circle cx="16" cy="12" r="3"/><path d="M5 17v3M8 17v3"/>',
+storage:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 15h6"/><circle cx="17" cy="15" r="1"/>',
+psu:'<rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="9" cy="12" r="3.5"/><path d="M16 9h3M16 12h3M16 15h3"/>',
+cooling:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="1.5"/><path d="M12 10.5C12 6 14 4.5 17 5M13.3 12.8c3.8 2.300 3.800 4.800 1.500 6.500M10.700 12.800C7 15 4.500 13.500 4.200 10.500"/>',
+case:'<rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="9" r="3"/><path d="M9 17h6"/>',
+monitor:'<rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/>',
+keyboard:'<rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/>',
+mouse:'<rect x="6" y="3" width="12" height="18" rx="6"/><path d="M12 3v7"/>',
+headset:'<path d="M4 15v-3a8 8 0 0116 0v3"/><rect x="3" y="14" width="4" height="6" rx="1.5"/><rect x="17" y="14" width="4" height="6" rx="1.5"/>',
+extras:'<path d="M12 3l2.600 5.600 6 .8-4.400 4.200 1.100 6L12 16.700 6.700 19.600l1.100-6L3.400 9.400l6-.8z"/>',
+bolt:'<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>',dice:'<rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 8h.01M16 8h.01M12 12h.01M8 16h.01M16 16h.01"/>',
+file:'<path d="M6 2h8l5 5v15H6z"/><path d="M14 2v5h5M9 13h6M9 17h6"/>',card:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h4"/>',
+compare:'<path d="M8 3L4 7l4 4M4 7h12M16 21l4-4-4-4M20 17H8"/>',reset:'<path d="M3 12a9 9 0 109-9 9 9 0 00-7 3.500M3 4v4h4"/>',
+wrench:'<path d="M15 5a4 4 0 00-5 5L3 17l4 4 7-7a4 4 0 005-5l-3 3-3-1-1-3z"/>',leaf:'<path d="M5 19C5 9 11 4 20 4c0 9-5 15-15 15zM5 19l8-8"/>',
+screen:'<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>',shield:'<path d="M12 3l8 3v6c0 5-3.500 8-8 9-4.500-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/>',
+coin:'<circle cx="12" cy="12" r="9"/><path d="M12 6v12M15 9.500c-1-1.500-5-1.500-5 .5 0 2.500 5 1.500 5 4 0 2-4 2-5 .5"/>',
+target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',gauge:'<path d="M3 17a9 9 0 0118 0"/><path d="M12 17l4-6"/>',
+rocket:'<path d="M12 2c4 3 6 7 5 12l-5 3-5-3c-1-5 1-9 5-12zM9 19l-2 3M15 19l2 3"/><circle cx="12" cy="10" r="1.500"/>',
+brush:'<path d="M3 21c3 0 5-1 5-4l-2-2c-3 0-3 3-3 6zM8 15L19 4l2 2L10 17z"/>',
+book:'<path d="M4 5a2 2 0 012-2h13v16H6a2 2 0 00-2 2z"/><path d="M4 19a2 2 0 012-2h13"/>',check:'<path d="M5 12.500l4.500 4.500L19 7"/>',warn:'<path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18h.01"/>',x:'<path d="M6 6l12 12M18 6L6 18"/>'};
+function ic(n,sz){return '<svg class="i" viewBox="0 0 24 24"'+(sz?' style="width:'+sz+'px;height:'+sz+'px"':'')+' aria-hidden="true">'+(P[n]||P.extras)+'</svg>';}
+const ST={ok:ic('check'),warn:ic('warn'),bad:ic('x')};
+const BR={intel:['#0071c5','#fff','intel'],amd:['#0b0b0b','#ed1c24','AMD'],radeon:['#ed1c24','#fff','RADEON'],nvidia:['#76b900','#0b0b0b','NVIDIA'],msi:['#e60012','#fff','MSI'],asus:['#0b0b0b','#fff','ASUS'],gigabyte:['#111','#ff7a00','GIGABYTE'],asrock:['#0a4da2','#fff','ASRock'],noctua:['#7a5a2f','#f3e6c8','noctua'],ddr4:['#1e3a8a','#bfdbfe','DDR4'],ddr5:['#86198f','#fbcfe8','DDR5'],nvme:['#14532d','#bbf7d0','NVMe'],sata:['#334155','#e2e8f0','SATA'],hdd:['#3f3f46','#e4e4e7','HDD'],p80:['#92400e','#fde68a','80+']};
+function brand(k){const b=BR[k],n=b[2].length,fs=n>6?9:n>4?10.500:12.500;
+ return '<svg class="lg" viewBox="0 0 64 24" role="img" aria-label="'+b[2]+'"><rect width="64" height="24" rx="6" fill="'+b[0]+'"/><rect x="7" y="19" width="50" height="2" rx="1" fill="'+b[1]+'" opacity=".55"/><text x="32" y="15" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-weight="900" font-size="'+fs+'" fill="'+b[1]+'">'+b[2]+'</text></svg>';}
+const TX=(t,f,z)=>'<text x="16" y="21.500" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-weight="900" font-size="'+z+'" fill="'+f+'">'+t+'</text>';
+const AP={valorant:['#fd4556',TX('V','#fff',17)],cs2:['#de9b35','<circle cx="16" cy="16" r="7" fill="none" stroke="#fff" stroke-width="2"/><path d="M16 4v7M16 21v7M4 16h7M21 16h7" stroke="#fff" stroke-width="2"/>'],fortnite:['#6d3cf2',TX('F','#fff',18)],gta5:['#0d0d0d',TX('V','#5fd35f',18)],
+minecraft:['#5b8731','<rect x="6" y="6" width="10" height="10" fill="#7cbd3b"/><rect x="16" y="6" width="10" height="10" fill="#8b5a2b"/><rect x="6" y="16" width="10" height="10" fill="#8b5a2b"/><rect x="16" y="16" width="10" height="10" fill="#7cbd3b"/>'],
+warzone:['#1a1a1a',TX('WZ','#9be15d',13)],cyberpunk:['#fcee0a',TX('CP','#111',13)],eldenring:['#1a1308','<circle cx="16" cy="16" r="9" fill="none" stroke="#d4af37" stroke-width="2.400"/><circle cx="16" cy="16" r="3" fill="#d4af37"/>'],
+blender:['#ea7600','<circle cx="16" cy="17" r="8.500" fill="none" stroke="#fff" stroke-width="2.400"/><circle cx="16" cy="17" r="3" fill="#fff"/>'],
+davinci:['#14161c','<circle cx="12" cy="12" r="5" fill="#ff5a5f" opacity=".9"/><circle cx="20" cy="12" r="5" fill="#4ade80" opacity=".9"/><circle cx="16" cy="20" r="5" fill="#60a5fa" opacity=".9"/>'],
+photoshop:['#001e36',TX('Ps','#31a8ff',15)],autocad:['#e51050',TX('A','#fff',18)],
+obs:['#302e31','<circle cx="16" cy="16" r="9" fill="none" stroke="#fff" stroke-width="2.400"/><circle cx="16" cy="8" r="3" fill="#fff"/><circle cx="9.500" cy="19" r="3" fill="#fff"/><circle cx="22.500" cy="19" r="3" fill="#fff"/>']};
+function app(id){const a=AP[id];return a?'<svg class="ap" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="'+a[0]+'"/>'+a[1]+'</svg>':'';}
+function itemLogo(cat,it){let k=null;
+ if(it.vendor)k=(cat==='gpu'&&it.vendor==='AMD')?'radeon':it.vendor.toLowerCase();
+ else if(cat==='ram')k=it.ddr.toLowerCase();
+ else if(cat==='storage')k=/NVMe/.test(it.type)?'nvme':it.type==='HDD'?'hdd':'sata';
+ else if(cat==='psu')k='p80';
+ else if(cat==='cooling'&&/Noctua/.test(it.name))k='noctua';
+ else if(cat==='cooling'&&/Wraith/.test(it.name))k='amd';
+ return(k&&BR[k])?brand(k):'<span class="gi">'+ic(cat,18)+'</span>';}
+function decorate(){
+ const m={langBtn:0,techBtn:'wrench',liteBtn:'leaf',kioskBtn:'screen',adminBtn:'shield',calcBtn:'bolt',surpriseBtn:'dice',printBtn:'file',cardBtn:'card',compareBtn:'compare',resetBtn:'reset',glossaryBtn:'book',saveAdmin:'check',pinGo:'shield',drawAgain:'card'};
+ Object.keys(m).forEach(id=>{const e=document.getElementById(id);if(e&&m[id]&&!e.querySelector('.i'))e.insertAdjacentHTML('afterbegin',ic(m[id]));});
+ const pm={budget:'coin',esports:'target',mid:'gauge',high:'rocket',creator:'brush'};
+ document.querySelectorAll('[data-preset]').forEach(e=>{if(!e.querySelector('.i'))e.insertAdjacentHTML('afterbegin',ic(pm[e.dataset.preset]));});
+}
+const caseState={seen:new Set()};
+function renderCase(){
+ const g=selItem,kase=g('case'),cpu=g('cpu'),mobo=g('mobo'),ram=g('ram'),gpu=g('gpu'),psu=g('psu'),cool=g('cooling'),st=g('storage');
+ const FR={itx:[70,40,180,170],matx:[55,26,210,198],atxmid:[40,14,240,222],atxfull:[26,6,268,238],bench:[30,20,260,210]};
+ const cid=kase?kase.id:'atxmid',[fx,fy,fw,fh]=FR[cid]||FR.atxmid;
+ const ix=fx+14,iy=fy+14,iw=fw-28,ih=fh-28,sp=liteActive()?'':' spin';
+ const dr=k=>(!caseState.seen.has(k)&&state.sel[k]&&!liteActive())?' drop':'';
+ const ph=(x,y,w,h,l)=>'<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="4" fill="none" stroke="#c084fc" stroke-opacity=".35" stroke-dasharray="3 3"/><text x="'+(x+w/2)+'" y="'+(y+h/2+2.500)+'" text-anchor="middle" font-size="7" fill="#8477a6" font-family="Arial">'+l+'</text>';
+ const fan=(cx,cy,r)=>{let b='';for(let i=0;i<7;i++)b+='<ellipse cx="'+cx+'" cy="'+(cy-r*.5)+'" rx="'+r*.17+'" ry="'+r*.42+'" transform="rotate('+(i*51.4)+' '+cx+' '+cy+')" fill="#c4b5fd" opacity=".85"/>';
+  return '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="#0a0514" stroke="url(#rgb)" stroke-width="1.800"/><g class="'+sp.trim()+'">'+b+'</g><circle cx="'+cx+'" cy="'+cy+'" r="'+r*.2+'" fill="#e9d5ff"/>';};
+ let o='<defs><linearGradient id="gl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".16"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#c084fc" stop-opacity=".12"/></linearGradient><linearGradient id="rgb" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#a855f7"/><stop offset=".3" stop-color="#d946ef"/><stop offset=".6" stop-color="#22d3ee"/><stop offset=".85" stop-color="#6366f1"/><stop offset="1" stop-color="#a855f7"/><animateTransform attributeName="gradientTransform" type="rotate" from="0 .5 .5" to="360 .5 .5" dur="4s" repeatCount="indefinite"/></linearGradient><radialGradient id="amb" cx=".5" cy=".55" r=".65"><stop offset="0" stop-color="#a855f7" stop-opacity=".32"><animate attributeName="stop-opacity" values=".16;.46;.16" dur="3.5s" repeatCount="indefinite"/></stop><stop offset="1" stop-color="#a855f7" stop-opacity="0"/></radialGradient><linearGradient id="pcb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2d1b52"/><stop offset="1" stop-color="#150c2a"/></linearGradient></defs>';
+ o+='<ellipse cx="160" cy="'+(fy+fh+8)+'" rx="'+fw*.42+'" ry="5" fill="#000" opacity=".45"/>';
+ if(cid==='bench'){o+='<rect x="'+fx+'" y="'+(fy+fh-6)+'" width="'+fw+'" height="8" rx="3" fill="#1b1236" stroke="#c084fc" stroke-opacity=".5"/><rect x="'+(fx+fw-10)+'" y="'+fy+'" width="6" height="'+fh+'" rx="3" fill="#1b1236" stroke="#c084fc" stroke-opacity=".5"/>';}
+ else if(kase){o+='<rect x="'+(fx+14)+'" y="'+(fy+fh)+'" width="22" height="5" rx="2" fill="#1b1236"/><rect x="'+(fx+fw-36)+'" y="'+(fy+fh)+'" width="22" height="5" rx="2" fill="#1b1236"/><rect x="'+fx+'" y="'+fy+'" width="'+fw+'" height="'+fh+'" rx="14" fill="#0b0618" stroke="#c084fc" stroke-opacity=".55" stroke-width="2"/><rect x="'+(fx+6)+'" y="'+(fy+6)+'" width="'+(fw-12)+'" height="'+(fh-12)+'" rx="10" fill="url(#amb)"/><rect x="'+(fx+6)+'" y="'+(fy+6)+'" width="'+(fw-12)+'" height="'+(fh-12)+'" rx="10" fill="url(#gl)"/><circle cx="'+(fx+fw-14)+'" cy="'+(fy+10)+'" r="2.500" fill="#d946ef"><animate attributeName="opacity" values="1;.2;1" dur="1.6s" repeatCount="indefinite"/></circle><linearGradient id="sw" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".24"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient><clipPath id="cc"><rect x="'+(fx+6)+'" y="'+(fy+6)+'" width="'+(fw-12)+'" height="'+(fh-12)+'" rx="10"/></clipPath><g clip-path="url(#cc)"><rect x="'+(fx-70)+'" y="'+fy+'" width="50" height="'+fh+'" fill="url(#sw)" transform="skewX(-18)"><animate attributeName="x" from="'+(fx-70)+'" to="'+(fx+fw+30)+'" dur="5s" repeatCount="indefinite"/></rect></g>';}
+ else{o+='<rect x="'+fx+'" y="'+fy+'" width="'+fw+'" height="'+fh+'" rx="14" fill="url(#amb)" stroke="#c084fc" stroke-opacity=".4" stroke-dasharray="5 4"/>';}
+ if(kase)o+='<rect class="hue" x="'+(fx+8)+'" y="'+(fy+22)+'" width="2.500" height="'+(fh-44)+'" rx="1" fill="url(#rgb)"/>';
+ const mx=ix,my=iy+ih*.1,mw=iw*.72,mh=ih*.66;
+ if(mobo){o+='<g class="part'+dr('mobo')+'"><rect x="'+mx+'" y="'+my+'" width="'+mw+'" height="'+mh+'" rx="5" fill="url(#pcb)" stroke="#7c3aed" stroke-width="1.200"/><path d="M'+(mx+8)+' '+(my+mh*.5)+'h'+mw*.3+'v'+mh*.2+'M'+(mx+mw*.5)+' '+(my+mh-6)+'h'+mw*.4+'M'+(mx+6)+' '+(my+6)+'v'+mh*.4+'" stroke="#a855f7" stroke-opacity=".35" fill="none"/><rect x="'+(mx+4)+'" y="'+(my+6)+'" width="'+mw*.07+'" height="'+mh*.3+'" rx="2" fill="#3b2a5e"/><rect x="'+(mx+mw*.74)+'" y="'+(my+mh*.5)+'" width="'+mw*.14+'" height="'+mw*.14+'" rx="2" fill="#241543" stroke="#a855f7" stroke-opacity=".5"/><text x="'+(mx+mw*.5)+'" y="'+(my+mh*.43)+'" text-anchor="middle" font-size="7" font-weight="700" fill="#c4b5fd" opacity=".75" font-family="Arial">'+(mobo.vendor||'').toUpperCase()+'</text></g>';}else o+=ph(mx,my,mw,mh,'MOBO');
+ const cx=ix+iw*.24,cy=my+mh*.2,cs=iw*.11;
+ if(cpu&&!cool){o+='<g class="part'+dr('cpu')+'"><rect x="'+(cx-cs/2)+'" y="'+(cy-cs/2)+'" width="'+cs+'" height="'+cs+'" rx="3" fill="#cbd5e1"/><text x="'+cx+'" y="'+(cy+2.500)+'" text-anchor="middle" font-size="6.500" font-weight="900" fill="#1f1b2e" font-family="Arial">'+(cpu.vendor==='Intel'?'intel':'AMD')+'</text></g>';}
+ else if(!cpu)o+=ph(cx-cs/2,cy-cs/2,cs,cs,'CPU');
+ if(cool){const g0='<g class="part'+dr('cooling')+'">';
+  if(cool.aio){const rw=iw*(cool.id==='aio360'?.66:.46),rh=ih*.085,n=cool.id==='aio360'?3:2;
+   o+=g0+'<path d="M'+(cx-6)+' '+(cy-cs*.55)+'C'+(cx-6)+' '+(iy+rh+8)+' '+(ix+14)+' '+(iy+rh+10)+' '+(ix+14)+' '+(iy+rh)+'M'+(cx+6)+' '+(cy-cs*.55)+'C'+(cx+6)+' '+(iy+rh+14)+' '+(ix+30)+' '+(iy+rh+16)+' '+(ix+30)+' '+(iy+rh)+'" stroke="#312052" stroke-width="3.500" fill="none"/><rect x="'+(ix+6)+'" y="'+(iy+2)+'" width="'+rw+'" height="'+rh+'" rx="3" fill="#140b28" stroke="#a5b4fc" stroke-opacity=".8"/>';
+   for(let i=0;i<n;i++)o+=fan(ix+6+rw*(i+.5)/n,iy+2+rh/2,rh*.42);
+   o+='<circle cx="'+cx+'" cy="'+cy+'" r="'+cs*.62+'" fill="#1b1236" stroke="url(#rgb)" stroke-width="2"/><circle cx="'+cx+'" cy="'+cy+'" r="'+cs*.25+'" fill="#d946ef" opacity=".85"/></g>';}
+  else if(cool.height>100){const w=iw*.2,h=ih*.28;o+=g0+'<rect x="'+(cx-w/2)+'" y="'+(cy-h/2)+'" width="'+w+'" height="'+h+'" rx="3" fill="#1b1236" stroke="#a5b4fc" stroke-opacity=".8"/>';
+   for(let i=1;i<9;i++)o+='<path d="M'+(cx-w/2+i*w/9)+' '+(cy-h/2+3)+'v'+(h-6)+'" stroke="#a5b4fc" stroke-opacity=".3"/>';
+   o+=fan(cx,cy,Math.min(w,h)*.38)+(cool.id==='nhd15'?'<rect x="'+(cx-w/2-5)+'" y="'+(cy-h/2+3)+'" width="5" height="'+(h-6)+'" rx="2" fill="#312052"/>':'')+'</g>';}
+  else{const w=cs*1.7;o+=g0+'<rect x="'+(cx-w/2)+'" y="'+(cy-w/2)+'" width="'+w+'" height="'+w+'" rx="4" fill="#1b1236" stroke="#a5b4fc" stroke-opacity=".8"/>'+fan(cx,cy,w*.36)+'</g>';}
+ }else o+=ph(cx-cs*.9,cy+cs*.7,cs*1.8,cs*.8,'COOL');
+ const rx0=ix+iw*.42,ry0=my+ih*.05,rwd=iw*.034,rht=ih*.3;
+ if(ram){o+='<g class="part'+dr('ram')+'">';for(let i=0;i<(ram.channels===2?2:1);i++)o+='<rect x="'+(rx0+i*iw*.06)+'" y="'+ry0+'" width="'+rwd+'" height="'+rht+'" rx="2" fill="#1b1236" stroke="url(#rgb)"/><rect class="hue" x="'+(rx0+i*iw*.06+rwd*.3)+'" y="'+(ry0+3)+'" width="'+rwd*.4+'" height="'+rht*.9+'" rx="1" fill="url(#rgb)"/>';o+='</g>';}else o+=ph(rx0,ry0,iw*.1,rht,'RAM');
+ const gw=Math.min(iw*.92,iw*(.45+.5*(gpu?gpu.len:250)/420)),gx=ix+iw*.04,gy=iy+ih*.58,gh=ih*.15;
+ if(gpu){const n=gpu.len>240?3:2;o+='<g class="part'+dr('gpu')+'"><rect x="'+gx+'" y="'+gy+'" width="'+gw+'" height="'+gh+'" rx="5" fill="#120a24" stroke="url(#rgb)" stroke-width="1.800"/>';
+  for(let i=0;i<n;i++)o+=fan(gx+gw*(.2+.7*(i+.5)/n),gy+gh/2,gh*.38);
+  o+='<text x="'+(gx+6)+'" y="'+(gy+gh/2+2.500)+'" font-size="7" font-weight="900" fill="#e9d5ff" font-family="Arial">'+((gpu.name.match(/RTX|GTX|RX|Arc/)||[''])[0])+'</text><rect x="'+(gx+gw-3)+'" y="'+(gy+3)+'" width="3" height="'+(gh-6)+'" rx="1" fill="#d946ef" opacity=".8"/></g>';}else o+=ph(gx,gy,iw*.7,gh,'GPU');
+ const px=ix,py=iy+ih*.81,pw=iw*.46,ph2=ih*.17;
+ if(psu){o+='<g class="part'+dr('psu')+'"><rect x="'+px+'" y="'+py+'" width="'+pw+'" height="'+ph2+'" rx="4" fill="#120a24" stroke="#fbbf24" stroke-opacity=".7"/><text x="'+(px+pw/2)+'" y="'+(py+ph2/2+3)+'" text-anchor="middle" font-size="9" font-weight="900" fill="#fcd34d" font-family="Arial">'+psu.watt+'W</text><path d="M'+(px+pw*.8)+' '+py+'V'+(gy+gh)+'" stroke="#7c3aed" stroke-width="2" fill="none"/></g>';}else o+=ph(px,py,pw,ph2,'PSU');
+ const nv=st&&/NVMe/.test(st.type);
+ if(st){o+='<g class="part'+dr('storage')+'">'+(nv?'<rect x="'+(ix+iw*.1)+'" y="'+(my+mh*.46)+'" width="'+iw*.22+'" height="'+ih*.035+'" rx="2" fill="#14532d" stroke="#4ade80"/>':'<rect x="'+(ix+iw*.52)+'" y="'+py+'" width="'+iw*.44+'" height="'+ph2+'" rx="4" fill="#120a24" stroke="#4ade80" stroke-opacity=".7"/><text x="'+(ix+iw*.74)+'" y="'+(py+ph2/2+3)+'" text-anchor="middle" font-size="8" font-weight="900" fill="#86efac" font-family="Arial">'+st.type+'</text>')+'</g>';}else o+=ph(ix+iw*.52,py,iw*.44,ph2,'SSD');
+ if(kase&&cid!=='bench'){o+='<g class="part'+dr('case')+'">'+fan(ix+iw*.88,iy+ih*.14,iw*.065)+fan(ix+iw*.88,iy+ih*.36,iw*.065)+'</g>';}
+ $('#caseFrame').innerHTML='<svg class="csvg" viewBox="0 0 320 250" role="img" aria-label="Gabinete virtual">'+o+'</svg>';
+ caseState.seen=new Set(ALL_CATS.filter(c=>state.sel[c]));
+ $('#caseChips').innerHTML=['cpu','gpu','mobo','ram','storage','psu','cooling'].map(c=>{const it=g(c);return it?'<span class="chip">'+itemLogo(c,it)+'<span>'+it.name.replace(/\(.*?\)/g,'').slice(0,24)+'</span></span>':'';}).join('');
+ $('#caseName').textContent=kase?kase.name:'—';
+ const parts=ALL_CATS.filter(c=>c!=='keyboard'&&c!=='mouse'&&c!=='headset'&&c!=='extras'&&state.sel[c]).length;
+ $('#caseNote').textContent=parts+'/9 '+(parts===9?t('complete'):t('missing'));
+}
+
+const state = {
+  lang: localStorage.getItem("bydp_lang") || (navigator.language && navigator.language.startsWith("es") ? "es" : "en"),
+  sel: {},
+  rate: (parseFloat(localStorage.getItem("bydp_rate")) >= 100 ? parseFloat(localStorage.getItem("bydp_rate")) : DB.rate),
+  budget: parseFloat(localStorage.getItem("bydp_budget")) || 0,
+  pin: localStorage.getItem("bydp_pin") || "1234",
+  idleReset: localStorage.getItem("bydp_idle") !== "0",
+  builds: parseInt(localStorage.getItem("bydp_builds") || "0", 10),
+  cardNo: parseInt(localStorage.getItem("bydp_cards") || "1247", 10),
+  saved: JSON.parse(localStorage.getItem("bydp_saved") || "[]"),
+  lastResult: null,
+  magnets: [],
+  cleanup: []
+};
+
+const $ = (s, r) => (r || document).querySelector(s);
+const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+const t = (k) => (I18N[state.lang][k] !== undefined ? I18N[state.lang][k] : k);
+const fmt = (n) => Math.round(n).toLocaleString(state.lang === "es" ? "es-AR" : "en-US");
+const usd = (n) => "$" + fmt(n);
+const ars = (n) => "$" + fmt(n * state.rate);
+const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const liteActive = () => document.body.classList.contains("lite") || reduce;
+
+function catLabel(c){ return t("cats")[c] || c; }
+function findItem(cat, id){ return (DB[cat] || []).find(x => x.id === id); }
+function selItem(cat){ return state.sel[cat] ? findItem(cat, state.sel[cat]) : null; }
+function selExtras(){ return (state.sel.extras || []).map(id => findItem("extras", id)).filter(Boolean); }
+function isSel(cat, id){ return cat === "extras" ? (state.sel.extras || []).indexOf(id) >= 0 : state.sel[cat] === id; }
+
+function toast(msg){
+  const el = $("#toast"); el.textContent = msg; el.classList.add("show");
+  clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove("show"), 2200);
+}
+
+const ALL_CATS = ["cpu","mobo","ram","gpu","storage","psu","cooling","case","monitor","keyboard","mouse","headset","extras"];
+
+function specTags(cat, it){
+  if(!it) return [];
+  const tags = [];
+  if(cat === "cpu"){ tags.push({txt:it.socket, cls:"d5"}); tags.push({txt:it.cores+"c/"+it.th+"t"}); tags.push({txt:it.tdp+"W", cls:"warn"}); }
+  if(cat === "mobo"){ tags.push({txt:it.socket, cls:"d5"}); tags.push({txt:it.ddr, cls:it.ddr==="DDR5"?"d5":"d4"}); tags.push({txt:it.form}); if(it.ryzen5kNoBios) tags.push({txt:"BIOS", cls:"warn"}); }
+  if(cat === "ram"){ tags.push({txt:it.ddr, cls:it.ddr==="DDR5"?"d5":"d4"}); tags.push({txt:it.gb+"GB"}); tags.push({txt:it.channels===2?"Dual":"Single", cls:it.channels===2?"":"warn"}); tags.push({txt:it.speed}); }
+  if(cat === "gpu"){ tags.push({txt:it.vram+"GB VRAM"}); tags.push({txt:it.power+"W", cls:"warn"}); tags.push({txt:it.len+"mm"}); tags.push({txt:it.base+" base"}); }
+  if(cat === "storage"){ tags.push({txt:it.type}); tags.push({txt:it.gb+"GB"}); }
+  if(cat === "psu"){ tags.push({txt:it.watt+"W"}); tags.push({txt:it.eff}); }
+  if(cat === "cooling"){ tags.push({txt:"Nivel "+it.level}); tags.push({txt:it.tdp+"W", cls:"warn"}); tags.push({txt:it.aio?"AIO":"Aire"}); }
+  if(cat === "case"){ tags.push({txt:it.supports.join("/")}); tags.push({txt:"GPU "+it.maxGpu+"mm"}); tags.push({txt:"Cooler "+it.maxCooler+"mm"}); }
+  if(cat === "monitor"){ tags.push({txt:it.res}); tags.push({txt:it.hz+"Hz"}); if(it.hz<100) tags.push({txt:"60Hz", cls:"warn"}); }
+  return tags;
+}
+
+function renderBuilder(){
+  const b = $("#builder");
+  b.innerHTML = ALL_CATS.map(cat => {
+    const items = DB[cat] || [];
+    const grid = items.map(it => {
+      const selected = isSel(cat, it.id);
+      const tags = specTags(cat, it).map(tg => '<span class="tag ' + (tg.cls || "") + '">' + tg.txt + '</span>').join("");
+      return '<button class="opt' + (selected ? " sel" : "") + '" data-cat="' + cat + '" data-id="' + it.id + '" aria-pressed="' + selected + '">' + (selected ? '<span class="ck">' + ic("check", 16) + '</span>' : "")
+        + '<div class="oh">' + itemLogo(cat, it) + '<div class="nm">' + it.name + '</div></div>'
+        + '<div class="spec">' + tags + '</div>'
+        + '<div class="pr">' + usd(it.price) + '<span class="ar" data-p="' + it.price + '">' + ars(it.price) + ' ARS</span></div>'
+        + '</button>';
+    }).join("");
+    return '<section class="glass section" aria-label="' + catLabel(cat) + '">'
+      + '<div class="sec-head"><span class="catico">' + ic(cat) + '</span><h2>' + catLabel(cat) + '</h2>'
+      + (cat === "extras" ? '<span class="multi">' + t("multiHint") + '</span>' : "")
+      + '<span class="hint" data-cat-hint="' + cat + '"></span></div>'
+      + '<div class="pillgrid">' + grid + '</div></section>';
+  }).join("");
+  enhance(b);
+}
+
+function totals(){
+  let sum = 0, count = 0;
+  ALL_CATS.forEach(c => {
+    if(c === "extras"){ selExtras().forEach(x => { sum += x.price; count++; }); return; }
+    const it = selItem(c); if(it){ sum += it.price; count++; }
+  });
+  return {sum, count};
+}
+
+function countUp(el, to, render){
+  if(!el) return;
+  if(liteActive()){ el.textContent = render(to); el.dataset.v = to; return; }
+  const from = parseFloat(el.dataset.v || "0") || 0;
+  el.dataset.v = to;
+  const t0 = performance.now(), dur = 450;
+  cancelAnimationFrame(el._raf);
+  (function loop(now){
+    const k = Math.min(1, (now - t0) / dur);
+    const e = 1 - Math.pow(1 - k, 3);
+    el.textContent = render(from + (to - from) * e);
+    if(k < 1) el._raf = requestAnimationFrame(loop);
+  })(performance.now());
+}
+
+function updateSummary(){
+  const tt = totals();
+  countUp($("#sumUsd"), tt.sum, v => usd(v));
+  countUp($("#sumArs"), tt.sum * state.rate, v => "$" + fmt(v));
+  $("#rateMini").textContent = fmt(state.rate);
+  $("#buildCount").textContent = state.builds;
+  if($("#rateInput") !== document.activeElement) $("#rateInput").value = state.rate;
+  if(state.budget > 0){
+    const over = tt.sum > state.budget;
+    $("#budgetStatus").innerHTML = '<span style="color:var(--' + (over ? "red" : "lime") + ')">' + (over ? ic("warn") + " " + t("overBudget") : ic("check") + " " + t("underBudget")) + '</span>';
+  } else $("#budgetStatus").textContent = "—";
+  ALL_CATS.forEach(c => {
+    const h = $('[data-cat-hint="' + c + '"]');
+    if(!h) return;
+    if(c === "extras"){ const ex = selExtras(); const xs = ex.reduce((s, x) => s + x.price, 0); h.textContent = ex.length ? usd(xs) + " · " + ars(xs) + " ARS" : ""; return; }
+    const it = selItem(c);
+    h.textContent = it ? usd(it.price) + " · " + ars(it.price) + " ARS" : "";
+  });
+  $$(".opt .ar").forEach(e => { e.textContent = ars(+e.dataset.p) + " ARS"; });
+  renderCompat();
+  renderCase();
+}
+
+function compat(){
+  const r = [];
+  const cpu = selItem("cpu"), mobo = selItem("mobo"), ram = selItem("ram"), gpu = selItem("gpu");
+  const psu = selItem("psu"), cool = selItem("cooling"), kase = selItem("case"), mon = selItem("monitor");
+  const add = (lvl, txt, tag) => r.push({lvl, txt, tag});
+
+  if(cpu && mobo){
+    if(cpu.socket === mobo.socket) add("ok", "Socket " + cpu.socket + " — " + mobo.name, "socket");
+    else add("bad", "Socket " + cpu.socket + " ≠ " + mobo.socket + " (CPU no entra en la placa)", "socket");
+  }
+  if(cpu && mobo && cpu.ryzen5k && mobo.ryzen5kNoBios){
+    add("warn", "Ryzen 5000 en A320M: requiere actualizar BIOS", "bios");
+  }
+  if(ram && mobo){
+    if(ram.ddr === mobo.ddr) add("ok", ram.ddr + " compatible con la placa", "ddr");
+    else add("bad", ram.ddr + " no entra en placa " + mobo.ddr, "ddr");
+  }
+  if(ram && ram.channels === 1){
+    add("warn", "RAM monocanal: perdés ~10-15% de FPS (usá 2 módulos)", "chan");
+  } else if(ram && ram.channels === 2){
+    add("ok", "RAM dual channel: ancho de banda completo", "chan");
+  }
+  if(mobo && kase){
+    if(kase.supports.indexOf(mobo.form) >= 0) add("ok", "Placa " + mobo.form + " entra en " + kase.name, "form");
+    else add("bad", "Placa " + mobo.form + " NO entra en " + kase.name + " (" + kase.supports.join("/") + ")", "form");
+  }
+  if(gpu && kase){
+    if(gpu.len <= kase.maxGpu) add("ok", "GPU " + gpu.len + "mm (máx " + kase.maxGpu + "mm)", "glen");
+    else add("bad", "GPU " + gpu.len + "mm demasiado larga para " + kase.name + " (máx " + kase.maxGpu + "mm)", "glen");
+  }
+  if(cool && kase){
+    if(cool.aio) add("ok", "AIO " + cool.name + " compatible con " + kase.name, "chgt");
+    else if(cool.height <= kase.maxCooler) add("ok", "Cooler " + cool.height + "mm (máx " + kase.maxCooler + "mm)", "chgt");
+    else add("bad", "Cooler " + cool.height + "mm no entra en " + kase.name + " (máx " + kase.maxCooler + "mm)", "chgt");
+  }
+  if(cool && cpu){
+    if(cool.tdp >= cpu.tdp) add("ok", "Cooler disipa " + cool.tdp + "W para CPU " + cpu.tdp + "W", "ctdp");
+    else add("bad", "Cooler " + cool.tdp + "W insuficiente para CPU de " + cpu.tdp + "W", "ctdp");
+  }
+  if(psu && cpu && gpu){
+    const need = Math.ceil((cpu.tdp + gpu.power + 100) * 1.2);
+    if(psu.watt >= need) add("ok", "Fuente " + psu.watt + "W (necesitás ~" + need + "W)", "psu");
+    else add("bad", "Fuente " + psu.watt + "W insuficiente: necesitás ~" + need + "W", "psu");
+  }
+  if(mon && gpu && cpu){
+    const g = gpu.base;
+    if(mon.hz <= 75 && g >= 120) add("warn", "Monitor " + mon.hz + "Hz limita una GPU potente", "hz");
+    else if(mon.hz >= 144 && g < 80) add("warn", "GPU modesta para monitor " + mon.hz + "Hz", "hz");
+    else add("ok", "Monitor " + mon.hz + "Hz acorde al equipo", "hz");
+  }
+  const missing = ALL_CATS.filter(c => ["cpu","mobo","ram","gpu","storage","psu","cooling","case","monitor"].indexOf(c) >= 0 && !state.sel[c]);
+  if(missing.length) add("warn", t("missing") + ": " + missing.map(catLabel).join(", "), "miss");
+  else if(r.length) add("ok", t("complete"), "miss");
+  return r;
+}
+
+function renderCompat(){
+  const list = compat().filter(c => c.lvl !== "ok" || true);
+  $("#compatList").innerHTML = list.map(c =>
+    '<div class="comp ' + c.lvl + '"><span class="st">' + ST[c.lvl] + '</span><span class="tx">' + c.txt + '</span></div>'
+  ).join("");
+}
+
+function ramFactor(){
+  const ram = selItem("ram"); if(!ram) return 0.9;
+  let f = ram.channels === 2 ? 1.0 : 0.86;
+  if(ram.ddr === "DDR5") f += 0.04;
+  if(ram.gb < 16) f -= 0.06;
+  return Math.max(0.6, f);
+}
+function thermalFactor(){
+  const cpu = selItem("cpu"), cool = selItem("cooling");
+  if(!cpu) return 0.95;
+  if(!cool) return 0.85;
+  return cool.tdp >= cpu.tdp ? 1.0 : 0.85;
+}
+function ramScore(){ const r = selItem("ram"); return r ? Math.min(100, r.gb / 64 * 100 + (r.channels === 2 ? 8 : 0)) : 40; }
+function cpuScore(){ const c = selItem("cpu"); return c ? Math.min(100, c.cap / 3.0) : 40; }
+function gpuScore(){ const g = selItem("gpu"); return g ? Math.min(100, g.base / 2.6) : 30; }
+
+function fpsFor(game, monitor){
+  const gpu = selItem("gpu"), cpu = selItem("cpu");
+  if(!gpu || !cpu) return 0;
+  const rf = ramFactor(), tf = thermalFactor();
+  const gfps = gpu.base / game.gpu * (monitor ? monitor.resFactor : 1);
+  const cfps = cpu.cap / game.cpu;
+  const raw = Math.min(gfps, cfps) * rf * tf;
+  const capped = monitor ? Math.min(raw, monitor.hz) : raw;
+  return {raw: raw, fps: Math.max(1, Math.round(capped)), limited: monitor && raw > monitor.hz};
+}
+
+function fpsVerdict(fps){
+  if(fps >= 144) return "excellent";
+  if(fps >= 100) return "great";
+  if(fps >= 60) return "decent";
+  if(fps >= 30) return "playable";
+  return "notgood";
+}
+function scoreVerdict(s){
+  if(s >= 85) return "excellent";
+  if(s >= 70) return "great";
+  if(s >= 50) return "decent";
+  if(s >= 30) return "playable";
+  return "notgood";
+}
+
+function progScore(p){
+  const s = gpuScore() * p.gw + cpuScore() * p.cw + ramScore() * p.rw;
+  return Math.max(0, Math.min(100, Math.round(s * (ramFactor() * 0.5 + thermalFactor() * 0.5) / 1)));
+}
+
+function analyze(){
+  const monitor = selItem("monitor");
+  const gameFps = GAMES.map(g => ({g, r: fpsFor(g, monitor)}));
+  const progs = PROGRAMS.map(p => ({p, s: progScore(p)}));
+  const gameAvg = gameFps.reduce((a, x) => a + Math.min(1, x.r.fps / 144), 0) / gameFps.length * 100;
+  const prodAvg = progs.reduce((a, x) => a + x.s, 0) / progs.length;
+
+  const gpu = selItem("gpu"), cpu = selItem("cpu");
+  let bottleneck = 0, limiting = "balanced";
+  if(gpu && cpu){
+    const gp = gpu.base, cp = cpu.cap;
+    bottleneck = Math.round(Math.abs(gp - cp) / Math.max(gp, cp) * 100);
+    limiting = gp < cp ? "gpu" : cp < gp ? "cpu" : "balanced";
+  }
+  const bLvl = bottleneck < 10 ? "low" : bottleneck < 20 ? "mild" : bottleneck < 35 ? "moderate" : "severe";
+  const balanceScore = 100 - bottleneck;
+  const score = Math.round(gameAvg * 0.5 + prodAvg * 0.3 + balanceScore * 0.2);
+
+  const cool = selItem("cooling");
+  const totalW = (cpu ? cpu.tdp : 0) + (gpu ? gpu.power : 0) + 70;
+  const cpuTemp = cpu ? Math.round(40 + cpu.tdp / Math.max(40, (cool ? cool.tdp : 65)) * 45) : 0;
+  const gpuTemp = gpu ? Math.round(58 + gpu.power / 22) : 0;
+
+  let upgrade = "—";
+  if(limiting === "gpu"){ const u = DB.gpu.find(x => x.base > (gpu ? gpu.base : 0) && x.price <= (gpu ? gpu.price : 0) * 1.9); upgrade = u ? u.name : "GPU más potente"; }
+  else if(limiting === "cpu"){ const u = DB.cpu.find(x => x.socket === (cpu ? cpu.socket : "") && x.cap > (cpu ? cpu.cap : 0)); upgrade = u ? u.name : "CPU más potente"; }
+  else if(selItem("ram") && selItem("ram").channels === 1) upgrade = "2° módulo de RAM (dual channel)";
+  else upgrade = "Equipo equilibrado: no urgente";
+
+  return {gameFps, progs, gameAvg, prodAvg, bottleneck, bLvl, limiting, score, totalW, cpuTemp, gpuTemp, upgrade, verdict: scoreVerdict(score)};
+}
+
+function buildCardsHTML(){
+  const a = analyze();
+  const showV = (k) => '<span class="badge ' + k + '">' + t("verdicts")[k] + '</span>';
+  const fbar = (p) => '<span class="fbar"><i style="width:' + Math.max(2, Math.min(100, p)) + '%"></i></span>';
+  const games = a.gameFps.map(x =>
+    '<div class="fps-row"><span class="gname wl">' + app(x.g.id) + x.g.name + '</span>'
+    + '<span class="fps">' + x.r.fps + ' FPS</span>'
+    + '<span class="mini">' + (x.r.limited ? t("fpsCapped") : (Math.round(x.r.raw) + " raw")) + '</span>'
+    + fbar(x.r.fps / 144 * 100) + showV(fpsVerdict(x.r.fps)) + '</div>').join("");
+  const progs = a.progs.map(x =>
+    '<div class="fps-row"><span class="gname wl">' + app(x.p.id) + x.p.name + '</span>'
+    + '<span class="fps">' + x.s + '/100</span>'
+    + '<span class="mini">' + x.s + '%</span>' + fbar(x.s) + showV(scoreVerdict(x.s)) + '</div>').join("");
+  const avgFps = Math.round(a.gameFps.reduce((s, x) => s + x.r.fps, 0) / a.gameFps.length);
+  return {a, games, progs, showV, avgFps};
+}
+
+function renderResults(){
+  const {a, games, progs, showV, avgFps} = buildCardsHTML();
+  const {sum} = totals();
+  const priceRows = ALL_CATS.filter(c => c !== "extras").map(c => {
+    const it = selItem(c); if(!it) return "";
+    return '<div class="fps-row"><span class="gname wl">' + itemLogo(c, it) + catLabel(c) + '</span><span style="color:var(--muted);font-size:.76rem;flex:1 1 130px;min-width:0;overflow-wrap:anywhere">' + it.name + '</span>'
+      + '<span class="fps">' + usd(it.price) + '</span><span class="mini">' + ars(it.price) + '</span></div>';
+  }).join("")
+    + selExtras().map(it =>
+      '<div class="fps-row"><span class="gname">' + catLabel("extras") + '</span><span style="color:var(--muted);font-size:.76rem;flex:1 1 130px;min-width:0;overflow-wrap:anywhere">' + it.name + '</span>'
+      + '<span class="fps">' + usd(it.price) + '</span><span class="mini">' + ars(it.price) + '</span></div>').join("");
+  const compRows = compat().map(c => '<div class="comp ' + c.lvl + '"><span class="st">' + ST[c.lvl] + '</span><span class="tx">' + c.txt + '</span></div>').join("");
+
+  $("#resultBody").innerHTML =
+    '<div class="result-grid">'
+    + '<div class="card hero">'
+    + '<div class="bigscore">'
+      + '<div class="dial" style="--p:' + a.score + ';--c1:var(--cyan);--c2:var(--magenta)"><div class="val"><b>' + a.score + '</b><span>' + t("score") + '</span></div></div>'
+      + '<div class="verdictbox">'
+        + '<div class="verdictline">' + showV(a.verdict) + '<span>' + t("verdict") + '</span></div>'
+        + '<div class="verdictsub">' + selItem("cpu").name + ' + ' + selItem("gpu").name + '</div>'
+      + '</div>'
+    + '</div>'
+    + '<div class="statstrip">'
+      + '<div class="stat"><b>' + avgFps + ' FPS</b><span>' + t("fpsAverage") + '</span></div>'
+      + '<div class="stat"><b>' + a.bottleneck + '%</b><span>' + t("bottleneck") + '</span></div>'
+      + '<div class="stat"><b>' + a.cpuTemp + '°</b><span>' + t("tempCpu") + '</span></div>'
+      + '<div class="stat"><b>' + a.gpuTemp + '°</b><span>' + t("tempGpu") + '</span></div>'
+      + '<div class="stat"><b>' + a.totalW + 'W</b><span>' + t("totalWatt") + '</span></div>'
+    + '</div>'
+    + '<div class="upgradeline">' + t("upgrade") + ': ' + a.upgrade + '</div>'
+    + '</div>'
+    + '<div class="card"><h3>' + t("fpsGames") + '</h3>' + games + '</div>'
+    + '<div class="card"><h3>' + t("fpsPrograms") + '</h3>' + progs + '</div>'
+    + '<div class="card"><h3>' + t("price") + '</h3>'
+      + '<div class="fps-row" style="font-size:.72rem;color:var(--muted)"><span class="gname">' + t("printComp") + '</span><span class="fps">USD</span><span class="mini">ARS</span></div>'
+      + priceRows
+      + '<div class="fps-row"><span class="gname" style="color:var(--txt)">' + t("printTotal") + '</span><span class="fps usd">' + usd(sum) + '</span><span class="mini ars">' + ars(sum) + '</span></div>'
+    + '</div>'
+    + '<div class="card"><h3>' + t("power") + '</h3>'
+      + (function(){
+          const es = state.lang === "es", psu = selItem("psu"), pw = psu ? psu.watt : 0, load = pw ? Math.round(a.totalW / pw * 100) : 0;
+          const col = (v, a1, a2) => v < a1 ? "#4ade80" : v < a2 ? "#fbbf24" : "#fb7185";
+          const mt = (lb, txt, pct, c) => '<div class="mt"><div class="mh"><span>' + lb + '</span><b>' + txt + '</b></div><div class="mb"><i style="width:' + Math.min(100, Math.max(4, pct)) + '%;background:' + c + ';color:' + c + '"></i></div></div>';
+          const lab = (v, lim) => v < lim ? t("tempSafe") : v < 85 ? t("tempWarm") : t("tempHot");
+          const cool = selItem("cooling");
+          return '<div class="pwr"><div class="dial" style="--p:' + Math.min(100, a.totalW / 9) + ';--c1:var(--amber);--c2:var(--red)"><div class="val"><b>' + a.totalW + 'W</b><span>' + t("totalWatt") + '</span></div></div>'
+            + '<div class="meters">'
+            + mt(t("tempCpu"), a.cpuTemp + "°C · " + lab(a.cpuTemp, 70), a.cpuTemp, col(a.cpuTemp, 70, 85))
+            + mt(t("tempGpu"), a.gpuTemp + "°C · " + lab(a.gpuTemp, 75), a.gpuTemp, col(a.gpuTemp, 75, 85))
+            + mt(es ? "Carga de fuente" : "PSU load", load + "% · " + pw + "W", load, col(load, 70, 90))
+            + '</div></div>'
+            + '<div class="pwr-foot"><span>' + ic("psu", 14) + (es ? "Margen " : "Headroom ") + Math.max(0, pw - a.totalW) + "W</span>"
+            + (cool ? '<span>' + ic("cooling", 14) + cool.name.replace(/\(.*?\)/g, "").trim() + '</span>' : "") + '</div>';
+        })()
+      + '</div>'
+    + '<div class="card" style="grid-column:1/-1"><h3>' + t("compatibility") + '</h3>' + compRows
+      + '<div class="tbl-actions">'
+      + '<button class="btn primary" id="saveBuildBtn">' + t("saveBuild") + '</button>'
+      + '<button class="btn ghost" id="printFromResult">' + t("budget") + '</button>'
+      + '</div></div>'
+    + '</div>';
+  $("#saveBuildBtn").addEventListener("click", saveBuild);
+  $("#printFromResult").addEventListener("click", doPrint);
+  state.lastResult = {a, sum};
+  updTechPhrase(a, sum);
+  if(a.score >= 80 && !liteActive()) burstConfetti();
+}
+
+function updTechPhrase(a, sum){
+  const cpu = selItem("cpu"), gpu = selItem("gpu"), ram = selItem("ram");
+  const box = $("#techPhrase");
+  if(!cpu || !gpu || !ram){ if(box) box.textContent = "—"; return; }
+  if(!box) return;
+  const avg = Math.round(a.gameFps.reduce((s, x) => s + x.r.fps, 0) / a.gameFps.length);
+  const specs = cpu.name + " + " + gpu.name + " + " + ram.name;
+  const verdictEN = (I18N.en.verdicts || {})[a.verdict] || a.verdict;
+  const verdictES = (I18N.es.verdicts || {})[a.verdict] || a.verdict;
+  const total = usd(sum) + " / ARS " + fmt(sum * state.rate);
+  box.innerHTML =
+    '<div style="display:grid;gap:10px">'
+    + '<div><b>EN</b> · You chose <b>' + specs + '</b> — <b>' + avg + ' FPS</b> average across 8 titles! '
+    + 'Verdict: <b>' + verdictEN + '</b> (score ' + a.score + '/100). Total: <b>' + total + '</b>. '
+    + 'Grab a keyboard, plug in, and go get those frags!</div>'
+    + '<div style="border-top:1px dashed rgba(255,255,255,.15);padding-top:10px"><b>ES</b> · Elegiste <b>' + specs + '</b> — promedio de <b>' + avg + ' FPS</b> en 8 juegos. '
+    + 'Veredicto: <b>' + verdictES + '</b> (puntaje ' + a.score + '/100). Total: <b>' + total + '</b>. '
+    + 'Agarrá teclado, conectá todo y a buscar esos frags!</div>'
+    + '</div>';
+}
+
+function saveBuild(){
+  const {sum} = totals();
+  const a = analyze();
+  const entry = {
+    id: Date.now(), date: new Date().toISOString(),
+    name: (state.sel.cpu || "?") + " + " + (state.sel.gpu || "?"),
+    sum, score: a.score, fps: Math.round(a.gameFps.reduce((s, x) => s + x.r.fps, 0) / a.gameFps.length),
+    sel: Object.assign({}, state.sel)
+  };
+  state.saved.unshift(entry);
+  state.saved = state.saved.slice(0, 8);
+  localStorage.setItem("bydp_saved", JSON.stringify(state.saved));
+  toast(t("saved"));
+  renderSaved();
+}
+
+function renderSaved(){
+  const list = $("#savedList"); if(!list) return;
+  $("#savedCount").textContent = state.saved.length + " / 8";
+  if(!state.saved.length){ list.innerHTML = '<div class="kiosk-note">' + t("noSaved") + '</div>'; $("#cmpBody").innerHTML = ""; return; }
+  list.innerHTML = state.saved.map(e =>
+    '<div class="saveditem"><div><b>' + e.name + '</b><div class="m">' + e.date.slice(0, 10) + ' · ' + usd(e.sum) + ' · ' + t("score") + ' ' + e.score + ' · ' + e.fps + ' FPS</div></div>'
+    + '<button class="btn sm danger" data-del="' + e.id + '">' + ic("x",14) + '</button></div>').join("");
+  list.querySelectorAll("[data-del]").forEach(b => b.addEventListener("click", () => {
+    state.saved = state.saved.filter(x => x.id !== +b.dataset.del);
+    localStorage.setItem("bydp_saved", JSON.stringify(state.saved));
+    renderSaved();
+  }));
+  if(state.saved.length >= 2) renderCompare();
+  else $("#cmpBody").innerHTML = "";
+}
+
+function renderCompare(){
+  const rows = ["cpu", "gpu", "ram", "mobo", "psu", "case", "monitor"];
+  const builds = state.saved.slice(0, 4);
+  let html = '<table><thead><tr><th>' + t("printComp") + '</th>' + builds.map((b, i) => '<th>#' + (i + 1) + '</th>').join("") + '</tr></thead><tbody>';
+  rows.forEach(cat => {
+    html += '<tr><td>' + catLabel(cat) + '</td>' + builds.map(b => '<td>' + (b.sel[cat] ? (findItem(cat, b.sel[cat]) ? findItem(cat, b.sel[cat]).name : "—") : "—") + '</td>').join("") + '</tr>';
+  });
+  const bestSum = Math.min.apply(null, builds.map(b => b.sum));
+  const bestScore = Math.max.apply(null, builds.map(b => b.score));
+  const bestFps = Math.max.apply(null, builds.map(b => b.fps));
+  html += '<tr><td>' + t("printTotal") + ' (USD)</td>' + builds.map(b => '<td class="' + (b.sum === bestSum ? "win" : "") + '">' + usd(b.sum) + '</td>').join("") + '</tr>';
+  html += '<tr><td>' + t("score") + '</td>' + builds.map(b => '<td class="' + (b.score === bestScore ? "win" : "") + '">' + b.score + '</td>').join("") + '</tr>';
+  html += '<tr><td>FPS avg</td>' + builds.map(b => '<td class="' + (b.fps === bestFps ? "win" : "") + '">' + b.fps + '</td>').join("") + '</tr>';
+  html += '</tbody></table>';
+  $("#cmpBody").innerHTML = html;
+}
+
+function doPrint(){
+  const {sum} = totals();
+  const a = analyze();
+  state.cardNo += 1;
+  localStorage.setItem("bydp_cards", String(state.cardNo));
+  const rows = ALL_CATS.filter(c => c !== "extras").map(c => {
+    const it = selItem(c); if(!it) return "";
+    return '<tr><td>' + catLabel(c) + ': ' + it.name + '</td><td>' + usd(it.price) + '</td><td>' + ars(it.price) + '</td></tr>';
+  }).join("")
+    + selExtras().map(it => '<tr><td>' + catLabel("extras") + ': ' + it.name + '</td><td>' + usd(it.price) + '</td><td>' + ars(it.price) + '</td></tr>').join("");
+  const date = new Date().toLocaleDateString(state.lang === "es" ? "es-AR" : "en-US");
+  $("#printSheet").innerHTML =
+    '<div class="ph"><div><h1>' + t("printTitle") + '</h1><div>BUILD YOUR DREAM PC — What is your FPS?</div>'
+    + '<div>CPU: ' + (state.sel.cpu || "—") + ' · GPU: ' + (state.sel.gpu || "—") + ' · ' + t("score") + ': ' + a.score + '/100</div></div>'
+    + '<div style="text-align:right"><div class="num">' + t("printNo") + ' ' + String(state.cardNo).padStart(5, "0") + '</div><div>' + t("printDate") + ': ' + date + '</div></div></div>'
+    + '<table><thead><tr><th>' + t("printComp") + '</th><th>' + t("printPrice") + '</th><th>' + t("printPriceArs") + '</th></tr></thead><tbody>'
+    + rows
+    + '<tr><td><b>' + t("printTotal") + '</b></td><td><b>' + usd(sum) + '</b></td><td><b>' + ars(sum) + '</b></td></tr>'
+    + '</tbody></table>'
+    + '<p style="margin-top:14px;font-weight:700">' + t("printThanks") + '</p>'
+    + '<p style="font-size:11px">' + urlPlaceholder() + '</p>';
+  window.print();
+}
+function urlPlaceholder(){ return ""; }
+
+function drawCard(){
+  const order = GLOSSARY.map((g, i) => ({g, i}));
+  const pick = [];
+  const copy = order.slice();
+  const n = 3;
+  for(let k = 0; k < n && copy.length; k++){
+    const j = Math.floor(Math.random() * copy.length);
+    pick.push(copy.splice(j, 1)[0]);
+  }
+  document.documentElement.lang = state.lang;
+  $("#cardBody").innerHTML = pick.map(({g, i}) =>
+    '<div class="gcard"><div class="cat">' + g.c + ' · #' + String(i + 1).padStart(2, "0") + '</div>'
+    + '<div class="term">' + g.t + '</div><div class="def">' + (state.lang === "es" ? g.es : g.en) + '</div></div>').join("");
+  $("#cardCount").textContent = GLOSSARY.length + " terms";
+  openModal("#cardModal");
+}
+
+function preset(kind){
+  const maps = {
+    budget: {cpu:"i3-12100f", mobo:"h610m", ram:"d4-16-3200", gpu:"rtx3050", storage:"ssd1t", psu:"p550", cooling:"stock", case:"matx", monitor:"m1080-60", keyboard:"kb-basic", mouse:"ms-basic", headset:"hs-basic", extras:[]},
+    esports: {cpu:"r5-5600", mobo:"b550", ram:"d4-16-3200", gpu:"rtx3060", storage:"nvme1t4", psu:"p650", cooling:"tower", case:"atxmid", monitor:"m1080-240", keyboard:"kb-mech", mouse:"ms-gaming", headset:"hs-gaming", extras:["ex-mousepad"]},
+    mid: {cpu:"i5-13400f", mobo:"b760", ram:"d5-32-6000", gpu:"rtx4060ti", storage:"nvme1t4", psu:"p750", cooling:"tower", case:"atxmid", monitor:"m1440-165", keyboard:"kb-mech", mouse:"ms-gaming", headset:"hs-gaming", extras:["ex-mousepad"]},
+    high: {cpu:"r7-7800x3d", mobo:"b650", ram:"d5-32-6000", gpu:"rtx4070s", storage:"nvme2t4", psu:"p850", cooling:"aio360", case:"atxfull", monitor:"m1440-240", keyboard:"kb-mechp", mouse:"ms-wireless", headset:"hs-wifi", extras:["ex-streamdeck"]},
+    creator: {cpu:"r9-7950x", mobo:"x670e", ram:"d5-64-6000", gpu:"rtx4090", storage:"nvme2t5", psu:"p1200", cooling:"aio360", case:"atxfull", monitor:"m4k-144", keyboard:"kb-mechp", mouse:"ms-wireless", headset:"hs-wifi", extras:["ex-capture"]}
+  };
+  Object.assign(state.sel, maps[kind] || maps.mid);
+  if(!Array.isArray(state.sel.extras)) state.sel.extras = state.sel.extras ? [state.sel.extras] : [];
+  persistSel(); renderBuilder(); updateSummary();
+}
+
+function surprise(){
+  const rnd = (arr) => arr[Math.floor(Math.random() * arr.length)];
+  const cpu = rnd(DB.cpu);
+  const mobos = DB.mobo.filter(m => m.socket === cpu.socket);
+  const mobo = rnd(mobos.length ? mobos : DB.mobo);
+  const rams = DB.ram.filter(r => r.ddr === mobo.ddr);
+  const ram = rnd(rams.length ? rams : DB.ram);
+  const gpu = rnd(DB.gpu);
+  const cases = DB.case.filter(c => c.supports.indexOf(mobo.form) >= 0 && gpu.len <= c.maxGpu);
+  const kase = rnd(cases.length ? cases : DB.case);
+  const cool = rnd(DB.cooling.filter(c => c.tdp >= cpu.tdp && (c.aio || c.height <= kase.maxCooler)));
+  const need = Math.ceil((cpu.tdp + gpu.power + 100) * 1.2);
+  const psu = DB.psu.find(p => p.watt >= need) || DB.psu[DB.psu.length - 1];
+  state.sel = {
+    cpu:cpu.id, mobo:mobo.id, ram:ram.id, gpu:gpu.id, storage:rnd(DB.storage).id, psu:psu.id,
+    cooling:(cool || rnd(DB.cooling)).id, case:kase.id, monitor:rnd(DB.monitor).id,
+    keyboard:rnd(DB.keyboard).id, mouse:rnd(DB.mouse).id, headset:rnd(DB.headset).id, extras:[rnd(DB.extras).id]
+  };
+  persistSel(); renderBuilder(); updateSummary();
+  toast(cpu.name + " + " + gpu.name);
+}
+
+function persistSel(){ try { localStorage.setItem("bydp_sel", JSON.stringify(state.sel)); } catch(e){} }
+function loadSel(){
+  try {
+    const s = JSON.parse(localStorage.getItem("bydp_sel") || "{}");
+    Object.keys(s).forEach(k => {
+      if(k === "extras"){
+        const arr = Array.isArray(s[k]) ? s[k].slice() : [s[k]];
+        const ok = arr.filter(id => findItem("extras", id));
+        if(ok.length) state.sel.extras = ok; else delete state.sel.extras;
+      } else if(findItem(k, s[k])) state.sel[k] = s[k];
+    });
+  } catch(e){}
+}
+
+function resetBuild(){
+  state.sel = {}; persistSel(); renderBuilder(); updateSummary(); $("#resultBody").innerHTML = "";
+  toast(t("resetDone"));
+}
+
+function benchmark(done){
+  const modal = $("#resultModal"); modal.classList.add("open");
+  const logs = ["Detecting CPU…","Mounting GPU…","Reading RAM…","Stress test 1080p…","Ray tracing pass…","Compiling shaders…","Measuring 1% lows…","Thermal check…","Finalizing…"];
+  const total = reduce ? 300 : 2400;
+  let p = 0, li = 0;
+  $("#resultBody").innerHTML = '<div class="bench"><div class="sec-head" style="justify-content:center"><h2>' + t("bench") + '…</h2></div>'
+    + '<div class="pct" id="benchPct">0%</div><div class="bar"><i id="benchBar"></i></div><div class="log" id="benchLog"></div></div>';
+  const step = Math.max(16, total / 60);
+  const iv = setInterval(() => {
+    p = Math.min(100, p + (100 / (total / step)));
+    const bar = $("#benchBar"), pct = $("#benchPct"), log = $("#benchLog");
+    if(bar) bar.style.width = p + "%";
+    if(pct) pct.textContent = Math.round(p) + "%";
+    const target = Math.floor(p / (100 / logs.length));
+    if(log && target > li){ const d = document.createElement("div"); d.textContent = "> " + logs[li]; log.appendChild(d); log.scrollTop = log.scrollHeight; li++; }
+    if(p >= 100){ clearInterval(iv); setTimeout(done, reduce ? 60 : 240); }
+  }, step);
+}
+
+function calculate(){
+  const essential = ["cpu","mobo","ram","gpu"];
+  const missing = essential.filter(c => !state.sel[c]);
+  if(missing.length){ toast(t("missing") + ": " + missing.map(catLabel).join(", ")); return; }
+  benchmark(() => { renderResults(); state.builds++; localStorage.setItem("bydp_builds", String(state.builds)); $("#buildCount").textContent = state.builds; });
+}
+
+let confTimer = null;
+function burstConfetti(){
+  const c = $("#confetti"); c.classList.add("on");
+  const ctx = c.getContext("2d");
+  c.width = innerWidth; c.height = innerHeight;
+  const cols = ["#a855f7", "#d946ef", "#c084fc", "#818cf8", "#e9d5ff"];
+  const parts = Array.from({length: 110}, () => ({x: Math.random() * c.width, y: -20 - Math.random() * c.height * .4, vy: 2 + Math.random() * 4, vx: -1.5 + Math.random() * 3, s: 4 + Math.random() * 6, r: Math.random() * 6, c: cols[Math.floor(Math.random() * cols.length)]}));
+  cancelAnimationFrame(confTimer);
+  const t0 = performance.now();
+  (function loop(now){
+    ctx.clearRect(0, 0, c.width, c.height);
+    parts.forEach(pp => { pp.y += pp.vy; pp.x += pp.vx; pp.r += .12;
+      ctx.save(); ctx.translate(pp.x, pp.y); ctx.rotate(pp.r); ctx.fillStyle = pp.c; ctx.fillRect(-pp.s / 2, -pp.s / 2, pp.s, pp.s * .6); ctx.restore(); });
+    if(now - t0 < 2600) confTimer = requestAnimationFrame(loop); else { ctx.clearRect(0, 0, c.width, c.height); c.classList.remove("on"); }
+  })(t0);
+}
+
+function particles(){
+  if(reduce) return;
+  const c = $("#particles"), ctx = c.getContext("2d");
+  let ps = [], w = 0, h = 0, last = 0;
+  function size(){
+    w = c.width = innerWidth; h = c.height = innerHeight;
+    const n = Math.min(24, Math.max(10, Math.round(w / 64)));
+    ps = Array.from({length: n}, () => ({x: Math.random() * w, y: Math.random() * h, vx: (Math.random() - .5) * .22, vy: (Math.random() - .5) * .22, r: .7 + Math.random() * 1.5}));
+  }
+  size(); addEventListener("resize", size);
+  function loop(now){
+    requestAnimationFrame(loop);
+    if(document.hidden || document.body.classList.contains("lite")) return;
+    if(now - last < 45) return;
+    last = now;
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = "rgba(168,85,247,.35)";
+    for(let i = 0; i < ps.length; i++){
+      const p = ps[i];
+      p.x += p.vx; p.y += p.vy;
+      if(p.x < 0) p.x = w; else if(p.x > w) p.x = 0;
+      if(p.y < 0) p.y = h; else if(p.y > h) p.y = 0;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.2832); ctx.fill();
+    }
+    ctx.lineWidth = 1;
+    for(let i = 0; i < ps.length; i++) for(let j = i + 1; j < ps.length; j++){
+      const dx = ps[i].x - ps[j].x, dy = ps[i].y - ps[j].y, d = dx * dx + dy * dy;
+      if(d < 14000){ ctx.strokeStyle = "rgba(217,70,239," + (0.28 * (1 - d / 14000)) + ")"; ctx.beginPath(); ctx.moveTo(ps[i].x, ps[i].y); ctx.lineTo(ps[j].x, ps[j].y); ctx.stroke(); }
+    }
+  }
+  requestAnimationFrame(loop);
+}
+
+function enhance(root){
+  $$(".btn, .opt", root).forEach(el => {
+    if(el._enh) return; el._enh = true;
+    el.addEventListener("pointerdown", e => {
+      if(liteActive()) return;
+      const rect = el.getBoundingClientRect();
+      const s = document.createElement("span"); s.className = "ripple";
+      const size = Math.max(rect.width, rect.height);
+      s.style.width = s.style.height = size + "px";
+      s.style.left = (e.clientX - rect.left - size / 2) + "px";
+      s.style.top = (e.clientY - rect.top - size / 2) + "px";
+      el.appendChild(s); setTimeout(() => s.remove(), 620);
+    });
+  });
+}
+
+function openModal(sel){ const m = $(sel); m.classList.add("open"); const b = m.querySelector(".close"); if(b) b.focus(); }
+function closeModal(m){ m.classList.remove("open"); }
+
+function bind(){
+  $("#builder").addEventListener("click", e => {
+    const opt = e.target.closest(".opt"); if(!opt) return;
+    const cat = opt.dataset.cat, id = opt.dataset.id;
+    if(cat === "extras"){
+      let arr = (state.sel.extras || []).slice();
+      if(id === "ex-none"){ arr = []; }
+      else{
+        arr = arr.filter(x => x !== "ex-none");
+        const i = arr.indexOf(id);
+        if(i >= 0) arr.splice(i, 1); else arr.push(id);
+      }
+      if(arr.length) state.sel.extras = arr; else delete state.sel.extras;
+    } else {
+      state.sel[cat] = state.sel[cat] === id ? undefined : id;
+      if(!state.sel[cat]) delete state.sel[cat];
+    }
+    persistSel(); renderBuilder(); updateSummary(); idlePing();
+  });
+
+  $("#presets").addEventListener("click", e => {
+    const b = e.target.closest("[data-preset]"); if(!b) return;
+    preset(b.dataset.preset); idlePing();
+  });
+
+  $("#calcBtn").addEventListener("click", calculate);
+  $("#surpriseBtn").addEventListener("click", () => { surprise(); idlePing(); });
+  $("#resetBtn").addEventListener("click", resetBuild);
+  $("#printBtn").addEventListener("click", doPrint);
+  $("#drawAgain").addEventListener("click", drawCard);
+  $("#compareBtn").addEventListener("click", () => { renderSaved(); openModal("#compareModal"); });
+
+  $("#langBtn").addEventListener("click", () => {
+    state.lang = state.lang === "es" ? "en" : "es";
+    localStorage.setItem("bydp_lang", state.lang);
+    document.documentElement.lang = state.lang;
+    $("#langBtn").textContent = state.lang.toUpperCase();
+    refreshText(); renderBuilder(); updateSummary();
+  });
+
+  $("#techBtn").addEventListener("click", () => {
+    const on = document.body.classList.toggle("techmode");
+    $("#techBtn").setAttribute("aria-pressed", String(on));
+    toast(on ? t("techOn") : t("techOff"));
+    if(on){
+      if(state.lastResult) updTechPhrase(state.lastResult.a, state.lastResult.sum);
+      else { const box = $("#techPhrase"); if(box) box.textContent = t("techHint"); }
+    }
+  });
+
+  $("#liteBtn").addEventListener("click", () => {
+    const on = document.body.classList.toggle("lite");
+    $("#liteBtn").setAttribute("aria-pressed", String(on));
+    toast(on ? t("liteOn") : t("liteOff"));
+  });
+
+  $("#kioskBtn").addEventListener("click", () => {
+    const on = document.body.classList.toggle("kiosk");
+    $("#kioskBtn").setAttribute("aria-pressed", String(on));
+    toast(on ? t("kioskOn") : t("kioskOff"));
+    try { if(on && document.documentElement.requestFullscreen) document.documentElement.requestFullscreen(); else if(!on && document.fullscreenElement) document.exitFullscreen(); } catch(e){}
+  });
+
+  $("#rateInput").addEventListener("input", e => { const v = parseFloat(e.target.value); if(!(v >= 100)) return; state.rate = v; localStorage.setItem("bydp_rate", String(v)); updateSummary(); });
+  $("#budgetInput").addEventListener("input", e => { state.budget = Math.max(0, parseFloat(e.target.value) || 0); localStorage.setItem("bydp_budget", String(state.budget)); updateSummary(); });
+
+  $("#adminBtn").addEventListener("click", () => { $("#adminLock").hidden = false; $("#adminPanel").hidden = true; $("#pinInput").value = ""; openModal("#adminModal"); $("#pinInput").focus(); });
+  $("#pinGo").addEventListener("click", () => {
+    if($("#pinInput").value === state.pin){ $("#adminLock").hidden = true; $("#adminPanel").hidden = false; fillAdmin(); toast(t("adminOk")); }
+    else toast(t("adminBad"));
+  });
+  $("#pinInput").addEventListener("keydown", e => { if(e.key === "Enter") $("#pinGo").click(); });
+  $("#saveAdmin").addEventListener("click", () => {
+    try {
+      const r = parseFloat($("#adminRate").value); if(r > 0){ state.rate = r; localStorage.setItem("bydp_rate", String(r)); }
+      const np = $("#adminPin").value.trim(); if(np){ state.pin = np; localStorage.setItem("bydp_pin", np); }
+      state.idleReset = $("#adminIdle").checked; localStorage.setItem("bydp_idle", state.idleReset ? "1" : "0");
+      const parsed = JSON.parse($("#adminDb").value);
+      Object.keys(parsed).forEach(k => { DB[k] = parsed[k]; });
+      updateSummary(); toast(t("dbSaved"));
+    } catch(err){ toast("JSON: " + err.message); }
+  });
+  $("#restoreAdmin").addEventListener("click", () => { Object.keys(DEFAULT_DB).forEach(k => { DB[k] = JSON.parse(JSON.stringify(DEFAULT_DB[k])); }); fillAdmin(); renderBuilder(); updateSummary(); toast(t("dbRestored")); });
+  $("#resetCounter").addEventListener("click", () => { state.builds = 0; state.cardNo = 1000; localStorage.setItem("bydp_builds", "0"); localStorage.setItem("bydp_cards", "1000"); $("#buildCount").textContent = 0; toast(t("counterReset")); });
+
+  $$("[data-close]").forEach(b => b.addEventListener("click", () => closeModal(b.closest(".modal"))));
+  $$(".modal").forEach(m => m.addEventListener("click", e => { if(e.target === m) closeModal(m); }));
+  addEventListener("keydown", e => { if(e.key === "Escape") $$(".modal.open").forEach(closeModal); });
+
+  ["pointerdown", "keydown", "touchstart"].forEach(ev => addEventListener(ev, idlePing, {passive:true}));
+  addEventListener("resize", () => { const c = $("#confetti"); c.width = innerWidth; c.height = innerHeight; });
+}
+
+function fillAdmin(){
+  $("#adminRate").value = state.rate;
+  $("#adminPin").value = state.pin;
+  $("#adminIdle").checked = state.idleReset;
+  $("#adminDb").value = JSON.stringify(DB, null, 1);
+}
+
+let idleTimer = null, idleLeft = 90;
+function idlePing(){ if(!state.idleReset) return; idleLeft = 90; }
+function idleTick(){
+  if(state.idleReset && !document.querySelector(".modal.open")){
+    idleLeft = Math.max(0, idleLeft - 1);
+    const bar = $("#idleBar"); if(bar) bar.style.transform = "scaleX(" + (idleLeft / 90) + ")";
+    if(idleLeft === 0){ resetBuild(); idleLeft = 90; }
+  }
+}
+
+function refreshText(){
+  document.documentElement.lang = state.lang;
+  $("#tagline").textContent = t("tagline");
+  $("#budgetInput").placeholder = state.lang === "es" ? "Presupuesto" : "Budget";
+  $$("[data-i18n]").forEach(el => { const k = el.dataset.i18n; if(I18N[state.lang][k]) el.textContent = I18N[state.lang][k]; });
+  renderBuilder(); updateSummary();
+}
+
+function syncSticky(){
+  const tb = $(".glass.topbar");
+  if(!tb) return;
+  const h = Math.ceil(tb.getBoundingClientRect().height) + 6;
+  if(h > 40) document.documentElement.style.setProperty("--tb", h + "px");
+}
+
+function applyKioskFromHash(){
+  if(location.hash === "#kiosk"){
+    if(!document.body.classList.contains("kiosk")){
+      document.body.classList.add("kiosk");
+      const kb = $("#kioskBtn");
+      if(kb) kb.setAttribute("aria-pressed", "true");
+    }
+  }
+}
+
+function init(){
+  document.documentElement.lang = state.lang;
+  $("#langBtn").textContent = state.lang.toUpperCase();
+  $("#rateInput").value = state.rate;
+  $("#budgetInput").value = state.budget || "";
+  $("#buildCount").textContent = state.builds;
+  applyKioskFromHash();
+  decorate();
+  loadSel();
+  bind();
+  enhance(document);
+  refreshText();
+  renderSaved();
+  particles();
+  syncSticky();
+  addEventListener("resize", syncSticky);
+  addEventListener("hashchange", applyKioskFromHash);
+  setTimeout(syncSticky, 300);
+  setInterval(idleTick, 1000);
+  idlePing();
+}
+
+function buildDoc(){
+ const es=state.lang==="es",a=analyze(),sum=totals().sum,L=[];
+ const nm=x=>x.replace(/\(.*?\)/g,"").replace(/\s+/g," ").trim();
+ const line=(lb,it)=>lb+": "+nm(it.name)+" | USD "+fmt(it.price)+" | ARS "+fmt(it.price*state.rate);
+ L.push("BUILD YOUR DREAM PC - Expo Tecnica 2026",new Date().toLocaleDateString(es?"es-AR":"en-US"),"");
+ ALL_CATS.forEach(c=>{const it=selItem(c);if(it&&c!=="extras")L.push(line(catLabel(c),it));});
+ selExtras().forEach(it=>L.push(line(catLabel("extras"),it)));
+ L.push("TOTAL: USD "+fmt(sum)+" | ARS "+fmt(sum*state.rate)+" (1 USD = ARS "+fmt(state.rate)+")","");
+ const avg=Math.round(a.gameFps.reduce((q,x)=>q+x.r.fps,0)/a.gameFps.length);
+ L.push((es?"Puntaje: ":"Score: ")+a.score+"/100 - "+t("verdicts")[a.verdict]);
+ L.push("FPS "+(es?"promedio: ":"avg: ")+avg+" | Bottleneck: "+a.bottleneck+"% | "+a.totalW+"W");
+ L.push(a.gameFps.map(x=>x.g.name+" "+Math.round(x.r.fps)).join(", "));
+ L.push((es?"Alertas de compatibilidad: ":"Compatibility alerts: ")+compat().filter(c=>c.lvl!=="ok").length);
+ return L.join("\n");
+}
+function drawQR(txt,cv){
+ qrcode.stringToBytes=qrcode.stringToBytesFuncs["UTF-8"];
+ let qr=null;
+ for(const lv of ["M","L"]){try{qr=qrcode(0,lv);qr.addData(txt);qr.make();break;}catch(e){qr=null;}}
+ if(!qr){cv.replaceWith(document.createTextNode("QR: too much data"));return;}
+ const n=qr.getModuleCount(),qz=3,cell=Math.max(3,Math.floor(Math.min(300,innerWidth-70)/(n+2*qz))),size=(n+2*qz)*cell;
+ cv.width=cv.height=size;const g=cv.getContext("2d");g.fillStyle="#fff";g.fillRect(0,0,size,size);g.fillStyle="#000";
+ for(let r=0;r<n;r++)for(let k=0;k<n;k++)if(qr.isDark(r,k))g.fillRect((k+qz)*cell,(r+qz)*cell,cell,cell);
+}
+function injectQR(){
+ const hero=document.querySelector("#resultBody .card.hero");if(!hero)return;
+ const es=state.lang==="es",txt=buildDoc(),card=document.createElement("div");
+ card.className="card qrcard rgb";card.style.gridColumn="1/-1";
+ card.innerHTML="<h3>"+ic("file")+" "+(es?"Llevate tu PC al celular":"Take your PC with you")+"</h3><div class=\"qrwrap\"><canvas id=\"qrCanvas\"></canvas><div class=\"qrside\"><div>"
+  +(es?"Escaneá este QR con la cámara de tu celular: vas a recibir un documento con tus piezas, precios en USD y ARS, FPS y veredicto.":"Scan this QR with your phone camera: you get a document with your parts, USD and ARS prices, FPS and verdict.")
+  +"</div><button class=\"btn\" id=\"qrDl\">"+ic("file")+"<span>"+(es?"Descargar documento (.txt)":"Download document (.txt)")+"</span></button></div></div>";
+ {const grid=hero.parentElement,cards=[...grid.children].filter(x=>x.classList.contains("card")&&x!==hero);
+  if(cards.length===5){const[g1,g2,pr,pw,cp]=cards,A=document.createElement("div"),B=document.createElement("div");A.className=B.className="rcol";card.style.gridColumn="";A.append(g1,pr);B.append(g2,pw,card);cp.before(A);cp.before(B);}else grid.appendChild(card);}
+ drawQR(txt,card.querySelector("#qrCanvas"));
+ card.querySelector("#qrDl").onclick=()=>{const u=URL.createObjectURL(new Blob([txt],{type:"text/plain;charset=utf-8"})),l=document.createElement("a");l.href=u;l.download="Dream-PC.txt";document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),1500);};
+}
+const _rr=renderResults;
+renderResults=function(){_rr.apply(null,arguments);try{injectQR();}catch(e){console.error(e);}};
+
+
+(function(){
+ const h=document.querySelector(".topbar"),w=document.querySelector(".wrap");
+ if(!h||!w)return;
+ const fit=()=>{w.style.paddingTop=(h.offsetHeight+20)+"px";};
+ fit();addEventListener("resize",fit);
+ if(window.ResizeObserver)new ResizeObserver(fit).observe(h);
+})();
+
+document.addEventListener("pointermove", e => {
+  if(liteActive()) return;
+  const el = e.target.closest && e.target.closest(".opt"); if(!el) return;
+  const r = el.getBoundingClientRect();
+  el.style.setProperty("--mx", (e.clientX - r.left) + "px"); el.style.setProperty("--my", (e.clientY - r.top) + "px");
+}, {passive:true});
+document.addEventListener("DOMContentLoaded", init);
+</script>
+</body>
+</html>
